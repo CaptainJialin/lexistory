@@ -1,6 +1,7 @@
 # LexiStory
 
-[English](README.md) | 中文
+[![en](https://img.shields.io/badge/lang-en-red.svg)](README.md)
+[![zh-CN](https://img.shields.io/badge/lang-zh--CN-blue.svg)](README.zh-CN.md)
 
 > 一款 AI 驱动的语境式英语学习应用，将词汇和语法编织成专属阅读文章。
 

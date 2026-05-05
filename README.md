@@ -1,6 +1,7 @@
 # LexiStory
 
-English | [中文](README.zh-CN.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](README.md)
+[![zh-CN](https://img.shields.io/badge/lang-zh--CN-blue.svg)](README.zh-CN.md)
 
 > An AI-powered contextual English learning app that turns your vocabulary and grammar into personalized reading passages.
 
