@@ -1,0 +1,4070 @@
+{
+  "total_articles": 21,
+  "total_words": 1624,
+  "unique_words": 1125,
+  "top_words": [
+    {
+      "word": "sleep",
+      "frequency": 14,
+      "meanings": [
+        "n. 睡眠"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Sleep is not merely a period of rest but a complex biological process essential for physical and mental health",
+        "During sleep, the brain performs critical maintenance tasks, consolidating memories, clearing toxins, and reorganizing neural connections",
+        "Research has identified two main types of sleep: rapid eye movement (REM) sleep and non-REM sleep, each serving distinct functions"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "available",
+      "frequency": 13,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Please review the List of Available Projects and fill out the Group Project Request Form",
+        "Group discounts are available for parties of six or more",
+        "Season tickets are now available at a 30% discount off individual ticket prices"
+      ],
+      "pos_hint": "adj."
+    },
+    {
+      "word": "tea",
+      "frequency": 11,
+      "meanings": [
+        "n. 茶"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Tea has been cultivated in China for over 4,000 years, making it one of the oldest beverages in continuous use",
+        "According to legend, Emperor Shen Nong discovered tea in 2737 BC when leaves from a wild tree blew into his pot of boiling water",
+        "The resulting brew was refreshing and invigorating, and tea cultivation began shortly thereafter"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "language",
+      "frequency": 10,
+      "meanings": [
+        "n. 语言"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Reading encourages engagement with language in ways that improve memory, comprehension and critical thinking",
+        "The relationship between language and thought has fascinated philosophers and scientists for centuries",
+        "Does language shape the way we think, or does thought exist independently of language"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "species",
+      "frequency": 9,
+      "meanings": [
+        "n. 物种"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Habitat Restoration Team volunteers play a vital role in restoring sensitive resources and protecting endangered species across the ridges and valleys",
+        "As cities expand and natural habitats shrink, wildlife species face increasing pressure to adapt or perish",
+        "Some species have even changed their breeding patterns to align with the artificial light and warmth of human settlements"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "reading",
+      "frequency": 9,
+      "meanings": [
+        "n. 阅读"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Digital texts, audio and video all have educational roles, but reading and engaging with books remains the best way for individuals to improve their literacy skills and develop deep thinking abilities",
+        "Reading encourages engagement with language in ways that improve memory, comprehension and critical thinking",
+        "Furthermore, reading books without hyperlinks or notifications allows for deeper focus and concentration"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "park",
+      "frequency": 8,
+      "meanings": [
+        "n. 公园; v. 停车"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "We'll explore beautiful park sites while conducting invasive plant removal, winter planting, and seed collection",
+        "Benefits include a 20% Park Store discount, naturalist-led hikes, and invitations to special events",
+        "Nestled in the heart of the Canadian Rockies, Banff National Park offers visitors an unparalleled wilderness experience"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "however",
+      "frequency": 7,
+      "meanings": [
+        "adv. 然而，不过"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "However, when a cat is looking for affection, they tend to produce stretched and soft mews",
+        "However, not all species can adapt so quickly",
+        "However, solitude must be balanced with social connection"
+      ],
+      "pos_hint": "n.（人/物）"
+    },
+    {
+      "word": "complex",
+      "frequency": 7,
+      "meanings": [
+        "adj. 复杂的; n. 建筑群"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "This sustained attention builds the capacity for complex thought that is essential for academic and professional success",
+        "This cultural transmission of knowledge is a sophisticated adaptation that helps urban wildlife navigate complex human-dominated landscapes",
+        "The debate continues, but most researchers now agree that language and thought influence each other in complex, bidirectional ways"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "season",
+      "frequency": 7,
+      "meanings": [
+        "n. 季节; v. 调味"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Our 2022 season features a diverse lineup of performances ranging from classical Shakespeare to contemporary experimental theater",
+        "Season tickets are now available at a 30% discount off individual ticket prices",
+        "This is the ideal time to plant cool-season vegetables like lettuce, peas, and spinach"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "digital",
+      "frequency": 6,
+      "meanings": [
+        "adj. 数字的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Digital texts, audio and video all have educational roles, but reading and engaging with books remains the best way for individuals to improve their literacy skills and develop deep thinking abilities",
+        "This spatial memory is harder to develop with digital texts where the page layout constantly changes",
+        "Despite the convenience of digital devices, research consistently shows that students who read physical books score higher on reading comprehension tests and report greater enjoyment of reading"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "thought",
+      "frequency": 6,
+      "meanings": [
+        "n. 思想，想法"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "This sustained attention builds the capacity for complex thought that is essential for academic and professional success",
+        "The relationship between language and thought has fascinated philosophers and scientists for centuries",
+        "Does language shape the way we think, or does thought exist independently of language"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "special",
+      "frequency": 5,
+      "meanings": [
+        "adj. 特别的，专门的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Groups of five or more require special arrangements and must be confirmed in advance",
+        "Benefits include a 20% Park Store discount, naturalist-led hikes, and invitations to special events",
+        "But cats are special creatures who possess amazing vocalization skills"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "please",
+      "frequency": 5,
+      "meanings": [
+        "v. 请，使高兴"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Please review the List of Available Projects and fill out the Group Project Request Form",
+        "Please wear comfortable clothing that you don't mind getting dirty",
+        "Please arrive at least 30 minutes before the performance to allow time for seating"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "discount",
+      "frequency": 5,
+      "meanings": [
+        "n. 折扣; v. 打折"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Benefits include a 20% Park Store discount, naturalist-led hikes, and invitations to special events",
+        "Season tickets are now available at a 30% discount off individual ticket prices",
+        "Students with valid ID receive a 50% discount on all performances"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "educational",
+      "frequency": 5,
+      "meanings": [
+        "adj. 教育的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Digital texts, audio and video all have educational roles, but reading and engaging with books remains the best way for individuals to improve their literacy skills and develop deep thinking abilities",
+        "Join our community of over 10 million learners worldwide and start your educational journey today",
+        "The museum shop offers reproductions of many exhibited items, as well as books, posters, and educational materials"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "improve",
+      "frequency": 5,
+      "meanings": [
+        "v. 改善，提高"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Digital texts, audio and video all have educational roles, but reading and engaging with books remains the best way for individuals to improve their literacy skills and develop deep thinking abilities",
+        "Reading encourages engagement with language in ways that improve memory, comprehension and critical thinking",
+        "Psychologists today confirm that spending time alone can improve concentration, boost creativity, and help individuals develop a stronger sense of identity"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "biodiversity",
+      "frequency": 5,
+      "meanings": [
+        "n. 生物多样性"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The challenge for conservationists is to create urban green spaces that support biodiversity while accommodating the needs of growing human populations",
+        "Biodiversity the variety of life on Earth at all levels, from genes to ecosystems is declining at an alarming rate",
+        "Habitat destruction, pollution, climate change, and invasive species are the major drivers of this biodiversity crisis"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "alone",
+      "frequency": 5,
+      "meanings": [
+        "adj./adv. 独自的，单独的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "In a world that increasingly values connectivity and constant communication, the ability to be alone has become a rare and valuable skill",
+        "The poet Wordsworth wandered the Lake District alone, finding inspiration in nature's quiet beauty",
+        "Psychologists today confirm that spending time alone can improve concentration, boost creativity, and help individuals develop a stronger sense of identity"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "today",
+      "frequency": 5,
+      "meanings": [
+        "adv./n. 今天"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Psychologists today confirm that spending time alone can improve concentration, boost creativity, and help individuals develop a stronger sense of identity",
+        "Today, however, scientists have discovered that nostalgia is not only harmless but actually beneficial for mental health",
+        "Join our community of over 10 million learners worldwide and start your educational journey today"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "health",
+      "frequency": 5,
+      "meanings": [
+        "n. 健康"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Humans are inherently social beings, and prolonged isolation can indeed lead to loneliness and mental health problems",
+        "Today, however, scientists have discovered that nostalgia is not only harmless but actually beneficial for mental health",
+        "Welcome to Peak Fitness Center, your destination for health and wellness"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "century",
+      "frequency": 5,
+      "meanings": [
+        "n. 世纪"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Eighteenth-century physicians viewed it as a disease of the mind, prescribing everything from leeches to trips to the Swiss Alps as cures",
+        "Tea spread to Japan in the ninth century, where it evolved into the ritualized tea ceremony that continues today",
+        "European traders first encountered tea in the sixteenth century, and by the eighteenth century, it had become Britain's national drink"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "memories",
+      "frequency": 5,
+      "meanings": [
+        "n. 记忆（memory的复数）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Research conducted by psychologists at the University of Southampton has shown that nostalgic memories can increase feelings of social connectedness, boost self-esteem, and even provide a sense of meaning in life",
+        "When people think about positive memories from their past, their brains release dopamine, the same neurotransmitter associated with pleasure and reward",
+        "When facing challenges, people naturally turn to memories of times when they felt safe and supported"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "services",
+      "frequency": 5,
+      "meanings": [
+        "n. 服务（service的复数）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Audio description services are provided for visually impaired patrons upon request",
+        "Ecosystems with high biodiversity are more resilient to environmental changes and provide essential services such as pollination, water purification, and carbon storage",
+        "The economic value of these ecosystem services has been estimated at $125 trillion annually"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "access",
+      "frequency": 5,
+      "meanings": [
+        "n. 通道，获取; v. 进入，使用"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The rapid development of online education has transformed how people access knowledge",
+        "Mobile apps allow learning on the go, with offline access to downloaded content",
+        "Membership options include monthly plans at $59, annual plans at $599, and premium plans that include spa access and guest privileges for $89 monthly"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "failure",
+      "frequency": 5,
+      "meanings": [
+        "n. 失败"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Failure is an essential part of learning and growth, yet modern society often stigmatizes it",
+        "Recent research in educational psychology suggests that productive failure deliberately allowing students to struggle with complex problems before receiving instruction leads to deeper understanding and better long-term retention",
+        "History is filled with examples of failure preceding success"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "rem",
+      "frequency": 5,
+      "meanings": [
+        "n. 快速眼动睡眠阶段"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Research has identified two main types of sleep: rapid eye movement (REM) sleep and non-REM sleep, each serving distinct functions",
+        "Non-REM sleep, which occupies about 75% of total sleep time, is associated with physical restoration",
+        "During deep non-REM sleep, blood pressure drops, breathing slows, and blood flow to muscles increases, facilitating tissue repair and growth"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "winter",
+      "frequency": 4,
+      "meanings": [
+        "n. 冬季"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "We'll explore beautiful park sites while conducting invasive plant removal, winter planting, and seed collection",
+        "Autumn is harvest time for most vegetables, but it's also the season for planting spring-flowering bulbs and preparing perennials for winter",
+        "Winter gardening is often overlooked but can be productive"
+      ],
+      "pos_hint": "n.（人/物）"
+    },
+    {
+      "word": "animals",
+      "frequency": 4,
+      "meanings": [
+        "n. 动物（animal的复数）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Animals can express their needs using a lot of ways",
+        "For instance, almost all animals have distinct vocals that they rely on to either ask for help, scare away any dangerous animals or look for shelter",
+        "Remarkably, some animals are not merely surviving in urban environments but are actually thriving"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "cats",
+      "frequency": 4,
+      "meanings": [
+        "n. 猫（cat的复数）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "But cats are special creatures who possess amazing vocalization skills",
+        "Cats have many heightened senses, but their sense of smell is quite impressive",
+        "Dogs are known for their impressive fetching habit, but cats take this behavior up a notch"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "cat",
+      "frequency": 4,
+      "meanings": [
+        "n. 猫"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "If a pet cat is hungry, it will keep mewing to attract attention and find food",
+        "However, when a cat is looking for affection, they tend to produce stretched and soft mews",
+        "Mewing starts as soon as a baby cat is brought to life and uses it to get the mother's attention and be fed"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "food",
+      "frequency": 4,
+      "meanings": [
+        "n. 食物"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "If a pet cat is hungry, it will keep mewing to attract attention and find food",
+        "Specialist species that rely on specific food sources or habitats are particularly vulnerable to urbanization",
+        "Food and beverages are not permitted in the auditorium"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "individuals",
+      "frequency": 4,
+      "meanings": [
+        "n. 个人，个体（individual的复数）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Digital texts, audio and video all have educational roles, but reading and engaging with books remains the best way for individuals to improve their literacy skills and develop deep thinking abilities",
+        "Psychologists today confirm that spending time alone can improve concentration, boost creativity, and help individuals develop a stronger sense of identity",
+        "This balance allows individuals to bring their best selves to their interactions with others"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "thinking",
+      "frequency": 4,
+      "meanings": [
+        "n. 思考，想法"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Digital texts, audio and video all have educational roles, but reading and engaging with books remains the best way for individuals to improve their literacy skills and develop deep thinking abilities",
+        "Reading encourages engagement with language in ways that improve memory, comprehension and critical thinking",
+        "The philosopher Descartes famously did his best thinking in bed, away from the distractions of Paris"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "essential",
+      "frequency": 4,
+      "meanings": [
+        "adj. 必要的，本质的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "This sustained attention builds the capacity for complex thought that is essential for academic and professional success",
+        "Failure is an essential part of learning and growth, yet modern society often stigmatizes it",
+        "Sleep is not merely a period of rest but a complex biological process essential for physical and mental health"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "learning",
+      "frequency": 4,
+      "meanings": [
+        "n. 学习"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The tactile experience of holding a book, turning pages, and marking passages creates a physical connection to the text that enhances learning",
+        "Our adaptive learning technology identifies each student's strengths and weaknesses, recommending personalized study paths",
+        "Mobile apps allow learning on the go, with offline access to downloaded content"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "wildlife",
+      "frequency": 4,
+      "meanings": [
+        "n. 野生动物"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "As cities expand and natural habitats shrink, wildlife species face increasing pressure to adapt or perish",
+        "This cultural transmission of knowledge is a sophisticated adaptation that helps urban wildlife navigate complex human-dominated landscapes",
+        "Wildlife is abundant; visitors frequently spot elk, deer, black bears, and bighorn sheep"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "urban",
+      "frequency": 4,
+      "meanings": [
+        "adj. 城市的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Remarkably, some animals are not merely surviving in urban environments but are actually thriving",
+        "Scientists have discovered that urban foxes, raccoons, and birds are evolving new behaviors at unprecedented rates",
+        "This cultural transmission of knowledge is a sophisticated adaptation that helps urban wildlife navigate complex human-dominated landscapes"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "scientists",
+      "frequency": 4,
+      "meanings": [
+        "n. 科学家（scientist的复数）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Scientists have discovered that urban foxes, raccoons, and birds are evolving new behaviors at unprecedented rates",
+        "Today, however, scientists have discovered that nostalgia is not only harmless but actually beneficial for mental health",
+        "The relationship between language and thought has fascinated philosophers and scientists for centuries"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "even",
+      "frequency": 4,
+      "meanings": [
+        "adv. 甚至; adj. 平坦的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Some species have even changed their breeding patterns to align with the artificial light and warmth of human settlements",
+        "Research conducted by psychologists at the University of Southampton has shown that nostalgic memories can increase feelings of social connectedness, boost self-esteem, and even provide a sense of meaning in life",
+        "Cold frames and greenhouses extend the growing season, allowing for fresh greens even in January"
+      ],
+      "pos_hint": "v."
+    },
+    {
+      "word": "workshop",
+      "frequency": 4,
+      "meanings": [
+        "n. 研讨会，车间"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Join us for a hands-on workshop where you'll learn to create your own terrarium",
+        "The workshop lasts approximately two hours, and you'll take home your completed terrarium",
+        "The workshop fee is $45 per person"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "garden",
+      "frequency": 4,
+      "meanings": [
+        "n. 花园"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "A terrarium is a miniature garden grown inside a glass container",
+        "Mulching garden beds with straw or leaves protects root systems from freezing temperatures",
+        "Use this quiet season to plan next year's garden, order seeds, and maintain tools"
+      ],
+      "pos_hint": "v."
+    },
+    {
+      "word": "provided",
+      "frequency": 4,
+      "meanings": [
+        "conj. 假如; v. 提供（provide的过去式）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "All materials are provided, including the glass container, soil, stones, and a selection of small plants",
+        "Light refreshments will be provided during the session",
+        "Audio description services are provided for visually impaired patrons upon request"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "hours",
+      "frequency": 4,
+      "meanings": [
+        "n. 小时（hour的复数）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The workshop lasts approximately two hours, and you'll take home your completed terrarium",
+        "The center is open 24 hours a day, 365 days a year",
+        "Despite these well-documented risks, surveys indicate that nearly one-third of adults regularly get less than the recommended seven to nine hours of sleep per night"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "per",
+      "frequency": 4,
+      "meanings": [
+        "prep. 每"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The workshop fee is $45 per person",
+        "Park entrance fees are $10 per adult per day",
+        "Despite these well-documented risks, surveys indicate that nearly one-third of adults regularly get less than the recommended seven to nine hours of sleep per night"
+      ],
+      "pos_hint": "n.（人/物）"
+    },
+    {
+      "word": "solitude",
+      "frequency": 4,
+      "meanings": [
+        "n. 孤独，独处"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Solitude is not the same as loneliness",
+        "While loneliness is a negative state marked by a sense of isolation, solitude is a positive and constructive state of engagement with oneself",
+        "Many great thinkers and artists throughout history have emphasized the importance of solitude for creativity and self-discovery"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "nostalgia",
+      "frequency": 4,
+      "meanings": [
+        "n. 怀旧，乡愁"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Nostalgia was once considered a mental disorder, a form of homesickness so severe that it could be fatal",
+        "Today, however, scientists have discovered that nostalgia is not only harmless but actually beneficial for mental health",
+        "Nostalgia also serves an important psychological function during times of transition or uncertainty"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "individual",
+      "frequency": 4,
+      "meanings": [
+        "n. 个人; adj. 个别的，个人的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Season tickets are now available at a 30% discount off individual ticket prices",
+        "Individual tickets range from $25 to $65 depending on seat location and performance date",
+        "The complete five-week course costs $450, or you may enroll in individual sessions for $95 each"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "english",
+      "frequency": 4,
+      "meanings": [
+        "n. 英语; adj. 英国的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Audio guides are available in twelve languages, including Mandarin, English, Spanish, and Arabic",
+        "For example, some languages have multiple words for what English speakers would simply call 'snow,' and speakers of these languages reportedly perceive snow differently",
+        "The children's department has introduced a bilingual storytime program in English and Spanish, held every Wednesday afternoon"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "natural",
+      "frequency": 3,
+      "meanings": [
+        "adj. 自然的，天然的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Help restore and protect Marin's natural areas from the Marin Headlands to Bolinas Ridge",
+        "As cities expand and natural habitats shrink, wildlife species face increasing pressure to adapt or perish",
+        "Scientists estimate that species are going extinct at 100 to 1,000 times the natural background rate, primarily due to human activities"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "explore",
+      "frequency": 3,
+      "meanings": [
+        "v. 探索，探究"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "We'll explore beautiful park sites while conducting invasive plant removal, winter planting, and seed collection",
+        "Interactive displays allow visitors to explore ancient writing systems and try their hand at cuneiform and hieroglyphics",
+        "When students wrestle with difficult concepts, they generate multiple hypotheses and explore different solution paths, even if they don't initially arrive at the correct answer"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "planting",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "We'll explore beautiful park sites while conducting invasive plant removal, winter planting, and seed collection",
+        "In spring, focus on soil preparation and planting",
+        "Autumn is harvest time for most vegetables, but it's also the season for planting spring-flowering bulbs and preparing perennials for winter"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "habitat",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Habitat Restoration Team volunteers play a vital role in restoring sensitive resources and protecting endangered species across the ridges and valleys",
+        "Habitat destruction, pollution, climate change, and invasive species are the major drivers of this biodiversity crisis",
+        "Emerging approaches include habitat corridors that connect fragmented populations, community-based conservation that engages local people as stewards, and market-based incentives that reward sustainable land use"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "across",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Habitat Restoration Team volunteers play a vital role in restoring sensitive resources and protecting endangered species across the ridges and valleys",
+        "Our platform offers over 5,000 courses across various disciplines, from programming and data science to literature and philosophy",
+        "These texts address universal themes love, mortality, ambition, morality that remain relevant across centuries and cultures"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "invitations",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Benefits include a 20% Park Store discount, naturalist-led hikes, and invitations to special events",
+        "Annual memberships include unlimited free admission and invitations to exclusive preview events",
+        "Alumni receive a 20% discount on all future courses and exclusive invitations to special tasting events"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "smell",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Cats have many heightened senses, but their sense of smell is quite impressive",
+        "Your cat will likely smell your face and store the smell in its memory and use it to recognize you in the future"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "memory",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Your cat will likely smell your face and store the smell in its memory and use it to recognize you in the future",
+        "Reading encourages engagement with language in ways that improve memory, comprehension and critical thinking",
+        "This spatial memory is harder to develop with digital texts where the page layout constantly changes"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "audio",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Digital texts, audio and video all have educational roles, but reading and engaging with books remains the best way for individuals to improve their literacy skills and develop deep thinking abilities",
+        "Audio description services are provided for visually impaired patrons upon request",
+        "Audio guides are available in twelve languages, including Mandarin, English, Spanish, and Arabic"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "comprehension",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Reading encourages engagement with language in ways that improve memory, comprehension and critical thinking",
+        "Despite the convenience of digital devices, research consistently shows that students who read physical books score higher on reading comprehension tests and report greater enjoyment of reading",
+        "Similarly, understanding references to Greek mythology enriches comprehension of Western art, politics, and psychology"
+      ],
+      "pos_hint": "n."
+    },
+    {
+      "word": "critical",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Reading encourages engagement with language in ways that improve memory, comprehension and critical thinking",
+        "During sleep, the brain performs critical maintenance tasks, consolidating memories, clearing toxins, and reorganizing neural connections",
+        "Reading classics develops critical thinking skills in ways that scanning online articles cannot"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "spatial",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "When students read physical books, they develop a spatial understanding of the text",
+        "This spatial memory is harder to develop with digital texts where the page layout constantly changes",
+        "Studies show that while language may influence thought in subtle ways, fundamental cognitive abilities such as spatial reasoning and numerical understanding exist independently of language"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "located",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "They remember where information was located on the page, which helps them recall the content",
+        "Our teaching kitchen is located downtown with convenient public transportation access",
+        "The library's new makerspace, located on the third floor, provides access to 3D printers, laser cutters, and electronics prototyping equipment"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "fully",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The reader can become fully absorbed in the narrative or argument",
+        "The theater is fully wheelchair accessible, with designated seating areas and companion seats available",
+        "A person unfamiliar with Shakespeare cannot fully appreciate how his phrases have permeated everyday English"
+      ],
+      "pos_hint": "adv."
+    },
+    {
+      "word": "actually",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Remarkably, some animals are not merely surviving in urban environments but are actually thriving",
+        "Today, however, scientists have discovered that nostalgia is not only harmless but actually beneficial for mental health",
+        "This approach, while well-intentioned, may actually hinder intellectual development"
+      ],
+      "pos_hint": "adv."
+    },
+    {
+      "word": "discovered",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Scientists have discovered that urban foxes, raccoons, and birds are evolving new behaviors at unprecedented rates",
+        "Today, however, scientists have discovered that nostalgia is not only harmless but actually beneficial for mental health",
+        "According to legend, Emperor Shen Nong discovered tea in 2737 BC when leaves from a wild tree blew into his pot of boiling water"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "researchers",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Researchers at the University of Washington found that crows can remember human faces for years and will teach their offspring which humans are threats",
+        "The debate continues, but most researchers now agree that language and thought influence each other in complex, bidirectional ways",
+        "For researchers, our interlibrary loan service has expanded to include materials from over 200 partner institutions worldwide"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "terrarium",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Join us for a hands-on workshop where you'll learn to create your own terrarium",
+        "A terrarium is a miniature garden grown inside a glass container",
+        "The workshop lasts approximately two hours, and you'll take home your completed terrarium"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "home",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The workshop lasts approximately two hours, and you'll take home your completed terrarium",
+        "This explains why listening to a song from one's teenage years or revisiting a childhood home can produce such intense feelings of warmth and comfort",
+        "Rowling's Harry Potter manuscript was rejected by twelve publishers before finding a home"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "adult",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Children under 16 must be accompanied by an adult",
+        "Standard adult tickets are $15",
+        "Park entrance fees are $10 per adult per day"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "loneliness",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Solitude is not the same as loneliness",
+        "While loneliness is a negative state marked by a sense of isolation, solitude is a positive and constructive state of engagement with oneself",
+        "Humans are inherently social beings, and prolonged isolation can indeed lead to loneliness and mental health problems"
+      ],
+      "pos_hint": "n."
+    },
+    {
+      "word": "state",
+      "frequency": 3,
+      "meanings": [
+        "n. 状态，国家; v. 陈述"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "While loneliness is a negative state marked by a sense of isolation, solitude is a positive and constructive state of engagement with oneself",
+        "Our state-of-the-art facility features a 5,000-square-meter gym floor with over 200 pieces of cardio and strength-training equipment"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "positive",
+      "frequency": 3,
+      "meanings": [
+        "adj. 积极的，肯定的; n. 正数"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "While loneliness is a negative state marked by a sense of isolation, solitude is a positive and constructive state of engagement with oneself",
+        "When people think about positive memories from their past, their brains release dopamine, the same neurotransmitter associated with pleasure and reward",
+        "The healthiest approach is to use nostalgic memories as a source of strength while remaining open to creating new positive experiences"
+      ],
+      "pos_hint": "adj."
+    },
+    {
+      "word": "throughout",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Many great thinkers and artists throughout history have emphasized the importance of solitude for creativity and self-discovery",
+        "Keeping a garden journal throughout the year helps track what varieties performed well and which pests were problematic, enabling continuous improvement",
+        "Free Wi-Fi is available throughout the building"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "creativity",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Many great thinkers and artists throughout history have emphasized the importance of solitude for creativity and self-discovery",
+        "Psychologists today confirm that spending time alone can improve concentration, boost creativity, and help individuals develop a stronger sense of identity",
+        "REM sleep, characterized by vivid dreaming and brain activity similar to wakefulness, is crucial for cognitive functions including creativity and emotional regulation"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "lake",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The poet Wordsworth wandered the Lake District alone, finding inspiration in nature's quiet beauty",
+        "Lake Louise, with its emerald waters reflecting the surrounding Victoria Glacier, is the park's most photographed location",
+        "Moraine Lake, equally stunning but less crowded, offers excellent hiking trails ranging from easy lakeside walks to challenging mountain ascents"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "welcome",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Welcome to the Riverside Theater",
+        "Welcome to Peak Fitness Center, your destination for health and wellness",
+        "We welcome your feedback and suggestions for improving our services"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "theater",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Welcome to the Riverside Theater",
+        "Our 2022 season features a diverse lineup of performances ranging from classical Shakespeare to contemporary experimental theater",
+        "The theater is fully wheelchair accessible, with designated seating areas and companion seats available"
+      ],
+      "pos_hint": "n.（人/物）"
+    },
+    {
+      "word": "classical",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Our 2022 season features a diverse lineup of performances ranging from classical Shakespeare to contemporary experimental theater",
+        "In an age of instant information and social media, the sustained attention required for reading classical literature may seem antiquated",
+        "Furthermore, classical texts provide cultural literacy, the shared references and allusions that enable sophisticated communication"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "tickets",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Season tickets are now available at a 30% discount off individual ticket prices",
+        "Individual tickets range from $25 to $65 depending on seat location and performance date",
+        "Standard adult tickets are $15"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "valid",
+      "frequency": 3,
+      "meanings": [
+        "adj. 有效的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Students with valid ID receive a 50% discount on all performances",
+        "An annual pass, valid for all Canadian national parks, costs $72",
+        "Some educators argue that the canon of classics should be expanded to include works from diverse traditions, and this is a valid critique"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "morning",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Consistent watering becomes crucial during hot periods; early morning irrigation minimizes evaporation and helps prevent fungal diseases",
+        "Group fitness classes are included with all memberships and run seven days a week, from early morning to late evening",
+        "Free training sessions are offered every Saturday morning for beginners interested in digital fabrication"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "allowing",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Cold frames and greenhouses extend the growing season, allowing for fresh greens even in January",
+        "Recent research in educational psychology suggests that productive failure deliberately allowing students to struggle with complex problems before receiving instruction leads to deeper understanding and better long-term retention",
+        "Childcare is available for children ages 6 months to 12 years, allowing parents to work out worry-free"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "courses",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Our platform offers over 5,000 courses across various disciplines, from programming and data science to literature and philosophy",
+        "Weekend intensive courses are also available for those with busy weekday schedules",
+        "Alumni receive a 20% discount on all future courses and exclusive invitations to special tasting events"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "literature",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Our platform offers over 5,000 courses across various disciplines, from programming and data science to literature and philosophy",
+        "In an age of instant information and social media, the sustained attention required for reading classical literature may seem antiquated",
+        "The complex narratives and ambiguous characters of great literature demand active interpretation, forcing readers to weigh evidence, consider multiple perspectives, and make reasoned judgments"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "course",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Each course is designed by experts and includes video lectures, reading materials, quizzes, and discussion forums",
+        "Each four-hour session focuses on one cuisine and includes hands-on preparation of a three-course meal",
+        "The complete five-week course costs $450, or you may enroll in individual sessions for $95 each"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "personalized",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Our adaptive learning technology identifies each student's strengths and weaknesses, recommending personalized study paths",
+        "All new members receive a complimentary fitness assessment and personalized workout plan",
+        "Classes are limited to 12 participants to ensure personalized instruction"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "water",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "According to legend, Emperor Shen Nong discovered tea in 2737 BC when leaves from a wild tree blew into his pot of boiling water",
+        "Today, tea is the second most consumed beverage in the world after water, with global production exceeding 6 million metric tons annually",
+        "Ecosystems with high biodiversity are more resilient to environmental changes and provide essential services such as pollination, water purification, and carbon storage"
+      ],
+      "pos_hint": "n.（人/物）"
+    },
+    {
+      "word": "art",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "During the Tang Dynasty, tea drinking became an art form, with elaborate ceremonies and specialized utensils",
+        "Our state-of-the-art facility features a 5,000-square-meter gym floor with over 200 pieces of cardio and strength-training equipment",
+        "Similarly, understanding references to Greek mythology enriches comprehension of Western art, politics, and psychology"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "india",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The British East India Company established vast tea plantations in India and Ceylon to meet growing European demand",
+        "Our experienced chefs will teach you authentic recipes from Italy, Thailand, India, Mexico, and Japan"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "visitors",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Interactive displays allow visitors to explore ancient writing systems and try their hand at cuneiform and hieroglyphics",
+        "Nestled in the heart of the Canadian Rockies, Banff National Park offers visitors an unparalleled wilderness experience",
+        "Wildlife is abundant; visitors frequently spot elk, deer, black bears, and bighorn sheep"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "languages",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Audio guides are available in twelve languages, including Mandarin, English, Spanish, and Arabic",
+        "For example, some languages have multiple words for what English speakers would simply call 'snow,' and speakers of these languages reportedly perceive snow differently"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "hour",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Guided tours depart every hour on the hour, led by trained archaeologists and historians",
+        "Each four-hour session focuses on one cuisine and includes hands-on preparation of a three-course meal"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "annual",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Annual memberships include unlimited free admission and invitations to exclusive preview events",
+        "An annual pass, valid for all Canadian national parks, costs $72",
+        "Membership options include monthly plans at $59, annual plans at $599, and premium plans that include spa access and guest privileges for $89 monthly"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "speakers",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The Sapir-Whorf hypothesis, proposed in the early twentieth century, suggests that the structure of a language affects its speakers' world view",
+        "For example, some languages have multiple words for what English speakers would simply call 'snow,' and speakers of these languages reportedly perceive snow differently"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "multiple",
+      "frequency": 3,
+      "meanings": [
+        "adj. 多个的，多样的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "For example, some languages have multiple words for what English speakers would simply call 'snow,' and speakers of these languages reportedly perceive snow differently",
+        "When students wrestle with difficult concepts, they generate multiple hypotheses and explore different solution paths, even if they don't initially arrive at the correct answer",
+        "The complex narratives and ambiguous characters of great literature demand active interpretation, forcing readers to weigh evidence, consider multiple perspectives, and make reasoned judgments"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "snow",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "For example, some languages have multiple words for what English speakers would simply call 'snow,' and speakers of these languages reportedly perceive snow differently",
+        "The park encompasses 6,641 square kilometers of mountainous terrain, featuring turquoise glacial lakes, dense pine forests, and snow-capped peaks"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "cognitive",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Studies show that while language may influence thought in subtle ways, fundamental cognitive abilities such as spatial reasoning and numerical understanding exist independently of language",
+        "This process builds cognitive flexibility and problem-solving skills",
+        "REM sleep, characterized by vivid dreaming and brain activity similar to wakefulness, is crucial for cognitive functions including creativity and emotional regulation"
+      ],
+      "pos_hint": "adj."
+    },
+    {
+      "word": "locally",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The town of Banff provides accommodation options from luxury resorts to budget hostels, along with restaurants serving locally sourced cuisine",
+        "All ingredients are locally sourced and organic whenever possible",
+        "The library cafe now serves fair-trade coffee and locally baked pastries"
+      ],
+      "pos_hint": "adv."
+    },
+    {
+      "word": "sessions",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Personal trainers are available for one-on-one sessions, with specialized programs for weight loss, muscle building, and athletic performance",
+        "The complete five-week course costs $450, or you may enroll in individual sessions for $95 each",
+        "Free training sessions are offered every Saturday morning for beginners interested in digital fabrication"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "week",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Group fitness classes are included with all memberships and run seven days a week, from early morning to late evening",
+        "The complete five-week course costs $450, or you may enroll in individual sessions for $95 each",
+        "Members can borrow up to ten digital items simultaneously for a three-week period"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "members",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Our nutrition counseling service helps members develop healthy eating plans tailored to their fitness goals",
+        "All new members receive a complimentary fitness assessment and personalized workout plan",
+        "Members can borrow up to ten digital items simultaneously for a three-week period"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "non",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Research has identified two main types of sleep: rapid eye movement (REM) sleep and non-REM sleep, each serving distinct functions",
+        "Non-REM sleep, which occupies about 75% of total sleep time, is associated with physical restoration",
+        "During deep non-REM sleep, blood pressure drops, breathing slows, and blood flow to muscles increases, facilitating tissue repair and growth"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "crisis",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Modern lifestyle factors excessive screen time, irregular work schedules, and high stress levels contribute to this sleep crisis",
+        "Habitat destruction, pollution, climate change, and invasive species are the major drivers of this biodiversity crisis",
+        "Ultimately, addressing the biodiversity crisis requires transformative changes in how societies produce and consume resources"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "library",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The Metropolitan Public Library is pleased to announce several new services for our patrons",
+        "The library's new makerspace, located on the third floor, provides access to 3D printers, laser cutters, and electronics prototyping equipment",
+        "The library cafe now serves fair-trade coffee and locally baked pastries"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "classics",
+      "frequency": 3,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Reading classics develops critical thinking skills in ways that scanning online articles cannot",
+        "Some educators argue that the canon of classics should be expanded to include works from diverse traditions, and this is a valid critique",
+        "The discipline of close reading, the expansion of vocabulary, and the development of empathy through encountering different worldviews these benefits make classics worth the effort"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "marin",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Help restore and protect Marin's natural areas from the Marin Headlands to Bolinas Ridge"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "invasive",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "We'll explore beautiful park sites while conducting invasive plant removal, winter planting, and seed collection",
+        "Habitat destruction, pollution, climate change, and invasive species are the major drivers of this biodiversity crisis"
+      ],
+      "pos_hint": "adj."
+    },
+    {
+      "word": "seed",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "We'll explore beautiful park sites while conducting invasive plant removal, winter planting, and seed collection",
+        "Genetic technologies such as seed banking and assisted reproduction offer additional tools for preserving endangered species"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "collection",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "We'll explore beautiful park sites while conducting invasive plant removal, winter planting, and seed collection",
+        "Highlights include a 3,000-year-old Egyptian sarcophagus, a collection of Roman coins from the reign of Augustus, and a reconstructed section of a Babylonian temple wall"
+      ],
+      "pos_hint": "n."
+    },
+    {
+      "word": "restoration",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Habitat Restoration Team volunteers play a vital role in restoring sensitive resources and protecting endangered species across the ridges and valleys",
+        "Non-REM sleep, which occupies about 75% of total sleep time, is associated with physical restoration"
+      ],
+      "pos_hint": "n."
+    },
+    {
+      "word": "volunteers",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Habitat Restoration Team volunteers play a vital role in restoring sensitive resources and protecting endangered species across the ridges and valleys",
+        "Seniors can take advantage of our technology tutoring program, where volunteers provide one-on-one assistance with smartphones, tablets, and computers"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "endangered",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Habitat Restoration Team volunteers play a vital role in restoring sensitive resources and protecting endangered species across the ridges and valleys",
+        "Genetic technologies such as seed banking and assisted reproduction offer additional tools for preserving endangered species"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "five",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Groups of five or more require special arrangements and must be confirmed in advance",
+        "The complete five-week course costs $450, or you may enroll in individual sessions for $95 each"
+      ],
+      "pos_hint": "adj."
+    },
+    {
+      "word": "request",
+      "frequency": 2,
+      "meanings": [
+        "n./v. 请求"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Please review the List of Available Projects and fill out the Group Project Request Form",
+        "Audio description services are provided for visually impaired patrons upon request"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "store",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Benefits include a 20% Park Store discount, naturalist-led hikes, and invitations to special events",
+        "Your cat will likely smell your face and store the smell in its memory and use it to recognize you in the future"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "led",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Benefits include a 20% Park Store discount, naturalist-led hikes, and invitations to special events",
+        "Guided tours depart every hour on the hour, led by trained archaeologists and historians"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "distinct",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "For instance, almost all animals have distinct vocals that they rely on to either ask for help, scare away any dangerous animals or look for shelter",
+        "Research has identified two main types of sleep: rapid eye movement (REM) sleep and non-REM sleep, each serving distinct functions"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "rely",
+      "frequency": 2,
+      "meanings": [
+        "v. 依靠，信赖"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "For instance, almost all animals have distinct vocals that they rely on to either ask for help, scare away any dangerous animals or look for shelter",
+        "Specialist species that rely on specific food sources or habitats are particularly vulnerable to urbanization"
+      ],
+      "pos_hint": "adv."
+    },
+    {
+      "word": "away",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "For instance, almost all animals have distinct vocals that they rely on to either ask for help, scare away any dangerous animals or look for shelter",
+        "The philosopher Descartes famously did his best thinking in bed, away from the distractions of Paris"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "mews",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "They are able to have entire conversations with humans using mews and you're able to interpret it",
+        "However, when a cat is looking for affection, they tend to produce stretched and soft mews"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "mewing",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "If a pet cat is hungry, it will keep mewing to attract attention and find food",
+        "Mewing starts as soon as a baby cat is brought to life and uses it to get the mother's attention and be fed"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "impressive",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Cats have many heightened senses, but their sense of smell is quite impressive",
+        "Dogs are known for their impressive fetching habit, but cats take this behavior up a notch"
+      ],
+      "pos_hint": "adj."
+    },
+    {
+      "word": "video",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Digital texts, audio and video all have educational roles, but reading and engaging with books remains the best way for individuals to improve their literacy skills and develop deep thinking abilities",
+        "Each course is designed by experts and includes video lectures, reading materials, quizzes, and discussion forums"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "literacy",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Digital texts, audio and video all have educational roles, but reading and engaging with books remains the best way for individuals to improve their literacy skills and develop deep thinking abilities",
+        "Furthermore, classical texts provide cultural literacy, the shared references and allusions that enable sophisticated communication"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "deep",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Digital texts, audio and video all have educational roles, but reading and engaging with books remains the best way for individuals to improve their literacy skills and develop deep thinking abilities",
+        "During deep non-REM sleep, blood pressure drops, breathing slows, and blood flow to muscles increases, facilitating tissue repair and growth"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "engagement",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Reading encourages engagement with language in ways that improve memory, comprehension and critical thinking",
+        "While loneliness is a negative state marked by a sense of isolation, solitude is a positive and constructive state of engagement with oneself"
+      ],
+      "pos_hint": "n."
+    },
+    {
+      "word": "read",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "When students read physical books, they develop a spatial understanding of the text",
+        "Despite the convenience of digital devices, research consistently shows that students who read physical books score higher on reading comprehension tests and report greater enjoyment of reading"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "remember",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "They remember where information was located on the page, which helps them recall the content",
+        "Researchers at the University of Washington found that crows can remember human faces for years and will teach their offspring which humans are threats"
+      ],
+      "pos_hint": "n.（人/物）"
+    },
+    {
+      "word": "content",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "They remember where information was located on the page, which helps them recall the content",
+        "Mobile apps allow learning on the go, with offline access to downloaded content"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "furthermore",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Furthermore, reading books without hyperlinks or notifications allows for deeper focus and concentration",
+        "Furthermore, classical texts provide cultural literacy, the shared references and allusions that enable sophisticated communication"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "deeper",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Furthermore, reading books without hyperlinks or notifications allows for deeper focus and concentration",
+        "Recent research in educational psychology suggests that productive failure deliberately allowing students to struggle with complex problems before receiving instruction leads to deeper understanding and better long-term retention"
+      ],
+      "pos_hint": "n.（人/物）"
+    },
+    {
+      "word": "focus",
+      "frequency": 2,
+      "meanings": [
+        "n./v. 焦点，集中"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Furthermore, reading books without hyperlinks or notifications allows for deeper focus and concentration",
+        "In spring, focus on soil preparation and planting"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "concentration",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Furthermore, reading books without hyperlinks or notifications allows for deeper focus and concentration",
+        "Psychologists today confirm that spending time alone can improve concentration, boost creativity, and help individuals develop a stronger sense of identity"
+      ],
+      "pos_hint": "n."
+    },
+    {
+      "word": "sustained",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "This sustained attention builds the capacity for complex thought that is essential for academic and professional success",
+        "In an age of instant information and social media, the sustained attention required for reading classical literature may seem antiquated"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "despite",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Despite the convenience of digital devices, research consistently shows that students who read physical books score higher on reading comprehension tests and report greater enjoyment of reading",
+        "Despite these well-documented risks, surveys indicate that nearly one-third of adults regularly get less than the recommended seven to nine hours of sleep per night"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "higher",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Despite the convenience of digital devices, research consistently shows that students who read physical books score higher on reading comprehension tests and report greater enjoyment of reading",
+        "City-dwelling birds, for instance, have begun singing at higher frequencies to be heard over traffic noise"
+      ],
+      "pos_hint": "n.（人/物）"
+    },
+    {
+      "word": "connection",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The tactile experience of holding a book, turning pages, and marking passages creates a physical connection to the text that enhances learning",
+        "However, solitude must be balanced with social connection"
+      ],
+      "pos_hint": "n."
+    },
+    {
+      "word": "habitats",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "As cities expand and natural habitats shrink, wildlife species face increasing pressure to adapt or perish",
+        "Specialist species that rely on specific food sources or habitats are particularly vulnerable to urbanization"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "pressure",
+      "frequency": 2,
+      "meanings": [
+        "n. 压力，压强; v. 施压"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "As cities expand and natural habitats shrink, wildlife species face increasing pressure to adapt or perish",
+        "During deep non-REM sleep, blood pressure drops, breathing slows, and blood flow to muscles increases, facilitating tissue repair and growth"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "adapt",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "As cities expand and natural habitats shrink, wildlife species face increasing pressure to adapt or perish",
+        "However, not all species can adapt so quickly"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "merely",
+      "frequency": 2,
+      "meanings": [
+        "adv. 仅仅，只不过"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Remarkably, some animals are not merely surviving in urban environments but are actually thriving",
+        "Sleep is not merely a period of rest but a complex biological process essential for physical and mental health"
+      ],
+      "pos_hint": "adv."
+    },
+    {
+      "word": "birds",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Scientists have discovered that urban foxes, raccoons, and birds are evolving new behaviors at unprecedented rates",
+        "City-dwelling birds, for instance, have begun singing at higher frequencies to be heard over traffic noise"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "warmth",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Some species have even changed their breeding patterns to align with the artificial light and warmth of human settlements",
+        "This explains why listening to a song from one's teenage years or revisiting a childhood home can produce such intense feelings of warmth and comfort"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "university",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Researchers at the University of Washington found that crows can remember human faces for years and will teach their offspring which humans are threats",
+        "Research conducted by psychologists at the University of Southampton has shown that nostalgic memories can increase feelings of social connectedness, boost self-esteem, and even provide a sense of meaning in life"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "teach",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Researchers at the University of Washington found that crows can remember human faces for years and will teach their offspring which humans are threats",
+        "Our experienced chefs will teach you authentic recipes from Italy, Thailand, India, Mexico, and Japan"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "sophisticated",
+      "frequency": 2,
+      "meanings": [
+        "adj. 复杂的，老练的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "This cultural transmission of knowledge is a sophisticated adaptation that helps urban wildlife navigate complex human-dominated landscapes",
+        "Furthermore, classical texts provide cultural literacy, the shared references and allusions that enable sophisticated communication"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "green",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The challenge for conservationists is to create urban green spaces that support biodiversity while accommodating the needs of growing human populations",
+        "Different varieties black, green, oolong, and white result from varying degrees of oxidation and processing"
+      ],
+      "pos_hint": "v."
+    },
+    {
+      "word": "populations",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The challenge for conservationists is to create urban green spaces that support biodiversity while accommodating the needs of growing human populations",
+        "Emerging approaches include habitat corridors that connect fragmented populations, community-based conservation that engages local people as stewards, and market-based incentives that reward sustainable land use"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "learn",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Join us for a hands-on workshop where you'll learn to create your own terrarium",
+        "You'll learn proper knife techniques, sauce preparation, and plating presentation"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "miniature",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "A terrarium is a miniature garden grown inside a glass container",
+        "Our experienced instructors will guide you through selecting appropriate plants, preparing the soil layers, and arranging your miniature landscape"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "glass",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "A terrarium is a miniature garden grown inside a glass container",
+        "All materials are provided, including the glass container, soil, stones, and a selection of small plants"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "container",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "A terrarium is a miniature garden grown inside a glass container",
+        "All materials are provided, including the glass container, soil, stones, and a selection of small plants"
+      ],
+      "pos_hint": "n.（人/物）"
+    },
+    {
+      "word": "experienced",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Our experienced instructors will guide you through selecting appropriate plants, preparing the soil layers, and arranging your miniature landscape",
+        "Our experienced chefs will teach you authentic recipes from Italy, Thailand, India, Mexico, and Japan"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "preparing",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Our experienced instructors will guide you through selecting appropriate plants, preparing the soil layers, and arranging your miniature landscape",
+        "Autumn is harvest time for most vegetables, but it's also the season for planting spring-flowering bulbs and preparing perennials for winter"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "suitable",
+      "frequency": 2,
+      "meanings": [
+        "adj. 合适的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "This activity is suitable for ages 12 and up",
+        "Latecomers will be admitted only at suitable breaks in the performance"
+      ],
+      "pos_hint": "adj."
+    },
+    {
+      "word": "ages",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "This activity is suitable for ages 12 and up",
+        "Childcare is available for children ages 6 months to 12 years, allowing parents to work out worry-free"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "discounts",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Group discounts are available for parties of six or more",
+        "Student and senior discounts are available"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "comfortable",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Please wear comfortable clothing that you don't mind getting dirty",
+        "The key is to cultivate the ability to be comfortable alone while also maintaining meaningful relationships"
+      ],
+      "pos_hint": "adj."
+    },
+    {
+      "word": "don",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Please wear comfortable clothing that you don't mind getting dirty",
+        "When students wrestle with difficult concepts, they generate multiple hypotheses and explore different solution paths, even if they don't initially arrive at the correct answer"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "refreshments",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Light refreshments will be provided during the session",
+        "Special evening viewings are held on the first Friday of each month, with live music and refreshments"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "session",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Light refreshments will be provided during the session",
+        "Each four-hour session focuses on one cuisine and includes hands-on preparation of a three-course meal"
+      ],
+      "pos_hint": "n."
+    },
+    {
+      "word": "communication",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "In a world that increasingly values connectivity and constant communication, the ability to be alone has become a rare and valuable skill",
+        "Furthermore, classical texts provide cultural literacy, the shared references and allusions that enable sophisticated communication"
+      ],
+      "pos_hint": "n."
+    },
+    {
+      "word": "isolation",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "While loneliness is a negative state marked by a sense of isolation, solitude is a positive and constructive state of engagement with oneself",
+        "Humans are inherently social beings, and prolonged isolation can indeed lead to loneliness and mental health problems"
+      ],
+      "pos_hint": "n."
+    },
+    {
+      "word": "history",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Many great thinkers and artists throughout history have emphasized the importance of solitude for creativity and self-discovery",
+        "History is filled with examples of failure preceding success"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "self",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Many great thinkers and artists throughout history have emphasized the importance of solitude for creativity and self-discovery",
+        "Research conducted by psychologists at the University of Southampton has shown that nostalgic memories can increase feelings of social connectedness, boost self-esteem, and even provide a sense of meaning in life"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "famously",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The philosopher Descartes famously did his best thinking in bed, away from the distractions of Paris",
+        "Thomas Edison famously conducted thousands of unsuccessful experiments before inventing the practical light bulb"
+      ],
+      "pos_hint": "adv."
+    },
+    {
+      "word": "finding",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The poet Wordsworth wandered the Lake District alone, finding inspiration in nature's quiet beauty",
+        "Rowling's Harry Potter manuscript was rejected by twelve publishers before finding a home"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "quiet",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The poet Wordsworth wandered the Lake District alone, finding inspiration in nature's quiet beauty",
+        "Use this quiet season to plan next year's garden, order seeds, and maintain tools"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "psychologists",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Psychologists today confirm that spending time alone can improve concentration, boost creativity, and help individuals develop a stronger sense of identity",
+        "Research conducted by psychologists at the University of Southampton has shown that nostalgic memories can increase feelings of social connectedness, boost self-esteem, and even provide a sense of meaning in life"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "boost",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Psychologists today confirm that spending time alone can improve concentration, boost creativity, and help individuals develop a stronger sense of identity",
+        "Research conducted by psychologists at the University of Southampton has shown that nostalgic memories can increase feelings of social connectedness, boost self-esteem, and even provide a sense of meaning in life"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "eighteenth",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Eighteenth-century physicians viewed it as a disease of the mind, prescribing everything from leeches to trips to the Swiss Alps as cures",
+        "European traders first encountered tea in the sixteenth century, and by the eighteenth century, it had become Britain's national drink"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "disease",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Eighteenth-century physicians viewed it as a disease of the mind, prescribing everything from leeches to trips to the Swiss Alps as cures",
+        "Chronic sleep deprivation has been linked to numerous health problems, including obesity, diabetes, cardiovascular disease, and depression"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "conducted",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Research conducted by psychologists at the University of Southampton has shown that nostalgic memories can increase feelings of social connectedness, boost self-esteem, and even provide a sense of meaning in life",
+        "Thomas Edison famously conducted thousands of unsuccessful experiments before inventing the practical light bulb"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "nostalgic",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Research conducted by psychologists at the University of Southampton has shown that nostalgic memories can increase feelings of social connectedness, boost self-esteem, and even provide a sense of meaning in life",
+        "The healthiest approach is to use nostalgic memories as a source of strength while remaining open to creating new positive experiences"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "associated",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "When people think about positive memories from their past, their brains release dopamine, the same neurotransmitter associated with pleasure and reward",
+        "Non-REM sleep, which occupies about 75% of total sleep time, is associated with physical restoration"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "revisiting",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "This explains why listening to a song from one's teenage years or revisiting a childhood home can produce such intense feelings of warmth and comfort",
+        "Learners can study at their own pace, revisiting difficult concepts as needed"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "emotional",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "This mental retreat provides emotional resilience and helps individuals cope with present difficulties",
+        "REM sleep, characterized by vivid dreaming and brain activity similar to wakefulness, is crucial for cognitive functions including creativity and emotional regulation"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "excessive",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "However, excessive nostalgia can become problematic if it leads people to idealize the past at the expense of engaging with the present",
+        "Modern lifestyle factors excessive screen time, irregular work schedules, and high stress levels contribute to this sleep crisis"
+      ],
+      "pos_hint": "adj."
+    },
+    {
+      "word": "problematic",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "However, excessive nostalgia can become problematic if it leads people to idealize the past at the expense of engaging with the present",
+        "Keeping a garden journal throughout the year helps track what varieties performed well and which pests were problematic, enabling continuous improvement"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "approach",
+      "frequency": 2,
+      "meanings": [
+        "n. 方法，途径; v. 接近，着手处理"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The healthiest approach is to use nostalgic memories as a source of strength while remaining open to creating new positive experiences",
+        "This approach, while well-intentioned, may actually hinder intellectual development"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "strength",
+      "frequency": 2,
+      "meanings": [
+        "n. 力量，优势"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The healthiest approach is to use nostalgic memories as a source of strength while remaining open to creating new positive experiences",
+        "Our state-of-the-art facility features a 5,000-square-meter gym floor with over 200 pieces of cardio and strength-training equipment"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "creating",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The healthiest approach is to use nostalgic memories as a source of strength while remaining open to creating new positive experiences",
+        "Experts recommend establishing consistent sleep schedules, creating dark and cool sleeping environments, and limiting caffeine and alcohol consumption to improve sleep quality"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "diverse",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Our 2022 season features a diverse lineup of performances ranging from classical Shakespeare to contemporary experimental theater",
+        "Some educators argue that the canon of classics should be expanded to include works from diverse traditions, and this is a valid critique"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "shakespeare",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Our 2022 season features a diverse lineup of performances ranging from classical Shakespeare to contemporary experimental theater",
+        "A person unfamiliar with Shakespeare cannot fully appreciate how his phrases have permeated everyday English"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "senior",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Senior citizens aged 65 and above are eligible for a 40% discount on weekday matinees",
+        "Student and senior discounts are available"
+      ],
+      "pos_hint": "n.（人/物）"
+    },
+    {
+      "word": "weekday",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Senior citizens aged 65 and above are eligible for a 40% discount on weekday matinees",
+        "Weekend intensive courses are also available for those with busy weekday schedules"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "accessible",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The theater is fully wheelchair accessible, with designated seating areas and companion seats available",
+        "Our digital lending platform now offers over 50,000 e-books and audiobooks, accessible through any internet-connected device"
+      ],
+      "pos_hint": "adj."
+    },
+    {
+      "word": "seating",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The theater is fully wheelchair accessible, with designated seating areas and companion seats available",
+        "Please arrive at least 30 minutes before the performance to allow time for seating"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "patrons",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Audio description services are provided for visually impaired patrons upon request",
+        "The Metropolitan Public Library is pleased to announce several new services for our patrons"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "beverages",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Food and beverages are not permitted in the auditorium",
+        "Tea has been cultivated in China for over 4,000 years, making it one of the oldest beverages in continuous use"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "gardening",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Successful gardening requires understanding the seasonal rhythms of plants",
+        "Winter gardening is often overlooked but can be productive"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "spring",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "In spring, focus on soil preparation and planting",
+        "Autumn is harvest time for most vegetables, but it's also the season for planting spring-flowering bulbs and preparing perennials for winter"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "cool",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "This is the ideal time to plant cool-season vegetables like lettuce, peas, and spinach",
+        "Experts recommend establishing consistent sleep schedules, creating dark and cool sleeping environments, and limiting caffeine and alcohol consumption to improve sleep quality"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "vegetables",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "This is the ideal time to plant cool-season vegetables like lettuce, peas, and spinach",
+        "Autumn is harvest time for most vegetables, but it's also the season for planting spring-flowering bulbs and preparing perennials for winter"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "temperatures",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "As temperatures rise in early summer, switch to warm-season crops such as tomatoes, peppers, and cucumbers",
+        "Mulching garden beds with straw or leaves protects root systems from freezing temperatures"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "summer",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "As temperatures rise in early summer, switch to warm-season crops such as tomatoes, peppers, and cucumbers",
+        "The best time to visit depends on your interests: summer offers hiking, canoeing, and wildlife viewing, while winter transforms the park into a skiing and ice-climbing paradise"
+      ],
+      "pos_hint": "n.（人/物）"
+    },
+    {
+      "word": "consistent",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Consistent watering becomes crucial during hot periods; early morning irrigation minimizes evaporation and helps prevent fungal diseases",
+        "Experts recommend establishing consistent sleep schedules, creating dark and cool sleeping environments, and limiting caffeine and alcohol consumption to improve sleep quality"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "crucial",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Consistent watering becomes crucial during hot periods; early morning irrigation minimizes evaporation and helps prevent fungal diseases",
+        "REM sleep, characterized by vivid dreaming and brain activity similar to wakefulness, is crucial for cognitive functions including creativity and emotional regulation"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "productive",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Winter gardening is often overlooked but can be productive",
+        "Recent research in educational psychology suggests that productive failure deliberately allowing students to struggle with complex problems before receiving instruction leads to deeper understanding and better long-term retention"
+      ],
+      "pos_hint": "adj."
+    },
+    {
+      "word": "extend",
+      "frequency": 2,
+      "meanings": [
+        "v. 延伸，扩展，给予"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Cold frames and greenhouses extend the growing season, allowing for fresh greens even in January",
+        "The consequences extend far beyond the loss of individual species"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "track",
+      "frequency": 2,
+      "meanings": [
+        "n. 轨道，踪迹; v. 追踪"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Keeping a garden journal throughout the year helps track what varieties performed well and which pests were problematic, enabling continuous improvement",
+        "The center includes an Olympic-sized swimming pool, a heated indoor track, and dedicated studios for yoga, spinning, and martial arts"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "varieties",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Keeping a garden journal throughout the year helps track what varieties performed well and which pests were problematic, enabling continuous improvement",
+        "Different varieties black, green, oolong, and white result from varying degrees of oxidation and processing"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "continuous",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Keeping a garden journal throughout the year helps track what varieties performed well and which pests were problematic, enabling continuous improvement",
+        "Tea has been cultivated in China for over 4,000 years, making it one of the oldest beverages in continuous use"
+      ],
+      "pos_hint": "adj."
+    },
+    {
+      "word": "rapid",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The rapid development of online education has transformed how people access knowledge",
+        "Research has identified two main types of sleep: rapid eye movement (REM) sleep and non-REM sleep, each serving distinct functions"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "online",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The rapid development of online education has transformed how people access knowledge",
+        "Reading classics develops critical thinking skills in ways that scanning online articles cannot"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "platform",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Our platform offers over 5,000 courses across various disciplines, from programming and data science to literature and philosophy",
+        "Our digital lending platform now offers over 50,000 e-books and audiobooks, accessible through any internet-connected device"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "experts",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Each course is designed by experts and includes video lectures, reading materials, quizzes, and discussion forums",
+        "Experts recommend establishing consistent sleep schedules, creating dark and cool sleeping environments, and limiting caffeine and alcohol consumption to improve sleep quality"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "learners",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Learners can study at their own pace, revisiting difficult concepts as needed",
+        "Join our community of over 10 million learners worldwide and start your educational journey today"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "difficult",
+      "frequency": 2,
+      "meanings": [
+        "adj. 困难的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Learners can study at their own pace, revisiting difficult concepts as needed",
+        "When students wrestle with difficult concepts, they generate multiple hypotheses and explore different solution paths, even if they don't initially arrive at the correct answer"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "concepts",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Learners can study at their own pace, revisiting difficult concepts as needed",
+        "When students wrestle with difficult concepts, they generate multiple hypotheses and explore different solution paths, even if they don't initially arrive at the correct answer"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "certificates",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Completion certificates are awarded to students who pass final assessments",
+        "Gift certificates make perfect presents for food lovers"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "pass",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Completion certificates are awarded to students who pass final assessments",
+        "An annual pass, valid for all Canadian national parks, costs $72"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "technology",
+      "frequency": 2,
+      "meanings": [
+        "n. 技术"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Our adaptive learning technology identifies each student's strengths and weaknesses, recommending personalized study paths",
+        "Seniors can take advantage of our technology tutoring program, where volunteers provide one-on-one assistance with smartphones, tablets, and computers"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "paths",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Our adaptive learning technology identifies each student's strengths and weaknesses, recommending personalized study paths",
+        "When students wrestle with difficult concepts, they generate multiple hypotheses and explore different solution paths, even if they don't initially arrive at the correct answer"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "partner",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "We partner with leading universities to offer accredited degree programs",
+        "For researchers, our interlibrary loan service has expanded to include materials from over 200 partner institutions worldwide"
+      ],
+      "pos_hint": "n.（人/物）"
+    },
+    {
+      "word": "million",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Join our community of over 10 million learners worldwide and start your educational journey today",
+        "Today, tea is the second most consumed beverage in the world after water, with global production exceeding 6 million metric tons annually"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "worldwide",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Join our community of over 10 million learners worldwide and start your educational journey today",
+        "For researchers, our interlibrary loan service has expanded to include materials from over 200 partner institutions worldwide"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "journey",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Join our community of over 10 million learners worldwide and start your educational journey today",
+        "Join our International Cooking Workshop and embark on a culinary journey around the world"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "oldest",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Tea has been cultivated in China for over 4,000 years, making it one of the oldest beverages in continuous use",
+        "Established in 1885, it is Canada's oldest national park and a UNESCO World Heritage Site"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "cultivation",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The resulting brew was refreshing and invigorating, and tea cultivation began shortly thereafter",
+        "The scholar Lu Yu wrote the Classic of Tea, the first comprehensive treatise on tea cultivation and preparation"
+      ],
+      "pos_hint": "n."
+    },
+    {
+      "word": "specialized",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "During the Tang Dynasty, tea drinking became an art form, with elaborate ceremonies and specialized utensils",
+        "Personal trainers are available for one-on-one sessions, with specialized programs for weight loss, muscle building, and athletic performance"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "classic",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The scholar Lu Yu wrote the Classic of Tea, the first comprehensive treatise on tea cultivation and preparation",
+        "Yet classic works endure for reasons that transcend their historical periods"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "japan",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Tea spread to Japan in the ninth century, where it evolved into the ritualized tea ceremony that continues today",
+        "Our experienced chefs will teach you authentic recipes from Italy, Thailand, India, Mexico, and Japan"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "european",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "European traders first encountered tea in the sixteenth century, and by the eighteenth century, it had become Britain's national drink",
+        "The British East India Company established vast tea plantations in India and Ceylon to meet growing European demand"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "established",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The British East India Company established vast tea plantations in India and Ceylon to meet growing European demand",
+        "Established in 1885, it is Canada's oldest national park and a UNESCO World Heritage Site"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "demand",
+      "frequency": 2,
+      "meanings": [
+        "n./v. 要求，需求"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The British East India Company established vast tea plantations in India and Ceylon to meet growing European demand",
+        "The complex narratives and ambiguous characters of great literature demand active interpretation, forcing readers to weigh evidence, consider multiple perspectives, and make reasoned judgments"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "annually",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Today, tea is the second most consumed beverage in the world after water, with global production exceeding 6 million metric tons annually",
+        "The economic value of these ecosystem services has been estimated at $125 trillion annually"
+      ],
+      "pos_hint": "adv."
+    },
+    {
+      "word": "black",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Different varieties black, green, oolong, and white result from varying degrees of oxidation and processing",
+        "Wildlife is abundant; visitors frequently spot elk, deer, black bears, and bighorn sheep"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "museum",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The City Museum's new exhibition, 'Ancient Civilizations,' opens this Saturday and runs through the end of the year",
+        "The museum shop offers reproductions of many exhibited items, as well as books, posters, and educational materials"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "exhibition",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The City Museum's new exhibition, 'Ancient Civilizations,' opens this Saturday and runs through the end of the year",
+        "The exhibition features over 300 artifacts from Mesopotamia, Egypt, Greece, and Rome, many of which have never been displayed publicly before"
+      ],
+      "pos_hint": "n."
+    },
+    {
+      "word": "ancient",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The City Museum's new exhibition, 'Ancient Civilizations,' opens this Saturday and runs through the end of the year",
+        "Interactive displays allow visitors to explore ancient writing systems and try their hand at cuneiform and hieroglyphics"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "saturday",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The City Museum's new exhibition, 'Ancient Civilizations,' opens this Saturday and runs through the end of the year",
+        "Free training sessions are offered every Saturday morning for beginners interested in digital fabrication"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "twelve",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Audio guides are available in twelve languages, including Mandarin, English, Spanish, and Arabic",
+        "Rowling's Harry Potter manuscript was rejected by twelve publishers before finding a home"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "spanish",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Audio guides are available in twelve languages, including Mandarin, English, Spanish, and Arabic",
+        "The children's department has introduced a bilingual storytime program in English and Spanish, held every Wednesday afternoon"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "items",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The museum shop offers reproductions of many exhibited items, as well as books, posters, and educational materials",
+        "Members can borrow up to ten digital items simultaneously for a three-week period"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "evening",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Special evening viewings are held on the first Friday of each month, with live music and refreshments",
+        "Group fitness classes are included with all memberships and run seven days a week, from early morning to late evening"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "held",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Special evening viewings are held on the first Friday of each month, with live music and refreshments",
+        "The children's department has introduced a bilingual storytime program in English and Spanish, held every Wednesday afternoon"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "admission",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Admission is free for children under 12, students, and seniors over 65",
+        "Annual memberships include unlimited free admission and invitations to exclusive preview events"
+      ],
+      "pos_hint": "n."
+    },
+    {
+      "word": "seniors",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Admission is free for children under 12, students, and seniors over 65",
+        "Seniors can take advantage of our technology tutoring program, where volunteers provide one-on-one assistance with smartphones, tablets, and computers"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "memberships",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Annual memberships include unlimited free admission and invitations to exclusive preview events",
+        "Group fitness classes are included with all memberships and run seven days a week, from early morning to late evening"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "exclusive",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Annual memberships include unlimited free admission and invitations to exclusive preview events",
+        "Alumni receive a 20% discount on all future courses and exclusive invitations to special tasting events"
+      ],
+      "pos_hint": "adj."
+    },
+    {
+      "word": "relationship",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The relationship between language and thought has fascinated philosophers and scientists for centuries",
+        "This suggests a more nuanced relationship in which language serves as a tool for expressing and refining thoughts rather than determining them entirely"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "centuries",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The relationship between language and thought has fascinated philosophers and scientists for centuries",
+        "These texts address universal themes love, mortality, ambition, morality that remain relevant across centuries and cultures"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "exist",
+      "frequency": 2,
+      "meanings": [
+        "v. 存在"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Does language shape the way we think, or does thought exist independently of language",
+        "Studies show that while language may influence thought in subtle ways, fundamental cognitive abilities such as spatial reasoning and numerical understanding exist independently of language"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "independently",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Does language shape the way we think, or does thought exist independently of language",
+        "Studies show that while language may influence thought in subtle ways, fundamental cognitive abilities such as spatial reasoning and numerical understanding exist independently of language"
+      ],
+      "pos_hint": "adv."
+    },
+    {
+      "word": "hypothesis",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The Sapir-Whorf hypothesis, proposed in the early twentieth century, suggests that the structure of a language affects its speakers' world view",
+        "However, modern research has challenged strong versions of this hypothesis"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "influence",
+      "frequency": 2,
+      "meanings": [
+        "n./v. 影响"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Studies show that while language may influence thought in subtle ways, fundamental cognitive abilities such as spatial reasoning and numerical understanding exist independently of language",
+        "The debate continues, but most researchers now agree that language and thought influence each other in complex, bidirectional ways"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "canadian",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Nestled in the heart of the Canadian Rockies, Banff National Park offers visitors an unparalleled wilderness experience",
+        "An annual pass, valid for all Canadian national parks, costs $72"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "banff",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Nestled in the heart of the Canadian Rockies, Banff National Park offers visitors an unparalleled wilderness experience",
+        "The town of Banff provides accommodation options from luxury resorts to budget hostels, along with restaurants serving locally sourced cuisine"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "square",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The park encompasses 6,641 square kilometers of mountainous terrain, featuring turquoise glacial lakes, dense pine forests, and snow-capped peaks",
+        "Our state-of-the-art facility features a 5,000-square-meter gym floor with over 200 pieces of cardio and strength-training equipment"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "less",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Moraine Lake, equally stunning but less crowded, offers excellent hiking trails ranging from easy lakeside walks to challenging mountain ascents",
+        "Despite these well-documented risks, surveys indicate that nearly one-third of adults regularly get less than the recommended seven to nine hours of sleep per night"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "hiking",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Moraine Lake, equally stunning but less crowded, offers excellent hiking trails ranging from easy lakeside walks to challenging mountain ascents",
+        "The best time to visit depends on your interests: summer offers hiking, canoeing, and wildlife viewing, while winter transforms the park into a skiing and ice-climbing paradise"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "sourced",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The town of Banff provides accommodation options from luxury resorts to budget hostels, along with restaurants serving locally sourced cuisine",
+        "All ingredients are locally sourced and organic whenever possible"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "cuisine",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The town of Banff provides accommodation options from luxury resorts to budget hostels, along with restaurants serving locally sourced cuisine",
+        "Each four-hour session focuses on one cuisine and includes hands-on preparation of a three-course meal"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "age",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "From an early age, children are taught to avoid mistakes, and educational systems reward correct answers while penalizing errors",
+        "In an age of instant information and social media, the sustained attention required for reading classical literature may seem antiquated"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "correct",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "From an early age, children are taught to avoid mistakes, and educational systems reward correct answers while penalizing errors",
+        "When students wrestle with difficult concepts, they generate multiple hypotheses and explore different solution paths, even if they don't initially arrive at the correct answer"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "psychology",
+      "frequency": 2,
+      "meanings": [
+        "n. 心理学"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Recent research in educational psychology suggests that productive failure deliberately allowing students to struggle with complex problems before receiving instruction leads to deeper understanding and better long-term retention",
+        "Similarly, understanding references to Greek mythology enriches comprehension of Western art, politics, and psychology"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "feedback",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "The key is to reframe failure as feedback, extracting lessons from setbacks and applying them to future endeavors",
+        "We welcome your feedback and suggestions for improving our services"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "floor",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Our state-of-the-art facility features a 5,000-square-meter gym floor with over 200 pieces of cardio and strength-training equipment",
+        "The library's new makerspace, located on the third floor, provides access to 3D printers, laser cutters, and electronics prototyping equipment"
+      ],
+      "pos_hint": "n.（人/物）"
+    },
+    {
+      "word": "loss",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Personal trainers are available for one-on-one sessions, with specialized programs for weight loss, muscle building, and athletic performance",
+        "The consequences extend far beyond the loss of individual species"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "building",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Personal trainers are available for one-on-one sessions, with specialized programs for weight loss, muscle building, and athletic performance",
+        "Free Wi-Fi is available throughout the building"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "seven",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Group fitness classes are included with all memberships and run seven days a week, from early morning to late evening",
+        "Despite these well-documented risks, surveys indicate that nearly one-third of adults regularly get less than the recommended seven to nine hours of sleep per night"
+      ],
+      "pos_hint": "v."
+    },
+    {
+      "word": "service",
+      "frequency": 2,
+      "meanings": [
+        "n. 服务"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Our nutrition counseling service helps members develop healthy eating plans tailored to their fitness goals",
+        "For researchers, our interlibrary loan service has expanded to include materials from over 200 partner institutions worldwide"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "monthly",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Membership options include monthly plans at $59, annual plans at $599, and premium plans that include spa access and guest privileges for $89 monthly"
+      ],
+      "pos_hint": "adv."
+    },
+    {
+      "word": "establishing",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Experts recommend establishing consistent sleep schedules, creating dark and cool sleeping environments, and limiting caffeine and alcohol consumption to improve sleep quality",
+        "Conservation efforts have traditionally focused on establishing protected areas, and while these remain important, they are insufficient alone"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "ecosystems",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Biodiversity the variety of life on Earth at all levels, from genes to ecosystems is declining at an alarming rate",
+        "Ecosystems with high biodiversity are more resilient to environmental changes and provide essential services such as pollination, water purification, and carbon storage"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "conservation",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Conservation efforts have traditionally focused on establishing protected areas, and while these remain important, they are insufficient alone",
+        "Emerging approaches include habitat corridors that connect fragmented populations, community-based conservation that engages local people as stewards, and market-based incentives that reward sustainable land use"
+      ],
+      "pos_hint": "n."
+    },
+    {
+      "word": "based",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Emerging approaches include habitat corridors that connect fragmented populations, community-based conservation that engages local people as stewards, and market-based incentives that reward sustainable land use"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "expanded",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "For researchers, our interlibrary loan service has expanded to include materials from over 200 partner institutions worldwide",
+        "Some educators argue that the canon of classics should be expanded to include works from diverse traditions, and this is a valid critique"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "cannot",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Reading classics develops critical thinking skills in ways that scanning online articles cannot",
+        "A person unfamiliar with Shakespeare cannot fully appreciate how his phrases have permeated everyday English"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "references",
+      "frequency": 2,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Furthermore, classical texts provide cultural literacy, the shared references and allusions that enable sophisticated communication",
+        "Similarly, understanding references to Greek mythology enriches comprehension of Western art, politics, and psychology"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "restore",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Help restore and protect Marin's natural areas from the Marin Headlands to Bolinas Ridge"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "headlands",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Help restore and protect Marin's natural areas from the Marin Headlands to Bolinas Ridge"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "bolinas",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Help restore and protect Marin's natural areas from the Marin Headlands to Bolinas Ridge"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "ridge",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Help restore and protect Marin's natural areas from the Marin Headlands to Bolinas Ridge"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "beautiful",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "We'll explore beautiful park sites while conducting invasive plant removal, winter planting, and seed collection"
+      ],
+      "pos_hint": "adj."
+    },
+    {
+      "word": "removal",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "We'll explore beautiful park sites while conducting invasive plant removal, winter planting, and seed collection"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "vital",
+      "frequency": 1,
+      "meanings": [
+        "adj. 至关重要的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Habitat Restoration Team volunteers play a vital role in restoring sensitive resources and protecting endangered species across the ridges and valleys"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "sensitive",
+      "frequency": 1,
+      "meanings": [
+        "adj. 敏感的"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Habitat Restoration Team volunteers play a vital role in restoring sensitive resources and protecting endangered species across the ridges and valleys"
+      ],
+      "pos_hint": "adj."
+    },
+    {
+      "word": "protecting",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Habitat Restoration Team volunteers play a vital role in restoring sensitive resources and protecting endangered species across the ridges and valleys"
+      ],
+      "pos_hint": "v./n./adj."
+    },
+    {
+      "word": "ridges",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Habitat Restoration Team volunteers play a vital role in restoring sensitive resources and protecting endangered species across the ridges and valleys"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "valleys",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Habitat Restoration Team volunteers play a vital role in restoring sensitive resources and protecting endangered species across the ridges and valleys"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "arrangements",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Groups of five or more require special arrangements and must be confirmed in advance"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "confirmed",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Groups of five or more require special arrangements and must be confirmed in advance"
+      ],
+      "pos_hint": "v./adj."
+    },
+    {
+      "word": "advance",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Groups of five or more require special arrangements and must be confirmed in advance"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "review",
+      "frequency": 1,
+      "meanings": [
+        "n./v. 复习，评论"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Please review the List of Available Projects and fill out the Group Project Request Form"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "list",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Please review the List of Available Projects and fill out the Group Project Request Form"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "fill",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Please review the List of Available Projects and fill out the Group Project Request Form"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "naturalist",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Benefits include a 20% Park Store discount, naturalist-led hikes, and invitations to special events"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "hikes",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Benefits include a 20% Park Store discount, naturalist-led hikes, and invitations to special events"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "express",
+      "frequency": 1,
+      "meanings": [
+        "v. 表达; n. 快车，快递"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Animals can express their needs using a lot of ways"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "lot",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "Animals can express their needs using a lot of ways"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "almost",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "For instance, almost all animals have distinct vocals that they rely on to either ask for help, scare away any dangerous animals or look for shelter"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "vocals",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "For instance, almost all animals have distinct vocals that they rely on to either ask for help, scare away any dangerous animals or look for shelter"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "scare",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "For instance, almost all animals have distinct vocals that they rely on to either ask for help, scare away any dangerous animals or look for shelter"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "dangerous",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "For instance, almost all animals have distinct vocals that they rely on to either ask for help, scare away any dangerous animals or look for shelter"
+      ],
+      "pos_hint": "adj."
+    },
+    {
+      "word": "creatures",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "But cats are special creatures who possess amazing vocalization skills"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "possess",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "But cats are special creatures who possess amazing vocalization skills"
+      ],
+      "pos_hint": "（词性待确定）"
+    },
+    {
+      "word": "vocalization",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "But cats are special creatures who possess amazing vocalization skills"
+      ],
+      "pos_hint": "n."
+    },
+    {
+      "word": "entire",
+      "frequency": 1,
+      "meanings": [
+        "（含义待补充）"
+      ],
+      "collocations": [],
+      "example_sentences": [
+        "They are able to have entire conversations with humans using mews and you're able to interpret it"
+      ],
+      "pos_hint": "（词性待确定）"
+    }
+  ],
+  "top_phrases": [
+    [
+      "for instance",
+      2
+    ],
+    [
+      "due to",
+      2
+    ],
+    [
+      "take advantage of",
+      1
+    ],
+    [
+      "turn to",
+      1
+    ],
+    [
+      "look for",
+      1
+    ],
+    [
+      "look out",
+      1
+    ],
+    [
+      "work out",
+      1
+    ],
+    [
+      "fill out",
+      1
+    ],
+    [
+      "in effect",
+      1
+    ],
+    [
+      "at all",
+      1
+    ],
+    [
+      "at least",
+      1
+    ],
+    [
+      "for example",
+      1
+    ],
+    [
+      "as soon as",
+      1
+    ],
+    [
+      "as well",
+      1
+    ],
+    [
+      "as well as",
+      1
+    ],
+    [
+      "familiar with",
+      1
+    ],
+    [
+      "interested in",
+      1
+    ],
+    [
+      "open to",
+      1
+    ],
+    [
+      "similar to",
+      1
+    ],
+    [
+      "suitable for",
+      1
+    ],
+    [
+      "according to",
+      1
+    ],
+    [
+      "up to",
+      1
+    ]
+  ],
+  "coverage": {
+    "core": {
+      "covered": 345,
+      "total": 3262,
+      "rate": 10.58
+    }
+  }
+}

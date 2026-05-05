@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LexiStory
 
-## Getting Started
+一款**语境式英语学习 Web App**。
 
-First, run the development server:
+核心想法：把你当天学的单词和语法，编织成一篇专属的英文文章。在真实语境中阅读、记忆、理解。
+
+## 快速开始
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+打开 http://localhost:3000 即可使用。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 核心流程
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. 输入今日要学的单词（5-10 个）
+2. 选择一个语法点（如：一般现在时、现在完成时等）
+3. 点击生成，AI 为你写一篇文章
+4. 在阅读页中高亮查看目标单词，阅读中文大意
+5. 历史记录页回顾所有生成的文章
 
-## Learn More
+## 技术栈
 
-To learn more about Next.js, take a look at the following resources:
+- Next.js 16 + React 19 + TypeScript
+- Tailwind CSS 4 + shadcn/ui
+- localStorage 本地持久化
+- Claude API（可选，用于真实文章生成）
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 配置真实 AI 生成（可选）
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+MVP 版本在没有 API Key 时会返回示例文章。如需接入真实的 Claude API：
 
-## Deploy on Vercel
+1. 在根目录创建 `.env.local`
+2. 写入：`ANTHROPIC_API_KEY=你的API密钥`
+3. 重启 `npm run dev`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 部署
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+推荐部署到 [Vercel](https://vercel.com)：
+
+```bash
+npx vercel
+```
