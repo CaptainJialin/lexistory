@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,62 +12,107 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import { LessonRecipe } from "@/components/lesson-recipe";
+import { LearningCompanion } from "@/components/learning-companion";
+import { notifyDataChanged } from "@/lib/client-store";
+import { type WordItem, type UserProgress } from "@/lib/types";
+import { getProgress, saveProgress, getLearningStats } from "@/lib/storage";
+import { addWords, getWordBook } from "@/lib/wordbook";
+import { countClozeAvailable } from "@/lib/cloze";
+import { countTranslationAvailable } from "@/lib/translation-practice";
 import {
-  WORD_PHRASES,
-  type WordItem,
-  type EducationLevel,
-  getGrammarsByIds,
-} from "@/lib/types";
-import { saveArticle, getLearningStats } from "@/lib/storage";
-import { getProgress, saveProgress } from "@/lib/storage";
+  getDailyProgress,
+  shouldRemindBackup,
+  markBackupReminded,
+  type DailyProgress,
+} from "@/lib/daily-goal";
+import { downloadBackup } from "@/lib/backup";
+import {
+  buildLessonPlan,
+  findNextUnitAcrossGrades,
+  wordsNeedingEnrichment,
+  applyEnrichment,
+  type LessonPlan,
+  type EnrichedWord,
+} from "@/lib/lesson-plan";
+import { generateArticleFromPlan } from "@/lib/generate-article";
+import {
+  getPrefetched,
+  isPrefetchValid,
+  commitPrefetched,
+  clearPrefetched,
+  prefetchAsPlan,
+  type PrefetchedLesson,
+} from "@/lib/prefetch";
 import {
   getAllBooks,
   getGradesByBook,
   getUnitsByGrade,
   getUnitById,
-  getWordsByUnit,
-  getGrammarIdsByUnit,
-  getNextUnit,
 } from "@/lib/official-words";
 import {
   Loader2, Sparkles, BookOpen, Target, Flame, Zap,
-  ChevronRight, RotateCcw, Library,
+  ChevronRight, RotateCcw, Library, Plus, X, RefreshCw, Check,
+  AlertTriangle, ArrowUpRight, Leaf,
 } from "lucide-react";
+
+const BOOK_LEVEL_LABELS: Record<string, string> = {
+  primary: "小学",
+  junior: "初中",
+  senior: "高中",
+  graduate: "考研",
+};
+
+type Mode = "task" | "select";
+
+/**
+ * 生成过程的分步文案。
+ * 时间点对应真实流程：撰写正文约 18 秒，随后逐句解析约 16 秒（分片并发）。
+ */
+const GENERATION_STEPS = [
+  "正在编排词汇与语法...",
+  "正在撰写文章...",
+  "正在做逐句解析...",
+  "就快好了...",
+];
 
 export default function Home() {
   const router = useRouter();
 
-  // ====== 状态 ======
-  const [progress, setProgress] = useState<ReturnType<typeof getProgress>>(null);
-  const [mode, setMode] = useState<"task" | "select">("task");
+  const [progress, setProgress] = useState<UserProgress | null>(null);
+  const [mode, setMode] = useState<Mode>("task");
+  const [plan, setPlan] = useState<LessonPlan | null>(null);
+  const [excluded, setExcluded] = useState<Set<string>>(new Set());
 
-  // 教材选择状态
+  // 教材选择
   const [selectedBookId, setSelectedBookId] = useState("");
   const [selectedGradeId, setSelectedGradeId] = useState("");
   const [selectedUnitId, setSelectedUnitId] = useState("");
 
+  // 自定义词表
+  const [showCustom, setShowCustom] = useState(false);
+  const [customText, setCustomText] = useState("");
+
   const [loading, setLoading] = useState(false);
+  const [enriching, setEnriching] = useState(false);
+  const [progressStep, setProgressStep] = useState(0);
   const [error, setError] = useState("");
-  const [recommending, setRecommending] = useState(false);
-  const [recommendedWords, setRecommendedWords] = useState<WordItem[]>([]);
-  const [recommendedGrammars, setRecommendedGrammars] = useState<
-    { id: string; name: string; nameEn: string; category: string; description: string }[]
-  >([]);
+  /** 上一次阅读时后台备好的下一篇，可秒开 */
+  const [ready, setReady] = useState<PrefetchedLesson | null>(null);
+  const [clozeCount, setClozeCount] = useState({ due: 0, total: 0 });
+  const [translateCount, setTranslateCount] = useState(0);
+  const [daily, setDaily] = useState<DailyProgress | null>(null);
+  const [remindBackup, setRemindBackup] = useState(false);
   const [stats, setStats] = useState({
     totalArticles: 0,
     streakDays: 0,
-    masteredWords: 0,
-    masteredGrammars: 0,
-    lastStudyDate: "",
-    avgSentenceClicks: 0,
+    knownWords: 0,
+    knownGrammars: 0,
+    dueWords: 0,
+    dueGrammars: 0,
   });
 
-
-  // 自定义生成模式（保留旧入口）
-  const [showCustom, setShowCustom] = useState(false);
-
-  // ====== 数据计算 ======
   const allBooks = useMemo(() => getAllBooks(), []);
 
   const availableGrades = useMemo(
@@ -83,320 +128,367 @@ export default function Home() {
     [selectedBookId, selectedGradeId]
   );
 
-  const selectedUnit = useMemo(
+  const currentUnit = useMemo(
     () =>
-      selectedBookId && selectedGradeId && selectedUnitId
-        ? getUnitById(selectedBookId, selectedGradeId, selectedUnitId)
+      progress
+        ? getUnitById(progress.bookId, progress.gradeId, progress.unitId)
         : null,
-    [selectedBookId, selectedGradeId, selectedUnitId]
+    [progress]
   );
 
-  // 当前进度对应的单元
-  const currentUnit = useMemo(() => {
-    if (!progress) return null;
-    return getUnitById(progress.bookId, progress.gradeId, progress.unitId);
-  }, [progress]);
+  const currentBook = useMemo(
+    () => (progress ? allBooks.find((b) => b.id === progress.bookId) : null),
+    [progress, allBooks]
+  );
 
-  const currentBook = useMemo(() => {
-    if (!progress) return null;
-    return allBooks.find((b) => b.id === progress.bookId);
-  }, [progress, allBooks]);
+  const currentGrade = useMemo(
+    () =>
+      progress
+        ? getGradesByBook(progress.bookId).find(
+            (g) => g.gradeId === progress.gradeId
+          )
+        : null,
+    [progress]
+  );
 
-  const currentGrade = useMemo(() => {
-    if (!progress) return null;
-    const grades = getGradesByBook(progress.bookId);
-    return grades.find((g) => g.gradeId === progress.gradeId);
-  }, [progress]);
+  const currentUnitState = progress?.unitStates?.[progress.unitId];
+  const nextUnit = progress ? findNextUnitAcrossGrades(progress) : null;
+  const gradeUnits = progress
+    ? getUnitsByGrade(progress.bookId, progress.gradeId)
+    : [];
+  const completedInGrade = progress
+    ? gradeUnits.filter((u) => progress.completedUnits.includes(u.unitId)).length
+    : 0;
 
-  // ====== 初始化 ======
+  /** 解析粘贴的词表：逗号、换行、分号、空格都能分隔 */
+  const customWords: WordItem[] = useMemo(() => {
+    if (!customText.trim()) return [];
+    return customText
+      .split(/[,，;；\n\r\t]+/)
+      .map((s) => s.trim())
+      .filter((s) => s && /[a-zA-Z]/.test(s))
+      .slice(0, 60)
+      .map((word) => ({ word }));
+  }, [customText]);
+
+  /**
+   * 已补全过的词义缓存。
+   *
+   * 配方每次重算都是从头 build，补全结果会被冲掉。没有这层缓存的话，
+   * 用户每点掉一个词就会重新发一次补全请求——点 5 个词就是 5 次付费调用。
+   */
+  const enrichCacheRef = useRef<Map<string, EnrichedWord>>(new Map());
+
+  const refreshPlan = useCallback(
+    (p: UserProgress | null, custom: WordItem[], exclude: Set<string>) => {
+      const built = buildLessonPlan({ progress: p, customWords: custom });
+      if (exclude.size > 0) {
+        built.words = built.words.filter(
+          (s) => !exclude.has(s.item.word.toLowerCase())
+        );
+      }
+      setPlan(applyEnrichment(built, [...enrichCacheRef.current.values()]));
+    },
+    []
+  );
+
   useEffect(() => {
-    const p = getProgress();
-    setProgress(p);
-    setStats(getLearningStats());
-    if (!p) {
-      setMode("select");
+    let p = getProgress();
+    // 全新用户先走摸底：直接甩三个下拉框既劝退，也让人看不出这产品到底特别在哪
+    if (!p && getWordBook().length === 0) {
+      router.replace("/onboarding");
+      return;
     }
-  }, []);
-
-  // ====== 调用大模型推荐单词和语法 ======
-  useEffect(() => {
-    if (!progress) return;
-    async function fetchRecommended() {
-      setRecommending(true);
-      try {
-        const res = await fetch("/api/recommend-words", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ gradeId: progress!.gradeId }),
-        });
-        const data = await res.json();
-        if (res.ok) {
-          setRecommendedWords(data.words || []);
-          setRecommendedGrammars(data.grammars || []);
-        }
-      } catch {
-        // 静默失败，使用默认数据
-      } finally {
-        setRecommending(false);
+    // 进度指向的单元可能已经不存在了（教材数据更新、迁移遗漏等）。
+    // 不兜底的话 currentUnit 为 null，今日任务整块渲染不出来，页面一片空白。
+    if (p && !getUnitById(p.bookId, p.gradeId, p.unitId)) {
+      const units = getUnitsByGrade(p.bookId, p.gradeId);
+      if (units.length > 0) {
+        p = { ...p, unitId: units[0].unitId };
+        saveProgress(p);
+      } else {
+        p = null;
       }
     }
-    fetchRecommended();
-  }, [progress?.gradeId, progress?.unitId]);
 
-  // ====== 教材选择处理 ======
-  const handleBookChange = useCallback(
-    (bookId: string | null) => {
-      setSelectedBookId(bookId || "");
-      setSelectedGradeId("");
-      setSelectedUnitId("");
-    },
-    []
-  );
+    setProgress(p);
+    setStats(getLearningStats());
+    setClozeCount(countClozeAvailable());
+    setTranslateCount(countTranslationAvailable());
+    setDaily(getDailyProgress());
+    setRemindBackup(shouldRemindBackup());
 
-  const handleGradeChange = useCallback(
-    (gradeId: string | null) => {
-      setSelectedGradeId(gradeId || "");
-      setSelectedUnitId("");
-    },
-    []
-  );
+    const prefetched = getPrefetched();
+    if (isPrefetchValid(prefetched, p)) {
+      setReady(prefetched);
+    } else if (prefetched) {
+      clearPrefetched(); // 进度变了或放太久，作废重算
+    }
 
-  // ====== 确认选择并保存进度 ======
+    if (!p) {
+      setMode("select");
+    } else {
+      refreshPlan(p, [], new Set());
+    }
+  }, [refreshPlan, router]);
+
+  // 粘贴词表变化时重算配方
+  useEffect(() => {
+    if (!progress) return;
+    refreshPlan(progress, customWords, excluded);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customWords, excluded, progress]);
+
+  /**
+   * 后台补全缺释义的词。
+   *
+   * 补全让模型按预期的义项来写（prompt 里的 <target meaning> / <usage patterns>），
+   * 也让这些词进单词本时自带中文释义。刻意做成非阻塞的：没补完就点生成也没关系，
+   * prompt 里已要求模型自行选一个适龄义项并在 wordUsages 里说明。
+   */
+  const pendingWords = plan ? wordsNeedingEnrichment(plan) : [];
+  const enrichKey = pendingWords.join(",");
+  const enrichGradeId = plan?.grade.id;
+
+  useEffect(() => {
+    if (!enrichKey || !enrichGradeId) return;
+
+    const controller = new AbortController();
+    setEnriching(true);
+
+    fetch("/api/enrich-words", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ words: enrichKey.split(","), gradeId: enrichGradeId }),
+      signal: controller.signal,
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { words?: EnrichedWord[] } | null) => {
+        if (!data?.words?.length) return;
+        for (const word of data.words) {
+          if (word?.word) {
+            enrichCacheRef.current.set(word.word.trim().toLowerCase(), word);
+          }
+        }
+        setPlan((current) =>
+          current ? applyEnrichment(current, data.words!) : current
+        );
+      })
+      .catch(() => {
+        // 静默失败：补全只是锦上添花，不能挡住生成
+      })
+      .finally(() => setEnriching(false));
+
+    return () => controller.abort();
+  }, [enrichKey, enrichGradeId]);
+
+  /**
+   * 生成要 20-30 秒。只转一个圈的话用户不知道是在跑还是卡死了，
+   * 按真实耗时推进文案，让等待有可预期的进度感。
+   */
+  useEffect(() => {
+    if (!loading) {
+      setProgressStep(0);
+      return;
+    }
+    const timers = [
+      setTimeout(() => setProgressStep(1), 3000),
+      setTimeout(() => setProgressStep(2), 18000),
+      setTimeout(() => setProgressStep(3), 32000),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, [loading]);
+
+  const handleToggleWord = useCallback((word: string) => {
+    setExcluded((prev) => {
+      const next = new Set(prev);
+      const key = word.toLowerCase();
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  }, []);
+
   const handleConfirmSelection = useCallback(() => {
     if (!selectedBookId || !selectedGradeId || !selectedUnitId) return;
-    const newProgress = {
+    const next: UserProgress = {
       bookId: selectedBookId,
       gradeId: selectedGradeId,
       unitId: selectedUnitId,
       completedUnits: progress?.completedUnits ?? [],
+      unitStates: progress?.unitStates ?? {},
     };
-    saveProgress(newProgress);
-    setProgress(newProgress);
+    saveProgress(next);
+    notifyDataChanged();
+    setProgress(next);
+    setExcluded(new Set());
+    // 换了单元，之前备好的那篇就不对路了
+    clearPrefetched();
+    setReady(null);
+    refreshPlan(next, customWords, new Set());
     setMode("task");
-  }, [selectedBookId, selectedGradeId, selectedUnitId, progress]);
+  }, [
+    selectedBookId,
+    selectedGradeId,
+    selectedUnitId,
+    progress,
+    customWords,
+    refreshPlan,
+  ]);
 
-  // ====== 生成文章核心逻辑 ======
-  async function generateForUnit(
-    bookId: string,
-    gradeId: string,
-    unitId: string
-  ) {
-    // 优先使用大模型推荐的单词和语法
-    let wordItems: WordItem[] = recommendedWords;
-    let grammars = recommendedGrammars;
-
-    // 如果推荐数据还没准备好，回退到本地教材数据
-    if (wordItems.length === 0) {
-      const words = getWordsByUnit(bookId, gradeId, unitId);
-      wordItems = words.map((word) => ({
-        word,
-        phrases: WORD_PHRASES[word.toLowerCase()],
-      }));
-    }
-    if (grammars.length === 0) {
-      const grammarIds = getGrammarIdsByUnit(bookId, gradeId, unitId);
-      grammars = getGrammarsByIds(grammarIds);
-    }
-
-    if (wordItems.length === 0) {
-      throw new Error("该单元没有单词数据");
-    }
-    if (grammars.length === 0) {
-      throw new Error("该单元没有语法数据");
-    }
-
-    // 根据年级推断 GradeOption
-    const gradeOpt = inferGradeOption(gradeId);
-
-    // 随机选择题材
-    const themes: Array<
-      "story" | "news" | "sci-fi" | "daily" | "adventure" | "social" | "frontier" | "economy" | "livelihood" | "biography" | "travel" | "history" | "nature"
-    > = [
-      "story", "news", "sci-fi", "daily", "adventure", "social",
-      "frontier", "economy", "livelihood", "biography", "travel", "history", "nature",
-    ];
-    const theme = themes[Math.floor(Math.random() * themes.length)];
-    const style = "exam-graduate" as const;
-
-    const res = await fetch("/api/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        words: wordItems,
-        grammars,
-        grade: gradeOpt,
-        theme,
-        style,
-      }),
-    });
-
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.error || "生成失败");
-    }
-
-    const article = {
-      id: Date.now().toString(),
-      title: data.title || "无标题",
-      content: data.content || "",
-      translation: data.translation || "",
-      words: wordItems,
-      grammar: grammars,
-      difficulty: {
-        level: gradeOpt.level as EducationLevel,
-        gradeId: gradeOpt.id,
-      },
-      sentences: Array.isArray(data.sentences) ? data.sentences : [],
-      quiz: Array.isArray(data.quiz) ? data.quiz : [],
-      wordUsages: data.wordUsages || {},
-      theme,
-      style,
-      createdAt: Date.now(),
+  function handleNextUnit() {
+    if (!progress || !nextUnit) return;
+    const updated: UserProgress = {
+      ...progress,
+      gradeId: nextUnit.gradeId,
+      unitId: nextUnit.unitId,
     };
-
-    saveArticle(article);
-    return article.id;
+    saveProgress(updated);
+    notifyDataChanged();
+    setProgress(updated);
+    setExcluded(new Set());
+    clearPrefetched();
+    setReady(null);
+    refreshPlan(updated, customWords, new Set());
   }
 
-  // 根据 gradeId 推断 GradeOption
-  function inferGradeOption(gradeId: string) {
-    const map: Record<string, { id: string; name: string; level: string; cefr: string; description: string }> = {
-      p3: { id: "p3", name: "三年级", level: "primary", cefr: "A1", description: "简单问答和描述，使用现在时，句长 5-8 词" },
-      p4: { id: "p4", name: "四年级", level: "primary", cefr: "A1", description: "能写简单段落，引入过去时，词汇量 500-800" },
-      p5: { id: "p5", name: "五年级", level: "primary", cefr: "A1+", description: "连词使用增加，能描述计划与喜好，句型稍复杂" },
-      p6: { id: "p6", name: "六年级", level: "primary", cefr: "A2", description: "简单复合句，时态混合，能写 80-100 词短文" },
-      j1: { id: "j1", name: "初一", level: "junior", cefr: "A2", description: "基础语法完整覆盖，能进行日常话题的连贯表达" },
-      j2: { id: "j2", name: "初二", level: "junior", cefr: "A2+", description: "多种时态混合，从句初现，文章长度 120-150 词" },
-      j3: { id: "j3", name: "初三", level: "junior", cefr: "B1", description: "中考难度，逻辑连接词丰富，能表达观点和原因" },
-      s1: { id: "s1", name: "高一", level: "senior", cefr: "B1", description: "篇章结构清晰，词汇量 2500+，能处理抽象话题" },
-      s2: { id: "s2", name: "高二", level: "senior", cefr: "B1+", description: "复杂句式增多，语态和从句灵活运用，接近高考难度" },
-      s3: { id: "s3", name: "高三", level: "senior", cefr: "B2", description: "高考及略高于高考，论证性表达，词汇精准" },
-      g1: { id: "g1", name: "考研基础", level: "graduate", cefr: "C1", description: "考研高频核心词 + 基础语法，文章长度 400-500 词，议论为主" },
-      g2: { id: "g2", name: "考研强化", level: "graduate", cefr: "C1+", description: "考研大纲全词 + 长难句分析，文章长度 450-600 词，论证复杂" },
-      g3: { id: "g3", name: "考研冲刺", level: "graduate", cefr: "C2", description: "真题难度，长难句密集，抽象话题，文章长度 500-700 词" },
-    };
-    return map[gradeId] || map["j2"];
-  }
-
-  // ====== 开始学习 ======
-  async function handleStartLearning() {
+  /** 纯复习：整篇只用学过的词，让用户能主动消化积压 */
+  async function handleReviewOnly() {
     if (!progress) return;
     setError("");
     setLoading(true);
     try {
-      const articleId = await generateForUnit(
-        progress.bookId,
-        progress.gradeId,
-        progress.unitId
-      );
-      router.push(`/article?id=${articleId}`);
+      const reviewPlan = buildLessonPlan({ progress, mode: "review" });
+      if (reviewPlan.words.length === 0) {
+        throw new Error("目前没有可复习的词");
+      }
+      const article = await generateArticleFromPlan(reviewPlan);
+      router.push(`/article?id=${article.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "生成失败，请重试");
       setLoading(false);
     }
   }
 
-  // ====== 切换到下一单元 ======
-  function handleNextUnit() {
-    if (!progress) return;
-    const next = getNextUnit(progress.bookId, progress.gradeId, progress.unitId);
-    if (next) {
-      const updated = { ...progress, unitId: next.unitId };
-      saveProgress(updated);
-      setProgress(updated);
+  /**
+   * 用户自己改了配方（加词 / 去词）时，预生成的那篇就对不上了，
+   * 这时必须走实时生成，不能把一篇不符合当前配方的文章塞给他。
+   */
+  const canUseReady =
+    !!ready && customWords.length === 0 && excluded.size === 0;
+
+  const displayPlan = canUseReady && ready ? prefetchAsPlan(ready) : plan;
+
+  /** 秒开：文章早在上一次阅读时就备好了 */
+  function handleOpenReady() {
+    if (!ready) return;
+    const article = commitPrefetched(ready);
+    setReady(null);
+    router.push(`/article?id=${article.id}`);
+  }
+
+  async function handleStartLearning() {
+    if (!plan) return;
+    setError("");
+    setLoading(true);
+    try {
+      // 超出本篇容量的自定义词先存进单词本，后续文章会自然带上
+      const planned = new Set(plan.words.map((s) => s.item.word.toLowerCase()));
+      const overflow = customWords.filter(
+        (w) => !planned.has(w.word.toLowerCase())
+      );
+      if (overflow.length > 0) {
+        addWords(overflow.map((w) => ({ word: w.word, source: "manual" })));
+      }
+
+      const article = await generateArticleFromPlan(plan);
+      router.push(`/article?id=${article.id}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "生成失败，请重试");
+      setLoading(false);
     }
   }
 
-  // ====== 渲染：今日任务模式 ======
+  // ====== 今日任务 ======
   function renderTaskMode() {
-    if (!progress || !currentUnit) return null;
+    if (!progress || !currentUnit || !plan) return null;
 
-    const words = recommendedWords.length > 0
-      ? recommendedWords.map((w) => w.word)
-      : getWordsByUnit(progress.bookId, progress.gradeId, progress.unitId);
-    const grammars = recommendedGrammars.length > 0
-      ? recommendedGrammars
-      : getGrammarsByIds(getGrammarIdsByUnit(progress.bookId, progress.gradeId, progress.unitId));
+    const completed = progress.completedUnits.includes(progress.unitId);
+    const statusLabel = completed
+      ? "已完成"
+      : currentUnitState?.status === "review"
+      ? "待巩固"
+      : "进行中";
+    const statusClass = completed
+      ? "border-green-200 bg-green-50 text-green-700"
+      : currentUnitState?.status === "review"
+      ? "border-amber-200 bg-amber-50 text-amber-700"
+      : "border-teal-200 bg-teal-50 text-teal-700";
 
     return (
-      <div className="space-y-6">
-        {/* 今日任务卡片 */}
-        <Card className="border-blue-200 bg-blue-50/50">
-          <CardHeader className="pb-3">
-            <div className="flex items-center gap-2">
-              <Target className="h-5 w-5 text-blue-600" />
-              <CardTitle className="text-lg">今日任务</CardTitle>
+      <div className="space-y-5">
+        <Card className="border-zinc-200 bg-white py-6">
+          <CardHeader className="px-5 pb-1 sm:px-6">
+            <div className="flex items-center gap-2.5">
+              <span className="flex size-8 items-center justify-center rounded-lg bg-teal-50"><BookOpen className="size-4 text-primary" /></span>
+              <CardTitle className="text-base font-semibold">为你准备的下一篇</CardTitle>
+              <span className="ml-auto text-[10px] tracking-wider text-zinc-400">YOUR NEXT STORY</span>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-5 px-5 sm:px-6">
             {/* 单元信息 */}
-            <div className="rounded-lg bg-white p-4">
-              <div className="flex items-center justify-between">
-                <div>
+            <div className="rounded-xl border border-zinc-100 bg-zinc-50/80 p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
                   <p className="text-sm text-zinc-500">
                     {currentBook?.name} · {currentGrade?.gradeName}
                   </p>
-                  <p className="text-lg font-bold text-zinc-900">
+                  <p className="mt-1 text-lg font-semibold text-zinc-900">
                     {currentUnit.unitName}
                   </p>
-                </div>
-                <Badge variant="outline" className="text-xs">
-                  {recommending ? "..." : `${words.length} 词`}
-                </Badge>
-              </div>
-            </div>
-
-            {/* 单词预览 */}
-            <div>
-              <p className="mb-2 text-xs font-medium text-zinc-500">
-                今日推荐单词
-              </p>
-              {recommending ? (
-                <div className="flex items-center gap-2 text-xs text-zinc-400">
-                  <Loader2 className="h-3 w-3 animate-spin" />
-                  AI 正在推荐单词...
-                </div>
-              ) : (
-                <div className="flex flex-wrap gap-1.5">
-                  {words.slice(0, 12).map((w, i) => (
-                    <Badge
-                      key={i}
-                      variant="secondary"
-                      className="text-xs font-normal"
-                    >
-                      {w}
-                    </Badge>
-                  ))}
-                  {words.length > 12 && (
-                    <span className="text-xs text-zinc-400">
-                      +{words.length - 12}
-                    </span>
+                  {gradeUnits.length > 0 && (
+                    <p className="mt-1 text-xs text-zinc-500">
+                      已完成 {completedInGrade}/{gradeUnits.length} 个单元
+                      {plan.unitProgress && plan.unitProgress.total > 1 && (
+                        <>
+                          {" · "}本单元第 {plan.unitProgress.index}/
+                          {plan.unitProgress.total} 篇
+                        </>
+                      )}
+                    </p>
                   )}
                 </div>
-              )}
-            </div>
-
-            {/* 语法点预览 */}
-            <div>
-              <p className="mb-2 text-xs font-medium text-zinc-500">
-                核心语法
-              </p>
-              {recommending ? (
-                <div className="text-xs text-zinc-400">加载中...</div>
-              ) : (
-                <div className="flex flex-wrap gap-1.5">
-                  {grammars.map((g) => (
-                    <Badge
-                      key={g.id}
-                      variant="outline"
-                      className="border-blue-200 bg-white text-blue-700 text-xs"
-                    >
-                      {g.name}
-                    </Badge>
-                  ))}
+                <Badge variant="outline" className={`shrink-0 text-xs ${statusClass}`}>
+                  {statusLabel}
+                </Badge>
+              </div>
+              {currentUnitState && (
+                <div className="mt-3 rounded-md bg-zinc-50 px-3 py-2 text-xs text-zinc-600">
+                  上次测验 {currentUnitState.lastScore} 分
+                  {currentUnitState.status === "review"
+                    ? "，建议再练一次。"
+                    : "，可以继续下一步。"}
                 </div>
               )}
             </div>
+
+            {/* 配方 —— 生成前就让用户看到文章由什么组成 */}
+            <LessonRecipe
+              plan={displayPlan ?? plan}
+              onToggleWord={canUseReady ? undefined : handleToggleWord}
+              enriching={enriching && !canUseReady}
+            />
+
+            {excluded.size > 0 && (
+              <button
+                type="button"
+                onClick={() => setExcluded(new Set())}
+                className="flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-800"
+              >
+                <RotateCcw className="h-3 w-3" />
+                已移除 {excluded.size} 个词，点此恢复
+              </button>
+            )}
 
             {error && (
               <div className="rounded-lg bg-red-50 px-4 py-2 text-sm text-red-600">
@@ -404,28 +496,103 @@ export default function Home() {
               </div>
             )}
 
-            <Button
-              onClick={handleStartLearning}
-              disabled={loading}
-              className="w-full"
-              size="lg"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  正在生成文章...
-                </>
-              ) : (
-                <>
-                  <BookOpen className="mr-2 h-4 w-4" />
-                  开始学习
-                </>
-              )}
-            </Button>
+            {canUseReady ? (
+              <>
+                <Button
+                  onClick={handleOpenReady}
+                  className="w-full rounded-xl"
+                  size="lg"
+                >
+                  <Zap className="mr-2 h-4 w-4" />
+                  开始阅读
+                </Button>
+                <p className="-mt-2 flex items-center justify-center gap-1 text-center text-xs text-emerald-600">
+                  <Check className="h-3 w-3" />
+                  已在你上次阅读时准备好，点开即读
+                </p>
+              </>
+            ) : (
+              <>
+                <Button
+                  onClick={handleStartLearning}
+                  disabled={loading || plan.words.length === 0}
+                  className="w-full rounded-xl"
+                  size="lg"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      {GENERATION_STEPS[progressStep]}
+                    </>
+                  ) : (
+                    <>
+                      <BookOpen className="mr-2 h-4 w-4" />
+                      生成这篇文章
+                      <ArrowUpRight className="ml-auto size-4" />
+                    </>
+                  )}
+                </Button>
+                {loading && (
+                  <p className="-mt-2 text-center text-xs text-zinc-400">
+                    通常需要 30-40 秒，请不要关闭页面
+                  </p>
+                )}
+              </>
+            )}
           </CardContent>
         </Card>
 
-        {/* 操作按钮 */}
+        {/* 自定义词表 */}
+        <Card className="border-zinc-200">
+          <CardContent className="p-4">
+            <button
+              type="button"
+              onClick={() => setShowCustom(!showCustom)}
+              aria-expanded={showCustom}
+              aria-controls="custom-word-input"
+              className="flex w-full items-center justify-between text-sm"
+            >
+              <span className="flex items-center gap-2 font-medium text-zinc-900">
+                <Plus className="h-4 w-4 text-zinc-400" />
+                加入自己的生词
+              </span>
+              {customWords.length > 0 && (
+                <Badge variant="secondary" className="text-xs">
+                  {customWords.length} 词
+                </Badge>
+              )}
+            </button>
+
+            {showCustom && (
+              <div className="mt-3 space-y-2">
+                <Textarea
+                  id="custom-word-input"
+                  aria-label="自定义生词"
+                  value={customText}
+                  onChange={(e) => setCustomText(e.target.value)}
+                  placeholder={"粘贴或输入单词，逗号 / 换行分隔\n例如：resilient, advocate, nuance"}
+                  rows={4}
+                  className="text-sm"
+                />
+                <p className="text-xs text-zinc-400">
+                  这些词会优先编进文章；超出本篇容量的会存入单词本，在后续文章中出现。
+                </p>
+                {customText && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="gap-1 text-xs text-zinc-500"
+                    onClick={() => setCustomText("")}
+                  >
+                    <X className="h-3 w-3" />
+                    清空
+                  </Button>
+                )}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
         <div className="flex gap-2">
           <Button
             variant="outline"
@@ -441,7 +608,7 @@ export default function Home() {
             <RotateCcw className="h-3.5 w-3.5" />
             切换单元
           </Button>
-          {getNextUnit(progress.bookId, progress.gradeId, progress.unitId) && (
+          {nextUnit && (
             <Button
               variant="outline"
               size="sm"
@@ -457,7 +624,7 @@ export default function Home() {
     );
   }
 
-  // ====== 渲染：教材选择模式 ======
+  // ====== 教材选择 ======
   function renderSelectMode() {
     return (
       <Card className="border-zinc-200 shadow-sm">
@@ -468,34 +635,45 @@ export default function Home() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
-          {/* 步骤1：选教材 */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-zinc-900">
+            <label htmlFor="book-select" className="text-sm font-medium text-zinc-900">
               教材版本 <span className="text-red-500">*</span>
             </label>
-            <Select value={selectedBookId} onValueChange={handleBookChange}>
-              <SelectTrigger>
-                <SelectValue placeholder="请选择教材..." />
+            <Select
+              value={selectedBookId}
+              onValueChange={(v) => {
+                setSelectedBookId(v || "");
+                setSelectedGradeId("");
+                setSelectedUnitId("");
+              }}
+            >
+              <SelectTrigger id="book-select" className="w-full" >
+                <SelectValue placeholder="请选择教材...">{allBooks.find((book) => book.id === selectedBookId)?.name}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {allBooks.map((book) => (
                   <SelectItem key={book.id} value={book.id}>
-                    {book.name}（{book.level === "primary" ? "小学" : book.level === "junior" ? "初中" : "考研"}）
+                    {book.name}（{BOOK_LEVEL_LABELS[book.level] ?? book.level}）
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
 
-          {/* 步骤2：选年级 */}
           {selectedBookId && (
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-900">
+              <label htmlFor="grade-select" className="text-sm font-medium text-zinc-900">
                 年级 <span className="text-red-500">*</span>
               </label>
-              <Select value={selectedGradeId} onValueChange={handleGradeChange}>
-                <SelectTrigger>
-                  <SelectValue placeholder="请选择年级..." />
+              <Select
+                value={selectedGradeId}
+                onValueChange={(v) => {
+                  setSelectedGradeId(v || "");
+                  setSelectedUnitId("");
+                }}
+              >
+                <SelectTrigger id="grade-select" className="w-full">
+                  <SelectValue placeholder="请选择年级...">{availableGrades.find((grade) => grade.gradeId === selectedGradeId)?.gradeName}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {availableGrades.map((g) => (
@@ -508,18 +686,17 @@ export default function Home() {
             </div>
           )}
 
-          {/* 步骤3：选单元 */}
           {selectedGradeId && (
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-900">
+              <label htmlFor="unit-select" className="text-sm font-medium text-zinc-900">
                 当前单元 <span className="text-red-500">*</span>
               </label>
               <Select
                 value={selectedUnitId}
                 onValueChange={(v) => setSelectedUnitId(v || "")}
               >
-                <SelectTrigger>
-                  <SelectValue placeholder="请选择单元..." />
+                <SelectTrigger id="unit-select" className="w-full">
+                  <SelectValue placeholder="请选择单元...">{availableUnits.find((unit) => unit.unitId === selectedUnitId)?.unitName}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {availableUnits.map((u) => (
@@ -532,120 +709,82 @@ export default function Home() {
             </div>
           )}
 
-          {/* 预览 */}
-          {selectedUnit && (
-            <div className="rounded-lg bg-zinc-50 p-4 space-y-3">
-              <div>
-                <p className="text-xs font-medium text-zinc-500 mb-1">单词预览</p>
-                <div className="flex flex-wrap gap-1">
-                  {selectedUnit.words.slice(0, 8).map((w, i) => (
-                    <Badge key={i} variant="secondary" className="text-xs font-normal">
-                      {w}
-                    </Badge>
-                  ))}
-                  {selectedUnit.words.length > 8 && (
-                    <span className="text-xs text-zinc-400">+{selectedUnit.words.length - 8}</span>
-                  )}
-                </div>
-              </div>
-              <div>
-                <p className="text-xs font-medium text-zinc-500 mb-1">语法点</p>
-                <div className="flex flex-wrap gap-1">
-                  {getGrammarsByIds(selectedUnit.grammarIds).map((g) => (
-                    <Badge key={g.id} variant="outline" className="text-xs">
-                      {g.name}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          <Button
-            onClick={handleConfirmSelection}
-            disabled={!selectedBookId || !selectedGradeId || !selectedUnitId}
-            className="w-full"
-            size="lg"
-          >
-            <Target className="mr-2 h-4 w-4" />
-            确认并开始学习
-          </Button>
+          <div className="flex gap-2">
+            {progress && (
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => setMode("task")}
+              >
+                取消
+              </Button>
+            )}
+            <Button
+              onClick={handleConfirmSelection}
+              disabled={!selectedBookId || !selectedGradeId || !selectedUnitId}
+              className="flex-1"
+              size="lg"
+            >
+              <Target className="mr-2 h-4 w-4" />
+              确认
+            </Button>
+          </div>
         </CardContent>
       </Card>
     );
   }
 
-  // ====== 渲染：自定义生成（保留旧入口）======
-  function renderCustomEntry() {
-    return (
-      <div className="mt-4 text-center">
-        <button
-          onClick={() => setShowCustom(!showCustom)}
-          className="text-xs text-zinc-400 hover:text-zinc-600 underline"
-        >
-          {showCustom ? "收起" : "高级：自定义生成文章"}
-        </button>
-      </div>
-    );
-  }
+  const statCards = [
+    { icon: BookOpen, tone: "bg-teal-50 text-primary", value: stats.totalArticles, label: "读过的文章", unit: "篇" },
+    { icon: Library, tone: "bg-[#f5f0e4] text-[#a38a50]", value: stats.knownWords, label: "积累的单词", unit: "个" },
+    { icon: Sparkles, tone: "bg-[#eeedf5] text-[#9182aa]", value: stats.knownGrammars, label: "学过的语法", unit: "个" },
+    { icon: Flame, tone: "bg-[#fbefe6] text-[#b58667]", value: stats.streakDays, label: "连续学习", unit: "天" },
+  ];
 
   return (
-    <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-8">
-      {/* 标题 */}
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
-          跟着教材学英语
-        </h1>
-        <p className="mt-3 text-zinc-600">
-          选择你的教材单元，AI 为你生成专属阅读文章
-        </p>
+    <main className="page-container entry-reveal">
+      <section className="relative mb-6 overflow-hidden rounded-[22px] border border-[#dfe5d3] bg-[#edf1e4] px-6 py-7 sm:px-8 sm:py-8">
+        <div className="relative z-10">
+          <p className="page-eyebrow mb-3 flex items-center gap-2 text-[#81916f]"><span className="size-1.5 rounded-full bg-[#90a378]" />YOUR DAILY CHAPTER</p>
+          <h1 className="text-[25px] font-semibold leading-relaxed tracking-tight text-[#314b37] sm:text-[32px]">今天，也读一点英语。</h1>
+          <p className="mt-2 max-w-md text-xs leading-6 text-[#72836a] sm:text-sm">新词藏在故事里，进步藏在每一天里。<br className="sm:hidden" />准备好开启今天的阅读了吗？</p>
+        </div>
+        <div aria-hidden="true" className="pointer-events-none absolute -right-4 -top-5 hidden size-56 items-center justify-center rounded-full border border-[#dbe3cd] md:flex">
+          <div className="absolute size-40 rounded-full border border-[#dbe3cd]" />
+          <div className="absolute top-[74px] h-[100px] w-[77px] rotate-[14deg] rounded-r-lg border border-[#c5ccaf] bg-[#d6ddc4] shadow-sm" />
+          <div className="relative mt-6 flex h-[108px] w-[78px] -rotate-[12deg] flex-col justify-between rounded-r-lg border-l-4 border-[#315b42] bg-[#58754d] p-3 text-[#eef0df] shadow-md"><BookOpen className="size-5" strokeWidth={1} /><span className="font-reading text-[11px] leading-4">One story.<br />One step<br />forward.</span></div>
+          <Leaf className="absolute bottom-5 right-8 size-10 rotate-12 text-[#8f9f79]" strokeWidth={1} />
+        </div>
+      </section>
+
+      <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {statCards.map((s) => <div key={s.label} className="flex items-center gap-3 rounded-2xl border border-zinc-200/80 bg-white px-4 py-4 sm:py-5"><span className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${s.tone}`}><s.icon className="size-[18px]" strokeWidth={1.6} /></span><div><p className="text-[23px] font-semibold leading-none tracking-tight text-zinc-800">{s.value}<span className="ml-1.5 text-[10px] font-normal text-zinc-400">{s.unit}</span></p><p className="mt-2 text-[10px] text-zinc-500">{s.label}</p></div></div>)}
       </div>
 
-      {/* 学习统计 */}
-      {stats.totalArticles > 0 && (
-        <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Card className="border-zinc-200">
-            <CardContent className="flex items-center gap-3 py-4">
-              <BookOpen className="h-5 w-5 text-blue-500" />
-              <div>
-                <p className="text-lg font-bold text-zinc-900">{stats.totalArticles}</p>
-                <p className="text-xs text-zinc-500">已读文章</p>
+      <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_270px]">
+        <div className="min-w-0 space-y-5">
+          {remindBackup && (
+            <div className="flex flex-wrap items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-6 text-amber-800">
+              <AlertTriangle className="size-4 shrink-0" /><span>给积累留一份备份，换设备也能继续学习。</span>
+              <div className="ml-auto flex shrink-0 gap-1">
+                <Button size="sm" variant="outline" className="h-8 border-amber-200 bg-white text-xs text-amber-800" onClick={() => { downloadBackup(); markBackupReminded(); setRemindBackup(false); }}>立即备份</Button>
+                <Button size="sm" variant="ghost" className="h-8 text-xs text-amber-700" onClick={() => { markBackupReminded(); setRemindBackup(false); }}>以后再说</Button>
               </div>
-            </CardContent>
-          </Card>
-          <Card className="border-zinc-200">
-            <CardContent className="flex items-center gap-3 py-4">
-              <Sparkles className="h-5 w-5 text-amber-500" />
-              <div>
-                <p className="text-lg font-bold text-zinc-900">{stats.masteredWords}</p>
-                <p className="text-xs text-zinc-500">已学单词</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="border-zinc-200">
-            <CardContent className="flex items-center gap-3 py-4">
-              <Zap className="h-5 w-5 text-orange-500" />
-              <div>
-                <p className="text-lg font-bold text-zinc-900">{stats.masteredGrammars}</p>
-                <p className="text-xs text-zinc-500">已学语法</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="border-zinc-200">
-            <CardContent className="flex items-center gap-3 py-4">
-              <Flame className="h-5 w-5 text-red-500" />
-              <div>
-                <p className="text-lg font-bold text-zinc-900">{stats.streakDays}</p>
-                <p className="text-xs text-zinc-500">连续天数</p>
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+          )}
+
+          {stats.dueWords > 0 && mode === "task" && (
+            <div className="flex flex-wrap items-center gap-2 rounded-xl border border-teal-200/60 bg-teal-50 px-4 py-3 text-xs leading-6 text-primary">
+              <RefreshCw className="size-3.5 shrink-0" /><span className="min-w-0 flex-1">{stats.dueWords} 个词适合温习，本篇已经带上一部分。</span>
+              <Button size="sm" variant="ghost" className="ml-auto h-7 shrink-0 text-[11px] text-primary" onClick={handleReviewOnly} disabled={loading}>只复习旧词<ArrowUpRight className="ml-1 size-3" /></Button>
+            </div>
+          )}
+
+          {mode === "task" && progress ? renderTaskMode() : renderSelectMode()}
         </div>
-      )}
-
-      {/* 主内容区 */}
-      {mode === "task" && progress ? renderTaskMode() : renderSelectMode()}
-
+        <LearningCompanion daily={daily} clozeCount={clozeCount} translateCount={translateCount} />
+      </div>
+      <p className="mt-10 text-center font-reading text-xs italic tracking-wide text-zinc-400">Every word has a story. Make it yours.</p>
     </main>
   );
 }

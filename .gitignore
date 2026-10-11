@@ -43,4 +43,8 @@ next-env.d.ts
 # project specific
 .claude/
 gptDictionary-main.zip
-
+lexistory.zip
+.next-*.log
+*.keystore
+*.jks
+/.mobile-build/

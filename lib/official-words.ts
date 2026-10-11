@@ -1,11 +1,40 @@
 import { OfficialWordBook } from "./types";
+import { GRADUATE_UNITS } from "./graduate-vocab";
 
 /**
  * 官方教材词表数据
  *
- * 覆盖人教版 PEP 小学（三年级起）、Go for it 初中、高中英语必修。
+ * 覆盖人教版 PEP 小学（三年级起）、Go for it 初中，以及考研核心词。
  * 每个单元标注核心语法点，用于自动生成文章时匹配语法。
  */
+
+const GRADUATE_STAGE_NAMES = ["考研基础", "考研强化", "考研冲刺"];
+const GRADUATE_STAGE_GRADES = ["g1", "g2", "g3"];
+
+/**
+ * 考研核心词教材由 lib/graduate-vocab.ts 生成。
+ *
+ * 手写的话既容易漏，也没法给每个词带释义。词表里自带中文释义，
+ * 意味着这些词进单词本时不用再调 /api/enrich-words 补全。
+ */
+function buildGraduateCoreBook(): OfficialWordBook {
+  return {
+    id: "graduate-core",
+    name: "考研英语核心词",
+    publisher: "考研高频词汇",
+    level: "graduate",
+    grades: GRADUATE_UNITS.map((units, stageIdx) => ({
+      gradeId: GRADUATE_STAGE_GRADES[stageIdx],
+      gradeName: GRADUATE_STAGE_NAMES[stageIdx],
+      units: units.map((unit) => ({
+        unitId: unit.id,
+        unitName: unit.name,
+        words: unit.words.map((w) => w.w),
+        grammarIds: unit.grammarIds,
+      })),
+    })),
+  };
+}
 
 export const OFFICIAL_WORD_BOOKS: OfficialWordBook[] = [
   // ========== 人教版 PEP 小学 ==========
@@ -534,18 +563,21 @@ export const OFFICIAL_WORD_BOOKS: OfficialWordBook[] = [
   },
 
   // ========== 考研英语 ==========
+  // 注意：本书曾错标为 id="pep-senior" / gradeId=s1,s2,s3（与 GRADE_OPTIONS 中
+  // 表示高一/高二/高三的 s1-s3 冲突），已更正为考研学段的 g1-g3。
+  // 旧数据由 lib/migrate.ts 的 LEGACY_ID_MAP 改写。
   {
-    id: "pep-senior",
+    id: "graduate-exam",
     name: "考研英语大纲",
     publisher: "考研大纲",
-    level: "senior",
+    level: "graduate",
     grades: [
       {
-        gradeId: "s1",
+        gradeId: "g1",
         gradeName: "考研基础",
         units: [
           {
-            unitId: "s1-u1",
+            unitId: "ge-g1-u1",
             unitName: "考研基础 - 每日练习",
             words: [
               "prefer", "content", "movement", "suitable", "actually",
@@ -556,7 +588,7 @@ export const OFFICIAL_WORD_BOOKS: OfficialWordBook[] = [
             grammarIds: ["simple-present", "simple-past", "infinitive"],
           },
           {
-            unitId: "s1-u2",
+            unitId: "ge-g1-u2",
             unitName: "考研基础 - 每日练习",
             words: [
               "apply", "visa", "rent", "pack", "amazing", "flight",
@@ -569,11 +601,11 @@ export const OFFICIAL_WORD_BOOKS: OfficialWordBook[] = [
         ],
       },
       {
-        gradeId: "s2",
+        gradeId: "g2",
         gradeName: "考研强化",
         units: [
           {
-            unitId: "s2-u1",
+            unitId: "ge-g2-u1",
             unitName: "考研强化 - 每日练习",
             words: [
               "heritage", "creative", "preserve", "promote", "application",
@@ -587,11 +619,11 @@ export const OFFICIAL_WORD_BOOKS: OfficialWordBook[] = [
         ],
       },
       {
-        gradeId: "s3",
+        gradeId: "g3",
         gradeName: "考研冲刺",
         units: [
           {
-            unitId: "s3-u1",
+            unitId: "ge-g3-u1",
             unitName: "考研冲刺 - 每日练习",
             words: [
               "festival", "lantern", "carnival", "costume", "march",
@@ -608,232 +640,10 @@ export const OFFICIAL_WORD_BOOKS: OfficialWordBook[] = [
       },
     ],
   },
-
   // ========== 考研英语核心词 ==========
-  {
-    id: "graduate-core",
-    name: "考研英语核心词",
-    publisher: "考研大纲",
-    level: "graduate",
-    grades: [
-      {
-        gradeId: "g1",
-        gradeName: "考研基础",
-        units: [
-          {
-            unitId: "g1-u1",
-            unitName: "Unit 1 社会与经济",
-            words: [
-              "benefit", "advantage", "disadvantage", "demand", "economy",
-              "economic", "financial", "market", "commercial", "trade",
-              "industry", "investment", "profit", "cost", "expense",
-              "employment", "unemployment", "income", "policy", "reform",
-            ],
-            grammarIds: ["relative-clauses", "noun-clauses", "passive-voice"],
-          },
-          {
-            unitId: "g1-u2",
-            unitName: "Unit 2 科技与环境",
-            words: [
-              "technology", "innovation", "device", "system", "digital",
-              "data", "research", "experiment", "progress", "advance",
-              "environment", "pollution", "protection", "climate", "global",
-              "energy", "resource", "sustainable", "waste", "damage",
-            ],
-            grammarIds: ["participles", "infinitive", "passive-voice"],
-          },
-          {
-            unitId: "g1-u3",
-            unitName: "Unit 3 教育与文化",
-            words: [
-              "education", "academic", "knowledge", "learning", "skill",
-              "ability", "talent", "intelligence", "culture", "tradition",
-              "custom", "history", "art", "literature", "language",
-              "communication", "expression", "behavior", "attitude", "character",
-            ],
-            grammarIds: ["gerund", "relative-clauses", "noun-clauses"],
-          },
-          {
-            unitId: "g1-u4",
-            unitName: "Unit 4 健康与心理",
-            words: [
-              "health", "healthcare", "medicine", "treatment", "disease",
-              "illness", "recovery", "fitness", "exercise", "diet",
-              "nutrition", "mental", "psychology", "emotion", "stress",
-              "pressure", "anxiety", "depression", "mood", "personality",
-            ],
-            grammarIds: ["simple-present", "present-perfect", "infinitive"],
-          },
-          {
-            unitId: "g1-u5",
-            unitName: "Unit 5 政治与法律",
-            words: [
-              "government", "political", "policy", "law", "legal",
-              "court", "justice", "right", "freedom", "democracy",
-              "election", "power", "authority", "control", "regulation",
-              "restriction", "obligation", "duty", "responsibility", "requirement",
-            ],
-            grammarIds: ["passive-voice", "conditional-1", "noun-clauses"],
-          },
-          {
-            unitId: "g1-u6",
-            unitName: "Unit 6 综合高频词",
-            words: [
-              "phenomenon", "significant", "perspective", "consequence", "circumstance",
-              "controversial", "comprehensive", "substantial", "remarkable", "contribution",
-              "assumption", "implication", "evaluation", "demonstrate", "indicate",
-              "interpret", "maintain", "preserve", "reinforce", "resolve",
-            ],
-            grammarIds: ["relative-clauses", "participles", "passive-voice"],
-          },
-        ],
-      },
-      {
-        gradeId: "g2",
-        gradeName: "考研强化",
-        units: [
-          {
-            unitId: "g2-u1",
-            unitName: "Unit 1 抽象论证",
-            words: [
-              "paradigm", "pragmatic", "empirical", "deductive", "inductive",
-              "proposition", "inference", "hypothesis", "theory", "evidence",
-              "observation", "conclusion", "analysis", "synthesis", "integrate",
-              "advocate", "formulate", "articulate", "elaborate", "illuminate",
-            ],
-            grammarIds: ["subjunctive-mood", "inversion", "cleft-sentences"],
-          },
-          {
-            unitId: "g2-u2",
-            unitName: "Unit 2 社会批判",
-            words: [
-              "hegemony", "subaltern", "diaspora", "cosmopolitan", "multiculturalism",
-              "bureaucracy", "meritocracy", "precedent", "jurisdiction", "contingency",
-              "ephemeral", "pervasive", "tenuous", "inexorable", "inscrutable",
-              "quintessential", "ubiquitous", "esoteric", "idiosyncratic", "perspicacious",
-            ],
-            grammarIds: ["passive-voice", "relative-clauses", "noun-clauses"],
-          },
-          {
-            unitId: "g2-u3",
-            unitName: "Unit 3 学术思辨",
-            words: [
-              "philosophy", "psychology", "literature", "civilization", "democracy",
-              "consciousness", "metaphor", "allegory", "paradox", "dilemma",
-              "sophisticated", "comprehensive", "substantial", "remarkable", "interpretation",
-              "justification", "clarification", "modification", "application", "demonstration",
-            ],
-            grammarIds: ["participles", "gerund", "infinitive"],
-          },
-          {
-            unitId: "g2-u4",
-            unitName: "Unit 4 科技前沿",
-            words: [
-              "entrepreneur", "innovation", "sustainability", "globalization", "urbanization",
-              "biodiversity", "ecosystem", "atmosphere", "composition", "transformation",
-              "technological", "scientific", "mechanical", "artificial", "intelligent",
-              "automation", "algorithm", "virtual", "digital", "cyber",
-            ],
-            grammarIds: ["passive-voice", "relative-clauses", "adverbial-clauses-time"],
-          },
-          {
-            unitId: "g2-u5",
-            unitName: "Unit 5 经济金融",
-            words: [
-              "entrepreneur", "investment", "profit", "revenue", "capital",
-              "asset", "liability", "equity", "dividend", "stock",
-              "bond", "market", "commerce", "transaction", "contract",
-              "negotiation", "partnership", "corporation", "enterprise", "monopoly",
-            ],
-            grammarIds: ["conditional-2", "noun-clauses", "passive-voice"],
-          },
-          {
-            unitId: "g2-u6",
-            unitName: "Unit 6 真题高频难词",
-            words: [
-              "paradigm", "heuristic", "epistemology", "ontology", "axiomatic",
-              "syllogism", "dialectic", "hermeneutics", "phenomenology", "existentialism",
-              "deconstruction", "postmodernism", "neoliberalism", "intersectionality", "restitution",
-              "retribution", "serendipity", "vicarious", "sanguine", "melancholic",
-            ],
-            grammarIds: ["inversion", "subjunctive-mood", "cleft-sentences"],
-          },
-        ],
-      },
-      {
-        gradeId: "g3",
-        gradeName: "考研冲刺",
-        units: [
-          {
-            unitId: "g3-u1",
-            unitName: "Unit 1 真题长难句 I",
-            words: [
-              "persuade", "convince", "analyze", "synthesize", "integrate",
-              "diversify", "critique", "formulate", "articulate", "elaborate",
-              "illuminate", "interpret", "justify", "maintain", "preserve",
-              "reinforce", "rely", "represent", "require", "resolve",
-            ],
-            grammarIds: ["relative-clauses", "noun-clauses", "participles"],
-          },
-          {
-            unitId: "g3-u2",
-            unitName: "Unit 2 真题长难句 II",
-            words: [
-              "respond", "reveal", "stimulate", "submit", "substitute",
-              "sustain", "tackle", "undergo", "undertake", "yield",
-              "generate", "identify", "illustrate", "impose", "indicate",
-              "emerge", "enhance", "ensure", "establish", "exceed",
-            ],
-            grammarIds: ["passive-voice", "infinitive", "gerund"],
-          },
-          {
-            unitId: "g3-u3",
-            unitName: "Unit 3 真题长难句 III",
-            words: [
-              "eliminate", "expand", "pursue", "proceed", "overcome",
-              "participate", "perceive", "possess", "predict", "qualify",
-              "obtain", "overcome", "necessitate", "lead", "contribute",
-              "depend", "result", "base", "relate", "aware",
-            ],
-            grammarIds: ["adverbial-clauses-concession", "adverbial-clauses-condition", "inversion"],
-          },
-          {
-            unitId: "g3-u4",
-            unitName: "Unit 4 论证性阅读 I",
-            words: [
-              "achievement", "assessment", "assistance", "attribute", "category",
-              "component", "concept", "conclusion", "conference", "conflict",
-              "consequence", "consistency", "construction", "consumption", "contemporary",
-              "convention", "cooperation", "coordination", "correlation", "criterion",
-            ],
-            grammarIds: ["relative-clauses", "noun-clauses", "participles"],
-          },
-          {
-            unitId: "g3-u5",
-            unitName: "Unit 5 论证性阅读 II",
-            words: [
-              "decline", "deficiency", "definition", "deliberate", "demonstration",
-              "denial", "depression", "derivation", "description", "design",
-              "determination", "deviation", "differentiation", "dignity", "dimension",
-              "discrepancy", "discrimination", "disposition", "distinction", "distortion",
-            ],
-            grammarIds: ["passive-voice", "subjunctive-mood", "cleft-sentences"],
-          },
-          {
-            unitId: "g3-u6",
-            unitName: "Unit 6 冲刺综合",
-            words: [
-              "dominance", "domination", "dynamics", "efficiency", "elaboration",
-              "elimination", "embodiment", "emergence", "emphasis", "enactment",
-              "enforcement", "enhancement", "enrollment", "equivalence", "equivalent",
-              "essence", "estimation", "evaluation", "evolution", "exaggeration",
-            ],
-            grammarIds: ["inversion", "participles", "relative-clauses"],
-          },
-        ],
-      },
-    ],
-  },
+  // 由 lib/graduate-vocab.ts 生成——原来手写的 18 单元只有 360 词，
+  // 二十几篇文章就读完了。现在 30 单元 750 词，且每个词自带释义。
+  buildGraduateCoreBook(),
 ];
 
 // ====== 查询函数 ======

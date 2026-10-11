@@ -1,3 +1,7 @@
+import type { SrsState } from "./srs";
+
+export type { SrsState };
+
 // ====== 文章题材 ======
 export type ArticleTheme =
   | "story"
@@ -55,7 +59,12 @@ export const STYLE_LABELS: Record<ArticleStyle, string> = {
 export interface WordItem {
   word: string;
   meaning?: string;
+  meanings?: string[];
+  targetMeaning?: string;
   phrases?: string[];
+  usagePatterns?: string[];
+  exampleSentences?: string[];
+  partOfSpeech?: string;
 }
 
 export interface GrammarOption {
@@ -99,6 +108,12 @@ export interface SentenceConstituent {
 export interface SentenceGrammar {
   name: string;        // 语法名称，如 "一般现在时"
   explanation: string; // 简单讲解原理
+  /**
+   * 对应 GRAMMAR_OPTIONS.id。由模型从给定列表中选标。
+   * 语法讲解页靠它反查「这个语法出现在哪些句子里」。
+   * 老数据没有此字段，读取处需按 name 回退匹配。
+   */
+  grammarId?: string;
 }
 
 export interface SentencePhrase {
@@ -125,6 +140,19 @@ export interface SentenceAnalysis {
   phrases?: SentencePhrase[];   // 句子中出现的短语
 }
 
+/** 目标词/语法在本篇中扮演的角色 */
+export type LessonRole = "new" | "review";
+
+export interface ArticleCoverage {
+  /** 每个目标词在正文中的真实出现次数（整词匹配），key 为小写 */
+  words: Record<string, number>;
+  /** 每个目标语法在 sentences 里被标注的次数，key 为 grammarId */
+  grammars: Record<string, number>;
+  missingWords: string[];
+  missingGrammars: string[];
+  computedAt: number;
+}
+
 export interface Article {
   id: string;
   title: string;
@@ -138,6 +166,20 @@ export interface Article {
   wordUsages?: Record<string, string>;
   theme?: ArticleTheme;
   style?: ArticleStyle;
+  source?: {
+    bookId: string;
+    bookName: string;
+    gradeId: string;
+    gradeName: string;
+    unitId: string;
+    unitName: string;
+  };
+  /** 本篇的配方：哪些是新内容、哪些是到期复现的 */
+  wordRoles?: Record<string, LessonRole>;    // key 为小写单词
+  grammarRoles?: Record<string, LessonRole>; // key 为 grammarId
+  planSummary?: string;
+  /** 生成后验证的真实出现情况 */
+  coverage?: ArticleCoverage;
   createdAt: number;
 }
 
@@ -838,8 +880,6 @@ export interface LearningRecord {
 }
 
 export interface UserLearningProfile {
-  wordMastery: Record<string, number>;    // 0-100
-  grammarMastery: Record<string, number>; // 0-100
   history: LearningRecord[];
   totalArticles: number;
   streakDays: number;
@@ -847,15 +887,39 @@ export interface UserLearningProfile {
 }
 
 // ====== 用户单词本 ======
+export type WordSource = "unit" | "article" | "manual";
+
 export interface WordBookEntry {
   id: string;
   word: string;
   meaning?: string;
   phrases?: string[];
+  /** srs.proficiency 的镜像，保留字段以兼容既有 UI 读取 */
   proficiency: number; // 0=陌生, 1=认识, 2=熟悉, 3=掌握
   addedAt: number;
   lastReviewedAt: number | null;
   reviewCount: number;
+  /** 复习调度状态。迁移后必定存在，可选仅为兼容未迁移的旧数据 */
+  srs?: SrsState;
+  source?: WordSource;
+  /** 来自哪个教材单元（source==="unit" 时有值） */
+  unitId?: string;
+  /** 出现过这个词的 articleId，用于「它在哪些文章里出现过」反查 */
+  seenIn?: string[];
+}
+
+// ====== 用户语法本 ======
+export interface GrammarEncounter {
+  articleId: string;
+  /** 该文章中用到这个语法的原句 */
+  sentences: string[];
+}
+
+export interface GrammarBookEntry {
+  grammarId: string; // 对应 GRAMMAR_OPTIONS.id
+  srs: SrsState;
+  addedAt: number;
+  encounteredIn: GrammarEncounter[];
 }
 
 // ====== 官方词表 ======
@@ -886,12 +950,36 @@ export interface UserProgress {
   gradeId: string;     // 当前年级
   unitId: string;      // 当前单元
   completedUnits: string[]; // 已完成单元ID列表
+  unitStates?: Record<string, UnitLearningState>; // 每个单元的学习状态
+}
+
+export type UnitLearningStatus = "completed" | "review";
+
+export interface UnitLearningState {
+  status: UnitLearningStatus;
+  bestScore: number;
+  lastScore: number;
+  articleId: string;
+  wrongQuestions: string[];
+  updatedAt: number;
 }
 
 // ====== 单元测验 ======
 export interface QuizQuestion {
   id: string;
-  type: "word-meaning" | "grammar-fill" | "reading-comprehension";
+  /**
+   * 题型。前三个是早期的通用类型，保留以兼容老文章；
+   * 后五个对应考研阅读的真实题型，新文章只用这五个。
+   */
+  type:
+    | "word-meaning"
+    | "grammar-fill"
+    | "reading-comprehension"
+    | "vocabulary-in-context"  // 词义猜测题
+    | "detail"                 // 细节理解题
+    | "inference"              // 推理判断题
+    | "main-idea"              // 主旨大意题
+    | "attitude";              // 态度观点题
   question: string;
   options: string[];
   correctIndex: number;
