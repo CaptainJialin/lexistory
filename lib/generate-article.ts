@@ -15,6 +15,7 @@ import {
 } from "./lesson-plan";
 import { computeCoverage } from "./coverage";
 import { saveArticle } from "./storage";
+import { apiFetch } from "./api-client";
 
 interface GenerateResponse {
   title?: string;
@@ -35,18 +36,21 @@ interface GenerateResponse {
 async function fetchAnalysis(
   content: string,
   grammars: Article["grammar"],
-  grade: LessonPlan["grade"]
+  grade: LessonPlan["grade"],
+  signal?: AbortSignal
 ): Promise<SentenceAnalysis[]> {
   try {
-    const res = await fetch("/api/analyze", {
+    const res = await apiFetch("/api/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ content, grammars, grade }),
+      signal,
     });
     if (!res.ok) return [];
     const data = (await res.json()) as { sentences?: SentenceAnalysis[] };
     return Array.isArray(data.sentences) ? data.sentences : [];
-  } catch {
+  } catch (error) {
+    if (signal?.aborted) throw error;
     return [];
   }
 }
@@ -57,7 +61,7 @@ export async function generateArticleFromPlan(
    * save=false 用于后台预生成——文章先不进历史记录，
    * 等用户真的点开阅读时再落盘，否则没读过的文章会污染历史。
    */
-  opts: { signal?: AbortSignal; save?: boolean } = {}
+  opts: { signal?: AbortSignal; save?: boolean; onStage?: (stage: "writing" | "analysis") => void } = {}
 ): Promise<Article> {
   const words = planWords(plan);
   const grammars = planGrammars(plan);
@@ -71,7 +75,8 @@ export async function generateArticleFromPlan(
     throw new Error("没有可用的语法点");
   }
 
-  const res = await fetch("/api/generate", {
+  opts.onStage?.("writing");
+  const res = await apiFetch("/api/generate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -92,7 +97,10 @@ export async function generateArticleFromPlan(
   }
 
   const content = data.content || "";
-  const sentences = await fetchAnalysis(content, grammars, plan.grade);
+  if (!content.trim()) throw new Error("这次没有生成有效正文，请重试。");
+  opts.onStage?.("analysis");
+  const sentences = await fetchAnalysis(content, grammars, plan.grade, opts.signal);
+  opts.signal?.throwIfAborted();
 
   const article: Article = {
     id: `${Date.now()}${Math.random().toString(36).slice(2, 6)}`,
@@ -132,7 +140,7 @@ export async function regenerateArticle(
   source: Article,
   grade: { id: string; name: string; level: string; cefr: string; description: string }
 ): Promise<Article> {
-  const res = await fetch("/api/generate", {
+  const res = await apiFetch("/api/generate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -150,6 +158,7 @@ export async function regenerateArticle(
   if (!res.ok) throw new Error(data.error || "生成失败");
 
   const content = data.content || "";
+  if (!content.trim()) throw new Error("这次没有生成有效正文，请重试。");
   const sentences = await fetchAnalysis(
     content,
     source.grammar,
@@ -158,6 +167,7 @@ export async function regenerateArticle(
 
   const article: Article = {
     ...source,
+    isDemo: false,
     id: `${Date.now()}${Math.random().toString(36).slice(2, 6)}`,
     title: data.title || "无标题",
     content,

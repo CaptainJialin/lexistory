@@ -1,4 +1,5 @@
 "use client";
+import { apiFetch } from "@/lib/api-client";
 
 import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -76,7 +77,7 @@ export default function TranslatePracticePage() {
     setError("");
     setGrading(true);
     try {
-      const res = await fetch("/api/grade-translation", {
+      const res = await apiFetch("/api/grade-translation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import WebSocket from "ws";
+import { readApiBody } from "@/lib/api-request";
 
 export const runtime = "nodejs";
 
@@ -20,7 +21,7 @@ function waitForOpen(socket: WebSocket): Promise<void> {
   });
 }
 
-function synthesizeSentence(input: string): Promise<Buffer> {
+function synthesizeSentence(input: string, signal: AbortSignal): Promise<Buffer> {
   const apiKey = process.env.DASHSCOPE_API_KEY;
   if (!apiKey) {
     return Promise.reject(new Error("DashScope API key not configured"));
@@ -42,7 +43,10 @@ function synthesizeSentence(input: string): Promise<Buffer> {
 
     function cleanup() {
       clearTimeout(timeout);
+      signal.removeEventListener("abort", onAbort);
       socket.removeAllListeners();
+      // Closing a CONNECTING socket emits an asynchronous error.
+      socket.on("error", () => {});
       if (
         socket.readyState === WebSocket.OPEN ||
         socket.readyState === WebSocket.CONNECTING
@@ -50,6 +54,10 @@ function synthesizeSentence(input: string): Promise<Buffer> {
         socket.close();
       }
     }
+
+    function onAbort() { finishWithError(new Error("Speech request cancelled")); }
+    signal.addEventListener("abort", onAbort, { once: true });
+    if (signal.aborted) { onAbort(); return; }
 
     function finishWithError(error: Error) {
       if (settled) return;
@@ -72,9 +80,7 @@ function synthesizeSentence(input: string): Promise<Buffer> {
 
     socket.on("error", (error) => finishWithError(error));
     socket.on("close", () => {
-      if (!settled && audioChunks.length > 0) {
-        finishWithAudio();
-      }
+      if (!settled) finishWithError(new Error("Speech connection ended before completion"));
     });
 
     socket.on("message", (data) => {
@@ -83,6 +89,7 @@ function synthesizeSentence(input: string): Promise<Buffer> {
 
         if (event.type === "response.audio.delta" && event.delta) {
           audioChunks.push(Buffer.from(event.delta, "base64"));
+          if (audioChunks.reduce((sum, chunk) => sum + chunk.length, 0) > 8 * 1024 * 1024) finishWithError(new Error("Audio exceeds limit"));
           return;
         }
 
@@ -105,12 +112,16 @@ function synthesizeSentence(input: string): Promise<Buffer> {
 
     waitForOpen(socket)
       .then(() => {
+        if (settled) return;
         socket.send(
           JSON.stringify({
             type: "session.update",
+            event_id: crypto.randomUUID(),
             session: {
               voice: "Cherry",
               response_format: "wav",
+              language_type: "English",
+              sample_rate: 24000,
               mode: "server_commit",
             },
           })
@@ -119,6 +130,7 @@ function synthesizeSentence(input: string): Promise<Buffer> {
         socket.send(
           JSON.stringify({
             type: "input_text_buffer.append",
+            event_id: crypto.randomUUID(),
             text: input,
           })
         );
@@ -126,6 +138,7 @@ function synthesizeSentence(input: string): Promise<Buffer> {
         socket.send(
           JSON.stringify({
             type: "session.finish",
+            event_id: crypto.randomUUID(),
           })
         );
       })
@@ -137,7 +150,9 @@ function synthesizeSentence(input: string): Promise<Buffer> {
 
 export async function POST(request: NextRequest) {
   try {
-    const { text } = (await request.json()) as { text?: string };
+    const parsedRequest = await readApiBody(request, "speech");
+    if (parsedRequest.error) return parsedRequest.error;
+    const { text } = parsedRequest.body as { text: string };
     const input = text?.trim();
 
     if (!input) {
@@ -151,16 +166,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const audio = await synthesizeSentence(input);
+    if (!process.env.DASHSCOPE_API_KEY) return NextResponse.json({ error: "云端语音未配置，将使用设备语音。" }, { status: 503 });
+    const audio = await synthesizeSentence(input, request.signal);
     const body = new Uint8Array(audio);
 
     return new NextResponse(body, {
       headers: {
         "Content-Type": "audio/wav",
-        "Cache-Control": "private, max-age=86400",
+        "Cache-Control": "no-store",
       },
     });
   } catch (error) {
+    if (request.signal.aborted) return new NextResponse(null, { status: 499 });
     console.error("Speech generation error:", error);
     return NextResponse.json(
       { error: "Failed to generate speech" },

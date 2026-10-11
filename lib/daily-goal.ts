@@ -8,7 +8,8 @@
  * 定高了只会让人第三天就放弃。
  */
 
-import { getProfile } from "./recommend";
+import { getProfile, recordStudyDay } from "./recommend";
+import { localDateKey } from "./calendar";
 import { countClozeAvailable } from "./cloze";
 import { getDueWordCount } from "./wordbook";
 
@@ -35,6 +36,7 @@ export interface DailyGoal {
   date: string;
   articlesRead: number;
   reviewsDone: number;
+  articleIds?: string[];
 }
 
 export interface DailyProgress {
@@ -55,7 +57,7 @@ export interface DailyProgress {
 }
 
 function today(now: number = Date.now()): string {
-  return new Date(now).toISOString().slice(0, 10);
+  return localDateKey(now);
 }
 
 function readGoal(): DailyGoal | null {
@@ -82,14 +84,16 @@ function currentGoal(now: number = Date.now()): DailyGoal {
   return { date, articlesRead: 0, reviewsDone: 0 };
 }
 
-export function recordArticleReadForGoal(now: number = Date.now()): void {
+export function recordArticleReadForGoal(articleId: string, now: number = Date.now()): void {
   const goal = currentGoal(now);
-  writeGoal({ ...goal, articlesRead: goal.articlesRead + 1 });
+  if (goal.articleIds?.includes(articleId)) return;
+  writeGoal({ ...goal, articlesRead: goal.articlesRead + 1, articleIds: [...(goal.articleIds ?? []), articleId] });
 }
 
 export function recordReviewForGoal(count: number = 1, now: number = Date.now()): void {
   const goal = currentGoal(now);
   writeGoal({ ...goal, reviewsDone: goal.reviewsDone + count });
+  if (count > 0) recordStudyDay(now);
 }
 
 /**

@@ -154,6 +154,8 @@ export interface ArticleCoverage {
 }
 
 export interface Article {
+  /** Editorial sample that can be read without waiting for AI generation. */
+  isDemo?: boolean;
   id: string;
   title: string;
   content: string;

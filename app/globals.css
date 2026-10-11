@@ -1,6 +1,9 @@
 @import "tailwindcss";
+
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+
+.reader-prose p { font-size: var(--reading-font-size, 20px); line-height: 1.9; }
 
 @custom-variant dark (&:is(.dark *));
 

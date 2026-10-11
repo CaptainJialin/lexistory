@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { readApiBody } from "@/lib/api-request";
 import { getGradeById } from "@/lib/types";
 
 /**
@@ -81,7 +82,9 @@ IMPORTANT:
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const parsedRequest = await readApiBody(request, "enrich-words");
+    if (parsedRequest.error) return parsedRequest.error;
+    const body = parsedRequest.body;
     const rawWords: unknown = body?.words;
     const gradeId: unknown = body?.gradeId;
 
@@ -129,7 +132,7 @@ export async function POST(request: NextRequest) {
           ),
         },
       ],
-    });
+    }, { signal: request.signal, timeout: 60000, maxRetries: 0 });
 
     const content = completion.choices[0]?.message?.content || "";
     if (!content) {

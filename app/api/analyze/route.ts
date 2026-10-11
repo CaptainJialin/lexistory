@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { readApiBody } from "@/lib/api-request";
 import { GrammarOption, GradeOption } from "@/lib/types";
 import { buildAnalysisPrompt } from "@/lib/prompt";
 import { parseLlmJson } from "@/lib/json-repair";
@@ -73,7 +74,9 @@ function splitIntoChunks(content: string): string[] {
 
 export async function POST(request: NextRequest) {
   try {
-    const body: AnalyzeRequest = await request.json();
+    const parsedRequest = await readApiBody(request, "analyze");
+    if (parsedRequest.error) return parsedRequest.error;
+    const body = parsedRequest.body as unknown as AnalyzeRequest;
     const { content, grammars, grade } = body;
 
     if (!content?.trim()) {
@@ -113,7 +116,7 @@ export async function POST(request: NextRequest) {
               }),
             },
           ],
-        });
+        }, { signal: request.signal, timeout: 75000, maxRetries: 0 });
 
         const raw = completion.choices[0]?.message?.content || "";
         if (!raw) return { sentences: [], repaired: false };

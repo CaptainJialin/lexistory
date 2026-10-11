@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { readApiBody } from "@/lib/api-request";
 import { parseLlmJson } from "@/lib/json-repair";
 
 /**
@@ -83,7 +84,9 @@ RULES:
 
 export async function POST(request: NextRequest) {
   try {
-    const body: GradeRequest = await request.json();
+    const parsedRequest = await readApiBody(request, "grade-translation");
+    if (parsedRequest.error) return parsedRequest.error;
+    const body = parsedRequest.body as unknown as GradeRequest;
     const { sentence, reference, input } = body;
 
     if (!sentence?.trim() || !input?.trim()) {
@@ -114,7 +117,7 @@ export async function POST(request: NextRequest) {
         },
         { role: "user", content: buildPrompt({ sentence, reference, input }) },
       ],
-    });
+    }, { signal: request.signal, timeout: 60000, maxRetries: 0 });
 
     const raw = completion.choices[0]?.message?.content || "";
     if (!raw) {

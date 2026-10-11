@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { readApiBody } from "@/lib/api-request";
 import {
   WordItem,
   GrammarOption,
@@ -36,7 +37,9 @@ const openai = new OpenAI({
 
 export async function POST(request: NextRequest) {
   try {
-    const body: GenerateRequest = await request.json();
+    const parsedRequest = await readApiBody(request, "generate");
+    if (parsedRequest.error) return parsedRequest.error;
+    const body = parsedRequest.body as unknown as GenerateRequest;
     const { words, grammars, grade, theme, style, wordRoles, grammarRoles } = body;
 
     if (!words?.length || !grammars?.length || !grade) {
@@ -49,8 +52,8 @@ export async function POST(request: NextRequest) {
     const apiKey = process.env.DEEPSEEK_API_KEY;
     if (!apiKey) {
       return NextResponse.json(
-        { error: "DeepSeek API key not configured" },
-        { status: 500 }
+        { error: "文章生成服务尚未配置，可以先阅读体验故事。" },
+        { status: 503 }
       );
     }
 
@@ -77,7 +80,7 @@ export async function POST(request: NextRequest) {
         },
         { role: "user", content: prompt },
       ],
-    });
+    }, { signal: request.signal, timeout: 75000, maxRetries: 0 });
 
     const raw = completion.choices[0]?.message?.content || "";
     const finishReason = completion.choices[0]?.finish_reason;

@@ -18,6 +18,7 @@ import {
   Menu,
   Leaf,
   ShieldCheck,
+  Settings2,
 } from "lucide-react";
 import { getLearningStats } from "@/lib/recommend";
 import { getProgress } from "@/lib/storage";
@@ -40,6 +41,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/grammar", label: "语法本", icon: Sparkles, primary: true },
   { href: "/history", label: "历史文章", icon: History },
   { href: "/stats", label: "学习统计", icon: BarChart3 },
+  { href: "/settings", label: "偏好与安装", icon: Settings2 },
 ];
 
 function isActive(pathname: string, href: string): boolean {
@@ -145,7 +147,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col lg:flex-row">
       <a href="#main-content" className="sr-only fixed left-4 top-4 z-50 rounded-lg bg-primary px-4 py-3 text-white focus:not-sr-only">跳转到主要内容</a>
-      <header className="sticky top-0 z-30 border-b bg-[#fdfdfa]/95 backdrop-blur lg:hidden">
+      <header className="sticky top-0 z-30 border-b bg-[#fdfdfa]/95 pt-[env(safe-area-inset-top)] backdrop-blur lg:hidden">
         <div className="flex items-center justify-between px-5 py-4">
           <Brand />
           <details key={pathname} className="group relative">

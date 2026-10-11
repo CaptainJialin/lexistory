@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import type { PlaybackState } from "@/lib/sentence-player";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,7 @@ import {
   ChevronRight,
   X,
   Scissors,
-  Volume2,
+  Play, Pause, RotateCcw, Loader2, Square,
   ExternalLink,
 } from "lucide-react";
 
@@ -99,6 +100,9 @@ export function SentenceAnalysisPanel({
   onPrev,
   onNext,
   onSpeak,
+  playback,
+  onReplay,
+  onRate,
   onCollapse,
   onClose,
 }: {
@@ -110,6 +114,9 @@ export function SentenceAnalysisPanel({
   onPrev: () => void;
   onNext: () => void;
   onSpeak: () => void;
+  playback: PlaybackState;
+  onReplay: () => void;
+  onRate: (rate: number) => void;
   onCollapse: () => void;
   onClose: () => void;
 }) {
@@ -122,6 +129,7 @@ export function SentenceAnalysisPanel({
 
   return (
     <aside
+      aria-label="句子解析"
       className={
         // 移动端：底部抽屉，限高可滚动——单句最多能有十几个区块，
         // 不限高的话最重要的原句和主干会被顶出屏幕
@@ -133,15 +141,15 @@ export function SentenceAnalysisPanel({
       {/* 头部：固定，不随内容滚动 */}
       <div className="flex shrink-0 items-center justify-between border-b px-4 py-3">
         <div className="flex min-w-0 items-center gap-2">
-          <BookOpen className="h-4 w-4 shrink-0 text-teal-600" />
-          <span className="text-sm font-semibold text-zinc-900">句子解析</span>
+          <BookOpen className="hidden h-4 w-4 shrink-0 text-teal-600 min-[360px]:block" />
+          <span className="whitespace-nowrap text-sm font-semibold text-zinc-900">句子解析</span>
           {total > 1 && (
             <span className="shrink-0 text-xs text-zinc-400">
               {index + 1}/{total}
             </span>
           )}
           {isLong && (
-            <Badge className="shrink-0 bg-purple-100 text-[10px] text-purple-700 hover:bg-purple-100">
+            <Badge className="hidden shrink-0 bg-purple-100 text-[10px] text-purple-700 hover:bg-purple-100 min-[380px]:inline-flex">
               长难句
             </Badge>
           )}
@@ -150,60 +158,75 @@ export function SentenceAnalysisPanel({
           <Button
             variant="ghost"
             size="sm"
-            className="h-7 w-7 p-0"
+            className="h-10 w-10 p-0"
             onClick={onPrev}
             disabled={index <= 0}
             title="上一句"
+            aria-label="上一句"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <Button
             variant="ghost"
             size="sm"
-            className="h-7 w-7 p-0"
+            className="h-10 w-10 p-0"
             onClick={onNext}
             disabled={index >= total - 1}
             title="下一句"
+            aria-label="下一句"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
           <Button
             variant="ghost"
             size="sm"
-            className="h-7 w-7 p-0 lg:hidden"
+            className="h-10 w-10 p-0 lg:hidden"
             onClick={onCollapse}
             title="收起"
+            aria-label="收起解析"
           >
             <ChevronDown className="h-4 w-4" />
           </Button>
           <Button
             variant="ghost"
             size="sm"
-            className="h-7 w-7 p-0"
+            className="h-10 w-10 p-0"
             onClick={onClose}
             title="关闭"
+            aria-label="关闭解析"
           >
             <X className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
+      <div className="shrink-0 border-b bg-[#f5f8f3] px-4 py-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <Button onClick={onSpeak} className="min-h-11 gap-2" aria-label={playback.status === "playing" ? "暂停朗读" : playback.status === "loading" ? "取消语音加载" : playback.status === "paused" ? "继续朗读" : "播放句子"}>
+            {playback.status === "playing" ? <Pause className="size-4" /> : playback.status === "loading" ? <Square className="size-4" /> : <Play className="size-4" />}
+            {playback.status === "playing" ? "暂停" : playback.status === "loading" ? "取消加载" : playback.status === "paused" ? "继续播放" : playback.status === "ended" ? "再听一遍" : "播放句子"}
+          </Button>
+          <Button variant="outline" onClick={onReplay} disabled={playback.status === "loading" || playback.status === "idle"} className="min-h-11 gap-1.5" aria-label="从头播放句子"><RotateCcw className="size-4" /><span className="hidden min-[360px]:inline">重播</span></Button>
+          <label className="ml-auto flex items-center gap-1 text-xs text-zinc-500"><span className="hidden min-[360px]:inline">语速</span>
+            <select aria-label="朗读语速" value={playback.rate} onChange={(event) => onRate(Number(event.target.value))} className="min-h-11 rounded-lg border bg-white px-2 text-sm text-zinc-800">
+              <option value={0.75}>0.75×</option><option value={0.9}>0.9×</option><option value={1}>1×</option><option value={1.25}>1.25×</option>
+            </select>
+          </label>
+        </div>
+        <p className="mt-2 flex items-center gap-1.5 text-xs leading-5 text-zinc-500" role="status">
+          {playback.status === "loading" && <Loader2 className="size-3 animate-spin" />}
+          {playback.status === "error" ? playback.message : playback.status === "loading" ? "正在准备语音，可以随时取消" : playback.status === "paused" ? "已暂停，点击继续播放" : playback.status === "playing" ? (playback.source === "device" ? "设备语音 · 正在朗读" : "正在朗读") : playback.status === "ended" ? "本句播放完毕" : "点句子只看解析，点击播放才会朗读"}
+        </p>
+      </div>
+
       {/* 内容：独立滚动 */}
-      <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3">
+      <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
         {/* 原句 + 翻译 */}
         <div className="rounded-md bg-zinc-50 px-3 py-2">
           <div className="flex items-start gap-2">
             <p className="flex-1 text-sm font-medium leading-relaxed text-zinc-800">
               {analysis.sentence}
             </p>
-            <button
-              type="button"
-              onClick={onSpeak}
-              className="shrink-0 rounded p-1 text-zinc-400 transition-colors hover:bg-zinc-200 hover:text-zinc-700"
-              title="朗读这句"
-            >
-              <Volume2 className="h-3.5 w-3.5" />
-            </button>
           </div>
           {analysis.translation && (
             <p className="mt-1.5 text-sm leading-relaxed text-zinc-500">

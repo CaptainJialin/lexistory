@@ -9,6 +9,7 @@
 import { UserLearningProfile, GrammarOption, WordItem } from "./types";
 import { getWordBook, getDueWordCount } from "./wordbook";
 import { getGrammarBook, getDueGrammarCount } from "./grammarbook";
+import { localDateKey, calendarDayDistance } from "./calendar";
 
 const PROFILE_KEY = "lexistory_profile";
 
@@ -39,6 +40,16 @@ function createEmptyProfile(): UserLearningProfile {
   };
 }
 
+export function recordStudyDay(now: number = Date.now()): void {
+  const profile = getProfile();
+  const today = localDateKey(now);
+  if (profile.lastStudyDate === today) return;
+  const consecutive = profile.lastStudyDate && calendarDayDistance(profile.lastStudyDate, today) === 1;
+  profile.streakDays = consecutive ? profile.streakDays + 1 : 1;
+  profile.lastStudyDate = today;
+  saveProfile(profile);
+}
+
 // ====== 学习行为记录 ======
 
 /**
@@ -53,21 +64,18 @@ export function recordArticleRead(
   grammars: GrammarOption[],
   gradeId: string,
   sentenceClicks: number = 0,
-  timeSpentSeconds: number = 0
+  timeSpentSeconds: number = 0,
+  now: number = Date.now()
 ): void {
   const profile = getProfile();
-  const today = new Date().toISOString().slice(0, 10);
+  const today = localDateKey(now);
 
   // 同一篇文章不重复计入历史
   if (profile.history.some((h) => h.articleId === articleId)) return;
 
   // 更新连续学习天数
   if (profile.lastStudyDate) {
-    const last = new Date(profile.lastStudyDate);
-    const todayDate = new Date(today);
-    const diff = Math.floor(
-      (todayDate.getTime() - last.getTime()) / (1000 * 60 * 60 * 24)
-    );
+    const diff = calendarDayDistance(profile.lastStudyDate, today);
     if (diff === 1) {
       profile.streakDays += 1;
     } else if (diff > 1) {
@@ -83,16 +91,12 @@ export function recordArticleRead(
     words: words.map((w) => w.word.toLowerCase()),
     grammarIds: grammars.map((g) => g.id),
     gradeId,
-    readAt: Date.now(),
+    readAt: now,
     sentenceClicks,
     timeSpentSeconds,
   });
 
-  // 只保留最近 100 条记录
-  if (profile.history.length > 100) {
-    profile.history = profile.history.slice(0, 100);
-  }
-
+  // Keep article IDs for lifetime deduplication; truncating made totals stop at 100.
   profile.totalArticles = profile.history.length;
   saveProfile(profile);
 }
@@ -131,7 +135,7 @@ export function getLearningStats(): LearningStats {
 
   return {
     totalArticles: profile.totalArticles,
-    streakDays: profile.streakDays,
+    streakDays: profile.lastStudyDate && calendarDayDistance(profile.lastStudyDate, localDateKey()) <= 1 ? profile.streakDays : 0,
     knownWords: wordBook.length,
     masteredWords: wordBook.filter((e) => (e.srs?.proficiency ?? e.proficiency) >= 3)
       .length,

@@ -1,11 +1,13 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { getArticles, deleteArticle } from "@/lib/storage";
+import { getArticles, deleteArticle, saveArticle } from "@/lib/storage";
+import type { Article } from "@/lib/types";
+import { getReadingProgress } from "@/lib/reading-progress";
 import { notifyDataChanged, useStoreVersion } from "@/lib/client-store";
 import { getArticleStudyLabel } from "@/lib/grade-resolver";
 import Link from "next/link";
@@ -14,10 +16,12 @@ import { BookOpen, Trash2, Clock, RefreshCw, ArrowUpRight } from "lucide-react";
 export default function HistoryPage() {
   const router = useRouter();
   const version = useStoreVersion();
+  const [deleted, setDeleted] = useState<Article | null>(null);
   const articles = useMemo(() => version < 0 ? [] : getArticles(), [version]);
 
   function handleDelete(id: string, e: React.MouseEvent) {
     e.stopPropagation();
+    setDeleted(articles.find((article) => article.id === id) ?? null);
     deleteArticle(id);
     notifyDataChanged();
   }
@@ -32,6 +36,8 @@ export default function HistoryPage() {
           开始新的阅读
         </Button>
       </div>
+
+      {deleted && <div role="status" className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900"><span>已移除《{deleted.title}》</span><Button variant="outline" size="sm" onClick={() => { saveArticle(deleted); setDeleted(null); notifyDataChanged(); }}>撤销删除</Button></div>}
 
       {articles.length === 0 ? (
         <Card className="border-dashed border-zinc-300">
@@ -58,6 +64,7 @@ export default function HistoryPage() {
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
                       <div className="mb-1 text-xs text-zinc-500">
+                        <span className="mr-2 text-teal-700">{getReadingProgress(article.id)?.completedAt ? "已读完" : "待继续"}</span>
                         {new Date(article.createdAt).toLocaleString("zh-CN")}
                       </div>
                       <h2 className="mt-3 font-reading text-2xl leading-tight text-zinc-900">

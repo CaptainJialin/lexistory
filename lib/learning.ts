@@ -18,9 +18,10 @@ import {
 } from "./coverage";
 import { recordWordExposure, gradeWordByText } from "./wordbook";
 import { recordGrammarEncounter, gradeGrammar } from "./grammarbook";
-import { recordArticleRead } from "./recommend";
+import { getProfile, recordArticleRead } from "./recommend";
 import { updateArticle } from "./storage";
 import { recordArticleReadForGoal } from "./daily-goal";
+import { localDateKey } from "./calendar";
 
 /**
  * wordUsages 的 key 大小写不受控（模型有时返回原形有时返回句中形式），
@@ -57,6 +58,14 @@ export function registerArticleLearning(
   now: number = Date.now()
 ): RegisterResult {
   const coverage = article.coverage ?? computeCoverage(article, now);
+  if (getProfile().history.some((record) => record.articleId === article.id)) {
+    return {
+      wordsRegistered: Object.keys(coverage.words).filter((key) => coverage.words[key] > 0),
+      wordsMissing: coverage.missingWords,
+      grammarsRegistered: Object.keys(coverage.grammars).filter((key) => coverage.grammars[key] > 0),
+      grammarsMissing: coverage.missingGrammars,
+    };
+  }
 
   // 老文章可能没算过 coverage，补算一次并回写
   if (!article.coverage) {
@@ -102,9 +111,9 @@ export function registerArticleLearning(
     article.id,
     article.words,
     article.grammar,
-    article.difficulty.gradeId
+    article.difficulty.gradeId, 0, 0, now
   );
-  recordArticleReadForGoal(now);
+  recordArticleReadForGoal(article.id, now);
 
   return {
     wordsRegistered,
@@ -162,6 +171,11 @@ export function applyQuizOutcome(
   result: QuizResult,
   now: number = Date.now()
 ): void {
+  const gradeKey = "lexistory_quiz_grades";
+  let gradedDays: Record<string, string> = {};
+  try { gradedDays = JSON.parse(localStorage.getItem(gradeKey) || "{}"); } catch { /* Older clients do not have this record. */ }
+  const day = localDateKey(now);
+  if (gradedDays[article.id] === day) return;
   const quiz = article.quiz ?? [];
   const wrongIds = new Set(result.wrongQuestions);
 
@@ -194,4 +208,6 @@ export function applyQuizOutcome(
   for (const [grammarId, correct] of grammarVerdicts) {
     gradeGrammar(grammarId, correct ? "good" : "again", now);
   }
+  gradedDays[article.id] = day;
+  localStorage.setItem(gradeKey, JSON.stringify(gradedDays));
 }

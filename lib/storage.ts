@@ -13,7 +13,7 @@ const QUIZ_KEY = "lexistory_quizzes";
  */
 export function saveArticle(article: Article): void {
   if (typeof window === "undefined") return;
-  const articles = getArticles();
+  const articles = getArticles().filter((existing) => existing.id !== article.id);
   articles.unshift(article);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(articles));
 }

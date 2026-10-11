@@ -2,19 +2,24 @@
 
 import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { useSentencePlayer } from "@/lib/use-sentence-player";
+import { getReadingProgress, saveReadingProgress } from "@/lib/reading-progress";
+import { notifyDataChanged } from "@/lib/client-store";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Article, SentenceAnalysis, PROFICIENCY_LABELS, THEME_LABELS, STYLE_LABELS, type WordItem, type QuizResult } from "@/lib/types";
-import { getArticles, recordSentenceClick, saveQuizResult, recordUnitQuizOutcome } from "@/lib/storage";
-import { getWordBook, updateWordProficiency } from "@/lib/wordbook";
+import { getArticles, recordSentenceClick, saveQuizResult, recordUnitQuizOutcome, updateArticle } from "@/lib/storage";
+import { readableSentences } from "@/lib/reader-sentences";
+import { apiFetch } from "@/lib/api-client";
+import { getWordBook, updateWordProficiency, addWords } from "@/lib/wordbook";
 import { findHighlights, coverageRate, computeCoverage, longSentencesIn } from "@/lib/coverage";
 import { getArticleStudyLabel, resolveArticleGrade } from "@/lib/grade-resolver";
 import { registerArticleLearning, applyQuizOutcome } from "@/lib/learning";
 import { regenerateArticle } from "@/lib/generate-article";
-import { prefetchNextLesson } from "@/lib/prefetch-next";
 import { QUIZ_TYPE_LABELS, stripOptionPrefix } from "@/lib/ui-constants";
 import { countClozeAvailable } from "@/lib/cloze";
 import { SentenceAnalysisPanel } from "@/components/article/sentence-analysis-panel";
@@ -40,6 +45,9 @@ function renderHighlightedText(
     }
     result.push(
       <mark
+        role={onWordClick ? "button" : undefined}
+        tabIndex={onWordClick ? 0 : undefined}
+        onKeyDown={onWordClick ? (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); onWordClick(match.wordKey); } } : undefined}
         key={`hl-${i}`}
         onClick={
           onWordClick
@@ -100,6 +108,10 @@ function SentenceBlock({
     return (
       <span className="inline-block align-top">
         <span
+          role="button"
+          tabIndex={0}
+          aria-pressed={isSelected}
+          onKeyDown={(event) => { if (event.target === event.currentTarget && (event.key === "Enter" || event.key === " ")) { event.preventDefault(); onSelect(); } }}
           onClick={onSelect}
           className={`cursor-pointer rounded px-0.5 transition-colors ${
             isSelected
@@ -108,7 +120,7 @@ function SentenceBlock({
               ? "hover:bg-teal-50"
               : ""
           } ${isSpeaking ? "ring-1 ring-teal-300" : ""}`}
-          title={analysis ? "点击查看句子解析并播放语音" : undefined}
+          title={analysis ? "点击查看句子解析" : undefined}
         >
           {highlighted}
         </span>
@@ -121,6 +133,10 @@ function SentenceBlock({
 
   return (
     <span
+      role="button"
+      tabIndex={0}
+      aria-pressed={isSelected}
+      onKeyDown={(event) => { if (event.target === event.currentTarget && (event.key === "Enter" || event.key === " ")) { event.preventDefault(); onSelect(); } }}
       onClick={onSelect}
       className={`cursor-pointer rounded px-0.5 transition-colors ${
         isSelected
@@ -129,7 +145,7 @@ function SentenceBlock({
           ? "hover:bg-teal-50"
           : ""
       } ${isSpeaking ? "ring-1 ring-teal-300" : ""}`}
-      title={analysis ? "点击查看句子解析并播放语音" : undefined}
+      title={analysis ? "点击查看句子解析" : undefined}
     >
       {highlighted}
     </span>
@@ -171,7 +187,7 @@ function WordProficiencyPopup({
   };
 
   return (
-    <div className="fixed bottom-6 left-1/2 z-40 w-[90%] max-w-md -translate-x-1/2 rounded-xl border bg-white p-4 shadow-lg">
+    <div className="fixed bottom-24 left-1/2 z-40 w-[90%] max-w-md -translate-x-1/2 rounded-xl border bg-white p-4 shadow-lg lg:bottom-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-lg font-bold text-zinc-900">{word}</span>
@@ -245,16 +261,18 @@ function WordProficiencyPopup({
           </p>
         </div>
       ) : (
-        <p className="mt-2 text-xs text-zinc-400">
-          该单词不在你的单词本中。生成文章时使用的单词会自动加入单词本。
-        </p>
+        <div className="mt-3"><Button variant="outline" size="sm" onClick={() => {
+          addWords([{ word, meaning: wordItem?.targetMeaning || wordItem?.meaning || wordUsages?.[word.toLowerCase()], phrases: wordItem?.phrases }]);
+          setEntry(getWordBook().find((item) => item.word.toLowerCase() === word.toLowerCase()) ?? null);
+          notifyDataChanged();
+        }}>加入单词本</Button><p className="mt-2 text-xs text-zinc-400">也可以在读完后，一次收下本文的目标词。</p></div>
       )}
     </div>
   );
 }
 
 // ====== 测验面板 ======
-function QuizPanel({ article }: { article: Article }) {
+function QuizPanel({ article, onComplete }: { article: Article; onComplete: () => boolean }) {
   const router = useRouter();
   const [started, setStarted] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -293,6 +311,7 @@ function QuizPanel({ article }: { article: Article }) {
       setSelectedOption(null);
       setShowAnswer(false);
     } else {
+      if (!onComplete()) return;
       const finalAnswers = answers.slice(0, total);
       const finalCorrectCount = finalAnswers.filter(
         (a, i) => a === quizItems[i].correctIndex
@@ -350,6 +369,7 @@ function QuizPanel({ article }: { article: Article }) {
         <p className="text-sm text-zinc-600 mb-4">
           {total} questions to check your understanding.
         </p>
+        <p className="mb-4 text-xs leading-6 text-zinc-500">当天同一篇的测验只调整一次复习计划，重做仍可查看成绩与解析。</p>
         <Button onClick={() => setStarted(true)} className="gap-1">
           <Target className="h-4 w-4" />
           Start Quiz
@@ -688,6 +708,8 @@ function ArticleViewer() {
   const router = useRouter();
   const id = searchParams.get("id");
   const [article, setArticle] = useState<Article | null>(null);
+  const sentences = useMemo(() => article ? readableSentences(article) : [], [article]);
+  const [analyzing, setAnalyzing] = useState(false);
   const [highlightedWord, setHighlightedWord] = useState<string | null>(null);
   const [selectedSentence, setSelectedSentence] = useState<SentenceAnalysis | null>(null);
   const [panelOpen, setPanelOpen] = useState(true);
@@ -696,99 +718,63 @@ function ArticleViewer() {
   const [tagsExpanded, setTagsExpanded] = useState(false);
   /** 长难句逐句跳转的游标，-1 表示还没开始 */
   const [longIndex, setLongIndex] = useState(-1);
-  const [speakingSentence, setSpeakingSentence] = useState<string | null>(null);
-  const [speechError, setSpeechError] = useState("");
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const audioUrlCacheRef = useRef<Map<string, string>>(new Map());
-
-  const speakWithBrowser = useCallback((text: string) => {
-    if (!("speechSynthesis" in window)) {
-      setSpeechError("当前浏览器不支持句子朗读。");
-      setSpeakingSentence(null);
-      return;
-    }
-
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
-    utterance.rate = 0.9;
-    utterance.onend = () => setSpeakingSentence(null);
-    utterance.onerror = () => {
-      setSpeechError("句子朗读失败，请再试一次。");
-      setSpeakingSentence(null);
-    };
-    window.speechSynthesis.speak(utterance);
-  }, []);
-
-  const playSentenceAudio = useCallback(
-    async (text: string) => {
-      const sentence = text.trim();
-      if (!sentence) return;
-
-      audioRef.current?.pause();
-      if ("speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
-      setSpeechError("");
-      setSpeakingSentence(sentence);
-
-      try {
-        let audioUrl = audioUrlCacheRef.current.get(sentence);
-        if (!audioUrl) {
-          const res = await fetch("/api/speech", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text: sentence }),
-          });
-
-          if (!res.ok) {
-            throw new Error("Speech API unavailable");
-          }
-
-          const blob = await res.blob();
-          audioUrl = URL.createObjectURL(blob);
-          audioUrlCacheRef.current.set(sentence, audioUrl);
-        }
-
-        const audio = new Audio(audioUrl);
-        audioRef.current = audio;
-        audio.onended = () => setSpeakingSentence(null);
-        audio.onerror = () => {
-          setSpeechError("模型语音播放失败，已尝试浏览器朗读。");
-          speakWithBrowser(sentence);
-        };
-        await audio.play();
-      } catch {
-        speakWithBrowser(sentence);
-      }
-    },
-    [speakWithBrowser]
-  );
+  const { player, state: playback, setRate } = useSentencePlayer();
+  const speakingSentence = playback.status === "playing" ? playback.text : null;
+  const [completed, setCompleted] = useState(false);
+  const [actionError, setActionError] = useState("");
 
   useEffect(() => {
-    const audioUrlCache = audioUrlCacheRef.current;
-    return () => {
-      audioRef.current?.pause();
-      audioRef.current = null;
-      if (typeof window !== "undefined" && "speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
-      audioUrlCache.forEach((url) => URL.revokeObjectURL(url));
-      audioUrlCache.clear();
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { player.stop(); setSelectedSentence(null); setHighlightedWord(null); }
     };
-  }, []);
+    document.addEventListener("keydown", onEscape);
+    return () => document.removeEventListener("keydown", onEscape);
+  }, [player]);
+
+  function handleComplete() {
+    if (!article) return false;
+    if (completed) return true;
+    try {
+      registerArticleLearning(article);
+      saveReadingProgress(article.id, { completedAt: Date.now() });
+      setCompleted(true);
+      setActionError("");
+      notifyDataChanged();
+      return true;
+    } catch {
+      setActionError("学习记录未能保存，可能是设备空间不足。请先到学习报告导出备份，再重试。");
+      return false;
+    }
+  }
 
   async function handleRegenerate() {
     if (!article) return;
     const grade = resolveArticleGrade(article);
     if (!grade) return;
     setRegenerating(true);
+    setActionError("");
+    player.stop();
     try {
       const newArticle = await regenerateArticle(article, grade);
       router.push(`/article?id=${newArticle.id}`);
-    } catch {
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : "生成失败，请检查网络后重试。");
       setRegenerating(false);
     }
+  }
+
+  async function handleAnalyze() {
+    if (!article) return;
+    setAnalyzing(true); setActionError("");
+    try {
+      const response = await apiFetch("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ content: article.content, grammars: article.grammar, grade: resolveArticleGrade(article) }) });
+      const data = await response.json();
+      if (!response.ok || !Array.isArray(data.sentences) || !data.sentences.length) throw new Error("解析暂未准备好，请稍后重试。正文和朗读仍可使用。");
+      const updated = { ...article, sentences: data.sentences.filter((s: SentenceAnalysis) => s && typeof s.sentence === "string") };
+      updated.coverage = computeCoverage(updated);
+      updateArticle(updated); setArticle(updated); setSelectedSentence(null); player.stop();
+    } catch (error) { setActionError(error instanceof Error ? error.message : "解析失败，请重试。"); }
+    finally { setAnalyzing(false); }
   }
 
   useEffect(() => {
@@ -805,16 +791,14 @@ function ArticleViewer() {
 
     setArticle(found);
     setRegenerating(false); // 新文章加载完成，重置 loading 状态
-
-    // 停留够久才算真的读了。入册只针对 coverage 验证过真的出现在正文里的
-    // 词和语法——模型漏用的目标词不会被记成「学过了」。
-    const timer = setTimeout(() => {
-      registerArticleLearning(found);
-      // 入册之后再预生成，下一篇才能反映刚学到的词
-      prefetchNextLesson();
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, [id, router]);
+    player.stop();
+    setSelectedSentence(null);
+    setHighlightedWord(null);
+    setLongIndex(-1);
+    setCompleted(Boolean(getReadingProgress(found.id)?.completedAt));
+    try { saveReadingProgress(found.id, {}); } catch { /* Reading works without storage. */ }
+    return () => player.stop();
+  }, [id, router, player]);
 
   // 把 content 渲染为带交互句子的段落
   /**
@@ -824,33 +808,35 @@ function ArticleViewer() {
   /** 选中第 n 句（用于面板里的上一句/下一句） */
   const selectSentenceAt = useCallback(
     (n: number) => {
-      const list = article?.sentences ?? [];
+      const list = sentences;
       if (n < 0 || n >= list.length) return;
+      player.stop();
       setSelectedSentence(list[n]);
+      if (article) { try { saveReadingProgress(article.id, { sentenceIndex: n }); } catch { /* Optional bookmark. */ } }
       setPanelOpen(true);
       // 跳到别的句子后，长难句游标就不再对应了
       setLongIndex(-1);
     },
-    [article]
+    [article, player, sentences]
   );
 
   const handleNextLongSentence = useCallback(() => {
     const longs = longSentencesIn(article!);
     if (longs.length === 0) return;
     const next = (longIndex + 1) % longs.length;
-    const target = article!.sentences?.find((s) => s.sentence === longs[next]);
+    const target = sentences.find((s) => s.sentence === longs[next]);
     setLongIndex(next);
     if (target) {
+      player.stop();
       setSelectedSentence(target);
       setPanelOpen(true);
     }
-  }, [article, longIndex]);
+  }, [article, longIndex, player, sentences]);
 
   const contentNodes = useMemo(() => {
     if (!article) return null;
 
     const paragraphs = article.content.split("\n\n").filter((p) => p.trim());
-    const sentences = article.sentences || [];
     let sentencePtr = 0;
 
     return paragraphs.map((paragraph, pIdx) => {
@@ -880,11 +866,12 @@ function ArticleViewer() {
               isSelected={selectedSentence?.sentence === s.sentence}
               isSpeaking={speakingSentence === s.sentence}
               onSelect={() => {
+                player.stop();
                 setSelectedSentence(
                   selectedSentence?.sentence === s.sentence ? null : s
                 );
                 setPanelOpen(true);
-                playSentenceAudio(s.sentence);
+                try { saveReadingProgress(article.id, { sentenceIndex: sentences.indexOf(s) }); } catch { /* Optional bookmark. */ }
                 if (id) recordSentenceClick(id);
               }}
               onWordClick={setHighlightedWord}
@@ -914,7 +901,7 @@ function ArticleViewer() {
         </p>
       );
     });
-  }, [article, selectedSentence, bilingualMode, id, playSentenceAudio, speakingSentence]);
+  }, [article, selectedSentence, bilingualMode, id, player, speakingSentence, sentences]);
 
   if (!article) {
     return (
@@ -927,13 +914,13 @@ function ArticleViewer() {
   const difficultyLabel = getArticleStudyLabel(article);
 
   const hasSentenceAnalysis =
-    article.sentences && article.sentences.length > 0;
+    sentences.length > 0;
 
   // 长难句是考研阅读最大的失分点，标出来并支持逐句跳转
   const longSentences = longSentencesIn(article);
 
   const selectedIndex = selectedSentence
-    ? (article.sentences ?? []).findIndex(
+    ? sentences.findIndex(
         (s) => s.sentence === selectedSentence.sentence
       )
     : -1;
@@ -944,7 +931,7 @@ function ArticleViewer() {
         // 桌面端解析面板停在右侧，正文让出宽度，两边能同时看见——
         // 攻克长难句时需要对照它在原文里的位置
         "mx-auto w-full max-w-2xl flex-1 px-4 py-6 transition-[padding] duration-200 " +
-        (selectedSentence && panelOpen ? "lg:mr-[400px]" : "")
+        (selectedSentence && panelOpen ? "lg:mr-[400px] lg:w-[calc(100%_-_400px)]" : "")
       }
     >
       <div className="mb-6 flex items-center justify-between">
@@ -967,6 +954,10 @@ function ArticleViewer() {
         </Button>
       </div>
 
+      {actionError && <p role="alert" className="mb-4 rounded-xl bg-red-50 p-4 text-sm text-red-700">{actionError}</p>}
+      {getReadingProgress(article.id)?.sentenceIndex !== undefined && !selectedSentence && (
+        <Button variant="outline" className="mb-4" onClick={() => selectSentenceAt(getReadingProgress(article.id)!.sentenceIndex!)}>接着看上次的句子</Button>
+      )}
       <Card className="overflow-hidden rounded-[22px] border-zinc-200 bg-[#fffefa] shadow-sm">
         <CardContent className="p-5 sm:p-8">
           <p className="page-eyebrow mb-5 flex items-center gap-2"><BookOpen className="size-3.5 text-teal-500" />YOUR READING MOMENT</p>
@@ -1012,9 +1003,6 @@ function ArticleViewer() {
                 </Badge>
               ))}
             </div>
-            {!tagsExpanded && (
-              <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white to-transparent" />
-            )}
           </div>
           <div className="mb-6 flex justify-end">
             <button
@@ -1040,7 +1028,7 @@ function ArticleViewer() {
                   <BookOpen className="mb-0.5 mr-1 inline-block h-3.5 w-3.5" />
                   {speakingSentence
                     ? "正在播放句子语音..."
-                    : "点高亮词看释义，点句子其他位置看解析并朗读"}
+                    : "点词看释义 · 点句子看解析 · 点播放听朗读"}
                 </div>
                 {/*
                   长难句是考研阅读最大的失分点，只显示个数字没用——
@@ -1072,14 +1060,20 @@ function ArticleViewer() {
               </Button>
             </div>
           )}
-          {speechError && (
-            <div className="mb-3 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">
-              {speechError}
-            </div>
-          )}
 
           {/* 文章内容 */}
+          {sentences.some((sentence) => !sentence.translation) && <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs leading-6 text-amber-800">部分句子的详细解析还未准备好，可以先阅读或听朗读。<Button variant="ghost" size="sm" disabled={analyzing} onClick={handleAnalyze} className="ml-1 text-xs">{analyzing ? "正在补全…" : "补全句子解析"}</Button></div>}
           <div className="reader-prose">{contentNodes}</div>
+
+          <section className="my-7 rounded-2xl border border-teal-200 bg-teal-50/70 p-5" aria-label="完成阅读">
+            <p className="font-semibold text-teal-950">{completed ? "这一篇，已经成为你的积累。" : "读到这里，为今天留下一点积累。"}</p>
+            <p className="mt-2 text-sm leading-6 text-teal-800">{completed ? "阅读已保存。可以做下方测验检验理解，或去复习刚遇见的单词。" : "确认读完后，本文实际出现的目标词会加入单词本，并记入今日阅读。"}</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Button onClick={handleComplete} disabled={completed}><CheckCircle2 className="mr-2 size-4" />{completed ? "已完成阅读" : "我读完了"}</Button>
+              {completed && <Link href="/review" className="inline-flex min-h-10 items-center rounded-lg border border-teal-200 bg-white px-4 text-sm font-medium text-teal-800">复习刚学的词 →</Link>}
+              {article.isDemo && <Link href="/onboarding" className="inline-flex min-h-10 items-center px-3 text-sm text-teal-800">定制我的学习起点 →</Link>}
+            </div>
+          </section>
 
           <Separator className="my-6" />
 
@@ -1094,7 +1088,7 @@ function ArticleViewer() {
           <ArticleLearningReport article={article} onRegenerate={handleRegenerate} />
 
           {/* 课后测验 */}
-          <QuizPanel article={article} />
+          <QuizPanel key={article.id} article={article} onComplete={handleComplete} />
         </CardContent>
       </Card>
 
@@ -1104,12 +1098,15 @@ function ArticleViewer() {
           analysis={selectedSentence}
           articleGrammars={article.grammar}
           index={selectedIndex}
-          total={article.sentences?.length ?? 0}
+          total={sentences.length}
           onPrev={() => selectSentenceAt(selectedIndex - 1)}
           onNext={() => selectSentenceAt(selectedIndex + 1)}
-          onSpeak={() => playSentenceAudio(selectedSentence.sentence)}
-          onCollapse={() => setPanelOpen(false)}
-          onClose={() => setSelectedSentence(null)}
+          playback={playback}
+          onSpeak={() => void player.toggle(selectedSentence.sentence)}
+          onReplay={() => void player.play(selectedSentence.sentence)}
+          onRate={setRate}
+          onCollapse={() => { player.pause(); setPanelOpen(false); }}
+          onClose={() => { player.stop(); setSelectedSentence(null); }}
         />
       )}
       {/* 收起状态的面板（只显示一个提示条） */}

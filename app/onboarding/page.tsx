@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ReadingPreview } from "@/components/reading-preview";
+import { openDemoArticle } from "@/lib/demo-article";
 import { EducationLevel } from "@/lib/types";
 import {
   PLACEMENT_SIZE,
@@ -55,6 +56,8 @@ export default function OnboardingPage() {
   const [answers, setAnswers] = useState<PlacementAnswer[]>([]);
   const [result, setResult] = useState<PlacementResult | null>(null);
   const [loading, setLoading] = useState(false);
+  const generationRef = useRef<AbortController | null>(null);
+  useEffect(() => () => generationRef.current?.abort(), []);
   const [progressStep, setProgressStep] = useState(0);
   const [error, setError] = useState("");
 
@@ -90,11 +93,7 @@ export default function OnboardingPage() {
     setError("");
     setLoading(true);
 
-    const timers = [
-      setTimeout(() => setProgressStep(1), 3000),
-      setTimeout(() => setProgressStep(2), 18000),
-      setTimeout(() => setProgressStep(3), 32000),
-    ];
+    const controller = new AbortController(); generationRef.current = controller;
 
     try {
       const progress = progressFromPlacement(result);
@@ -108,13 +107,12 @@ export default function OnboardingPage() {
         mode: "custom",
       });
 
-      const article = await generateArticleFromPlan(plan);
+      const article = await generateArticleFromPlan(plan, { signal: controller.signal, onStage: (stage) => setProgressStep(stage === "writing" ? 1 : 2) });
       router.push(`/article?id=${article.id}`);
     } catch (err) {
+      if (controller.signal.aborted) return;
       setError(err instanceof Error ? err.message : "生成失败，请重试");
       setLoading(false);
-    } finally {
-      timers.forEach(clearTimeout);
     }
   }
 
@@ -127,6 +125,11 @@ export default function OnboardingPage() {
             <p className="page-eyebrow mb-5 flex items-center gap-2"><span className="h-px w-6 bg-teal-500" />A NEW CHAPTER · 新的开始</p>
             <h1 className="text-[34px] font-semibold leading-[1.4] tracking-tight text-zinc-900 sm:text-[44px]">让单词，<br />在故事里<span className="relative text-primary">被记住<span aria-hidden="true" className="absolute -bottom-1 left-0 right-0 h-1 rounded-full bg-[#cad8b5]" /></span>。</h1>
             <p className="mt-5 max-w-md text-sm leading-7 text-zinc-500">从一篇为你而写的英文文章开始。<br className="hidden sm:block" />在阅读中遇见新词，在新的故事里，和老朋友重逢。</p>
+            <div className="mt-7">
+              <Button size="lg" onClick={() => { try { router.push(`/article?id=${openDemoArticle()}`); } catch { setError("体验文章保存失败，请检查浏览器存储空间。"); } }} className="gap-2">先读一篇，体验 1 分钟 <ArrowRight className="size-4" /></Button>
+              <p className="mt-3 text-xs leading-6 text-zinc-500">无需测试，无需等待。点词看释义，点句子看解析。</p>
+              {error && <p role="alert" className="mt-2 text-sm text-red-600">{error}</p>}
+            </div>
             <div className="hidden xl:block"><ReadingPreview /></div>
           </section>
 
@@ -339,9 +342,7 @@ export default function OnboardingPage() {
           )}
         </Button>
         {loading && (
-          <p className="mt-2 text-center text-xs text-zinc-400">
-            通常需要 30-40 秒，请不要关闭页面
-          </p>
+          <div className="mt-2 text-center"><p className="text-xs text-zinc-500">正在为你准备文章，较长内容可能需要一分钟。</p><Button variant="ghost" size="sm" onClick={() => { generationRef.current?.abort(); setLoading(false); setError("已取消。你的摸底结果已保留，可以稍后再试。"); }}>取消本次生成</Button></div>
         )}
 
         <button

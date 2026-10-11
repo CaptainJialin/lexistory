@@ -23,6 +23,7 @@ import {
   addWord,
   addWords,
   clearWordBook,
+  saveWordBook,
   getUpcomingDueCounts,
 } from "@/lib/wordbook";
 import { getArticles } from "@/lib/storage";
@@ -64,6 +65,7 @@ export default function WordBookPage() {
   const [editMeaning, setEditMeaning] = useState("");
   const [editPhrases, setEditPhrases] = useState("");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [removedEntries, setRemovedEntries] = useState<WordBookEntry[]>([]);
 
   const entries = useMemo<WordBookEntry[]>(
     () => (version < 0 ? [] : getWordBook()),
@@ -579,7 +581,7 @@ export default function WordBookPage() {
                               variant="ghost"
                               size="icon"
                               className="h-7 w-7 text-zinc-400 hover:text-red-600"
-                              onClick={() => removeWord(entry.id)}
+                              onClick={() => { setRemovedEntries([entry]); removeWord(entry.id); }}
                               aria-label={`删除单词 ${entry.word}`}
                             >
                               <Trash2 className="h-3.5 w-3.5" />
@@ -635,7 +637,8 @@ export default function WordBookPage() {
             size="sm"
             className="text-zinc-400 hover:text-red-600"
             onClick={() => {
-              if (confirm("确定要清空单词本吗？此操作不可撤销。")) {
+              if (confirm("清空单词本？离开此页前可以撤销。建议先到学习统计导出备份。")) {
+                setRemovedEntries(entries);
                 clearWordBook();
               }
             }}
@@ -645,6 +648,7 @@ export default function WordBookPage() {
           </Button>
         </div>
       )}
+      {removedEntries.length > 0 && <div role="status" className="sticky bottom-24 mt-5 flex items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 lg:bottom-4"><span>已移除 {removedEntries.length} 个单词</span><Button variant="outline" size="sm" onClick={() => { const current = getWordBook(); const words = new Set(current.map((item) => item.word.toLowerCase())); saveWordBook([...current, ...removedEntries.filter((item) => !words.has(item.word.toLowerCase()))]); setRemovedEntries([]); }}>撤销删除</Button></div>}
     </main>
   );
 }

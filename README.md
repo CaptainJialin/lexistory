@@ -1,5 +1,9 @@
 # LexiStory
 
+Website plus Android/iOS projects, sharing one learning UI. Read the [product audit](docs/product-audit.md) and [mobile build guide](docs/mobile.md). Data is currently stored on each device; account synchronization is not implemented.
+
+New learners can open an instant sample story. Selecting a sentence is silent; explicit playback supports pause, resume, replay and speed. Reading is credited only after completion is confirmed or the quiz is completed.
+
 [![en](https://img.shields.io/badge/lang-en-red.svg)](README.md)
 [![zh-CN](https://img.shields.io/badge/lang-zh--CN-blue.svg)](README.zh-CN.md)
 

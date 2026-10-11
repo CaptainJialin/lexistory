@@ -15,6 +15,8 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { LessonRecipe } from "@/components/lesson-recipe";
 import { LearningCompanion } from "@/components/learning-companion";
+import { ContinueReading } from "@/components/continue-reading";
+import { apiFetch } from "@/lib/api-client";
 import { notifyDataChanged } from "@/lib/client-store";
 import { type WordItem, type UserProgress } from "@/lib/types";
 import { getProgress, saveProgress, getLearningStats } from "@/lib/storage";
@@ -95,6 +97,13 @@ export default function Home() {
   const [customText, setCustomText] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const generationRef = useRef<AbortController | null>(null);
+  useEffect(() => () => generationRef.current?.abort(), []);
+
+  function cancelGeneration() {
+    generationRef.current?.abort();
+    setLoading(false); setError("已取消。可以调整配方后重新生成。");
+  }
   const [enriching, setEnriching] = useState(false);
   const [progressStep, setProgressStep] = useState(0);
   const [error, setError] = useState("");
@@ -256,7 +265,7 @@ export default function Home() {
     const controller = new AbortController();
     setEnriching(true);
 
-    fetch("/api/enrich-words", {
+    apiFetch("/api/enrich-words", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ words: enrichKey.split(","), gradeId: enrichGradeId }),
@@ -291,12 +300,6 @@ export default function Home() {
       setProgressStep(0);
       return;
     }
-    const timers = [
-      setTimeout(() => setProgressStep(1), 3000),
-      setTimeout(() => setProgressStep(2), 18000),
-      setTimeout(() => setProgressStep(3), 32000),
-    ];
-    return () => timers.forEach(clearTimeout);
   }, [loading]);
 
   const handleToggleWord = useCallback((word: string) => {
@@ -357,14 +360,16 @@ export default function Home() {
     if (!progress) return;
     setError("");
     setLoading(true);
+    const controller = new AbortController(); generationRef.current = controller;
     try {
       const reviewPlan = buildLessonPlan({ progress, mode: "review" });
       if (reviewPlan.words.length === 0) {
         throw new Error("目前没有可复习的词");
       }
-      const article = await generateArticleFromPlan(reviewPlan);
+      const article = await generateArticleFromPlan(reviewPlan, { signal: controller.signal, onStage: (stage) => setProgressStep(stage === "writing" ? 1 : 2) });
       router.push(`/article?id=${article.id}`);
     } catch (err) {
+      if (controller.signal.aborted) return;
       setError(err instanceof Error ? err.message : "生成失败，请重试");
       setLoading(false);
     }
@@ -391,6 +396,7 @@ export default function Home() {
     if (!plan) return;
     setError("");
     setLoading(true);
+    const controller = new AbortController(); generationRef.current = controller;
     try {
       // 超出本篇容量的自定义词先存进单词本，后续文章会自然带上
       const planned = new Set(plan.words.map((s) => s.item.word.toLowerCase()));
@@ -401,9 +407,10 @@ export default function Home() {
         addWords(overflow.map((w) => ({ word: w.word, source: "manual" })));
       }
 
-      const article = await generateArticleFromPlan(plan);
+      const article = await generateArticleFromPlan(plan, { signal: controller.signal, onStage: (stage) => setProgressStep(stage === "writing" ? 1 : 2) });
       router.push(`/article?id=${article.id}`);
     } catch (err) {
+      if (controller.signal.aborted) return;
       setError(err instanceof Error ? err.message : "生成失败，请重试");
       setLoading(false);
     }
@@ -533,9 +540,7 @@ export default function Home() {
                   )}
                 </Button>
                 {loading && (
-                  <p className="-mt-2 text-center text-xs text-zinc-400">
-                    通常需要 30-40 秒，请不要关闭页面
-                  </p>
+                  <div className="-mt-2 text-center"><p className="text-xs text-zinc-500">正在为你准备文章，较长内容可能需要一分钟。</p><Button variant="ghost" size="sm" onClick={cancelGeneration} className="mt-1 text-xs">取消本次生成</Button></div>
                 )}
               </>
             )}
@@ -743,6 +748,7 @@ export default function Home() {
 
   return (
     <main className="page-container entry-reveal">
+      <ContinueReading />
       <section className="relative mb-6 overflow-hidden rounded-[22px] border border-[#dfe5d3] bg-[#edf1e4] px-6 py-7 sm:px-8 sm:py-8">
         <div className="relative z-10">
           <p className="page-eyebrow mb-3 flex items-center gap-2 text-[#81916f]"><span className="size-1.5 rounded-full bg-[#90a378]" />YOUR DAILY CHAPTER</p>
@@ -767,7 +773,7 @@ export default function Home() {
             <div className="flex flex-wrap items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-6 text-amber-800">
               <AlertTriangle className="size-4 shrink-0" /><span>给积累留一份备份，换设备也能继续学习。</span>
               <div className="ml-auto flex shrink-0 gap-1">
-                <Button size="sm" variant="outline" className="h-8 border-amber-200 bg-white text-xs text-amber-800" onClick={() => { downloadBackup(); markBackupReminded(); setRemindBackup(false); }}>立即备份</Button>
+                <Button size="sm" variant="outline" className="h-8 border-amber-200 bg-white text-xs text-amber-800" onClick={() => { void downloadBackup().then(() => { markBackupReminded(); setRemindBackup(false); }).catch(() => setError("备份未导出，请到学习统计重试。")); }}>立即备份</Button>
                 <Button size="sm" variant="ghost" className="h-8 text-xs text-amber-700" onClick={() => { markBackupReminded(); setRemindBackup(false); }}>以后再说</Button>
               </div>
             </div>

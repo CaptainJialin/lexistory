@@ -10,7 +10,9 @@ import { getLearningStats, getProfile } from "@/lib/recommend";
 import { getWordBook, getUpcomingDueCounts } from "@/lib/wordbook";
 import { getGrammarBook } from "@/lib/grammarbook";
 import { getArticles } from "@/lib/storage";
-import { downloadBackup, importBackup } from "@/lib/backup";
+import { downloadBackup, importBackup, inspectBackup, undoLastImport, hasImportRecovery } from "@/lib/backup";
+import { localDateKey } from "@/lib/calendar";
+import { runMigrations } from "@/lib/migrate";
 import { notifyDataChanged, useStoreVersion, useNow } from "@/lib/client-store";
 import { DAY_MS, startOfDay } from "@/lib/srs";
 import {
@@ -29,6 +31,7 @@ export default function StatsPage() {
   const version = useStoreVersion();
   const fileRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState("");
+  const [pendingImport, setPendingImport] = useState<{ json: string; articles: number; words: number } | null>(null);
 
   const now = useNow();
 
@@ -53,7 +56,7 @@ export default function StatsPage() {
         cursor++;
       }
       growth.push({
-        date: new Date(dayEnd - DAY_MS).toISOString().slice(5, 10),
+        date: localDateKey(dayEnd - DAY_MS).slice(5, 10),
         total: running,
       });
     }
@@ -61,13 +64,13 @@ export default function StatsPage() {
     // 阅读热力图：每天读了几篇
     const readsByDay = new Map<string, number>();
     for (const record of profile.history) {
-      const key = new Date(record.readAt).toISOString().slice(0, 10);
+      const key = localDateKey(record.readAt);
       readsByDay.set(key, (readsByDay.get(key) ?? 0) + 1);
     }
     const heatmap: { date: string; count: number }[] = [];
     for (let i = HEATMAP_DAYS - 1; i >= 0; i--) {
       const day = new Date(startOfDay(now) - i * DAY_MS);
-      const key = day.toISOString().slice(0, 10);
+      const key = localDateKey(day.getTime());
       heatmap.push({ date: key, count: readsByDay.get(key) ?? 0 });
     }
 
@@ -111,12 +114,17 @@ export default function StatsPage() {
   function handleImport(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
+    if (file.size > 20 * 1024 * 1024) { setMessage("文件超过 20 MB，请检查备份。"); event.target.value = ""; return; }
     const reader = new FileReader();
     reader.onload = () => {
-      const result = importBackup(String(reader.result), "replace");
-      setMessage(result.message);
-      if (result.ok) notifyDataChanged();
+      try {
+        const json = String(reader.result);
+        const result = inspectBackup(json);
+        setPendingImport({ json, articles: result.articles, words: result.words });
+        setMessage("");
+      } catch (error) { setMessage(error instanceof Error ? error.message : "备份无法读取。"); }
     };
+    reader.onerror = () => setMessage("文件读取失败，请重新选择。");
     reader.readAsText(file);
     event.target.value = "";
   }
@@ -350,7 +358,11 @@ export default function StatsPage() {
           </p>
           <Separator className="my-4" />
           <div className="flex flex-wrap gap-2">
-            <Button variant="outline" size="sm" className="gap-1.5" onClick={downloadBackup}>
+            {hasImportRecovery() && <Button variant="outline" size="sm" onClick={() => {
+              const result = undoLastImport(); setMessage(result.message);
+              if (result.ok) { runMigrations(); notifyDataChanged(); }
+            }}>恢复上次导入前的数据</Button>}
+            <Button variant="outline" size="sm" className="gap-1.5" onClick={() => void downloadBackup().catch(() => setMessage("备份未导出，请重试并选择保存位置。"))}>
               <Download className="h-4 w-4" />
               导出备份
             </Button>
@@ -371,8 +383,16 @@ export default function StatsPage() {
               onChange={handleImport}
             />
           </div>
+          {pendingImport && <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4">
+            <p className="text-sm font-medium text-amber-900">已验证备份：{pendingImport.articles} 篇文章 · {pendingImport.words} 个单词</p>
+            <p className="mt-2 text-xs leading-6 text-amber-800">恢复后会替换这台设备上的学习数据。当前数据会保留一份恢复快照。</p>
+            <div className="mt-3 flex gap-2"><Button size="sm" onClick={() => {
+              const result = importBackup(pendingImport.json); setMessage(result.message);
+              if (result.ok) { runMigrations(); notifyDataChanged(); setPendingImport(null); }
+            }}>确认恢复这份备份</Button><Button variant="outline" size="sm" onClick={() => setPendingImport(null)}>取消</Button></div>
+          </div>}
           {message && (
-            <Badge variant="secondary" className="mt-3 text-xs">
+            <Badge role="status" variant="secondary" className="mt-3 text-xs">
               {message}
             </Badge>
           )}
