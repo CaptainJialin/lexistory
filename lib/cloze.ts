@@ -179,14 +179,11 @@ export function countClozeAvailable(now: number = Date.now()): {
   due: number;
   total: number;
 } {
-  const articleIds = new Set(getArticles().map((a) => a.id));
-  const hasContext = (e: WordBookEntry) =>
-    (e.seenIn ?? []).some((id) => articleIds.has(id));
-
-  const book = getWordBook().filter(hasContext);
+  const articles = new Map(getArticles().map((article) => [article.id, article]));
+  const book = getWordBook().filter((entry) => buildQuestionFor(entry, articles) !== null);
   return {
     due: book.filter((e) => e.srs && isDue(e.srs, now)).length,
-    total: book.filter((e) => (e.srs?.proficiency ?? e.proficiency) < 3).length,
+    total: book.filter((e) => (e.srs?.proficiency ?? e.proficiency) < 3 || (e.srs && isDue(e.srs, now))).length,
   };
 }
 

@@ -22,6 +22,18 @@ import { getProfile, recordArticleRead } from "./recommend";
 import { updateArticle } from "./storage";
 import { recordArticleReadForGoal } from "./daily-goal";
 import { localDateKey } from "./calendar";
+import { withLearningTransaction } from "./learning-transaction";
+
+/** Backfill only grammar for an already completed story after its analysis arrives. */
+export function registerAnalyzedGrammar(article: Article, now: number = Date.now()): void {
+  if (!getProfile().history.some((record) => record.articleId === article.id)) return;
+  const coverage = article.coverage ?? computeCoverage(article, now);
+  for (const grammar of article.grammar) {
+    if ((coverage.grammars[grammar.id] ?? 0) > 0) {
+      recordGrammarEncounter(grammar.id, article.id, sentencesUsingGrammar(article, grammar.id), now);
+    }
+  }
+}
 
 /**
  * wordUsages 的 key 大小写不受控（模型有时返回原形有时返回句中形式），
@@ -57,6 +69,10 @@ export function registerArticleLearning(
   article: Article,
   now: number = Date.now()
 ): RegisterResult {
+  return withLearningTransaction(() => registerLearning(article, now));
+}
+
+function registerLearning(article: Article, now: number): RegisterResult {
   const coverage = article.coverage ?? computeCoverage(article, now);
   if (getProfile().history.some((record) => record.articleId === article.id)) {
     return {

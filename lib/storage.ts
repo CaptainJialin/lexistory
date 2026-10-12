@@ -33,7 +33,8 @@ export function getArticles(): Article[] {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) return [];
   try {
-    return JSON.parse(raw) as Article[];
+    const articles = JSON.parse(raw);
+    return Array.isArray(articles) ? articles : [];
   } catch {
     return [];
   }

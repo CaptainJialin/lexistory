@@ -43,8 +43,7 @@ type Step = "stage" | "quiz" | "result";
 const GENERATION_STEPS = [
   "正在编排你的第一篇文章...",
   "正在撰写...",
-  "正在做逐句解析...",
-  "就快好了...",
+  "正在保存文章...",
 ];
 
 export default function OnboardingPage() {

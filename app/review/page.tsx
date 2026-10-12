@@ -16,7 +16,8 @@ import {
   type ClozeVerdict,
 } from "@/lib/cloze";
 import { gradeWord } from "@/lib/wordbook";
-import { recordReviewForGoal } from "@/lib/daily-goal";
+import { beginDailyReview, recordReviewForGoal } from "@/lib/daily-goal";
+import { withLearningTransaction } from "@/lib/learning-transaction";
 import { useStoreVersion, useNow } from "@/lib/client-store";
 import {
   BookOpen,
@@ -29,7 +30,7 @@ import {
   Quote,
 } from "lucide-react";
 
-const SET_SIZE = 10;
+const SET_SIZE = 5;
 
 interface Answered {
   question: ClozeQuestion;
@@ -52,6 +53,8 @@ export default function ReviewPage() {
   );
   const [showHint, setShowHint] = useState(false);
   const [history, setHistory] = useState<Answered[]>([]);
+  const [saveError, setSaveError] = useState("");
+  const submittedRef = useRef(false);
 
   const hydrated = version >= 0 && now > 0;
 
@@ -75,25 +78,34 @@ export default function ReviewPage() {
   }, [index, revealed]);
 
   const handleSubmit = useCallback(() => {
-    if (!current || revealed) return;
+    if (!current || revealed || submittedRef.current) return;
     const result = checkCloze(current, input);
-    setRevealed(result);
-    setHistory((prev) => [...prev, { question: current, verdict: result.verdict, input }]);
 
     // 记住了就拉长间隔；没记住当天重来，并会被排进下一篇文章的队首。
     // 「差一点」（词对形态错）按 hard 处理——比全错宽容，但不算完全掌握。
-    gradeWord(
-      current.entryId,
-      result.verdict === "correct"
-        ? "good"
-        : result.verdict === "close"
-        ? "hard"
-        : "again"
-    );
-    recordReviewForGoal(1);
+    try {
+      withLearningTransaction(() => {
+        beginDailyReview();
+        gradeWord(
+          current.entryId,
+          result.verdict === "correct"
+            ? "good"
+            : result.verdict === "close"
+            ? "hard"
+            : "again"
+        );
+        recordReviewForGoal(1);
+      });
+      submittedRef.current = true;
+      setSaveError(""); setRevealed(result);
+      setHistory((prev) => [...prev, { question: current, verdict: result.verdict, input }]);
+    } catch {
+      setSaveError("这次练习还没能保存，请先导出备份、腾出空间后重试。你的答案仍然保留。");
+    }
   }, [current, input, revealed]);
 
   const handleNext = useCallback(() => {
+    submittedRef.current = false;
     setIndex((i) => i + 1);
     setInput("");
     setRevealed(null);
@@ -101,6 +113,7 @@ export default function ReviewPage() {
   }, []);
 
   function handleRestart() {
+    submittedRef.current = false;
     setSession((s) => s + 1);
     setIndex(0);
     setInput("");
@@ -275,8 +288,10 @@ export default function ReviewPage() {
 
           {!revealed ? (
             <div className="mt-5 space-y-3">
+              {saveError && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-700">{saveError}</p>}
               <Input
                 ref={inputRef}
+                aria-label="填写句子中缺少的单词"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => {

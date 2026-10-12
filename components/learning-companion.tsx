@@ -20,7 +20,7 @@ export function LearningCompanion({ daily, clozeCount, translateCount }: {
           <div role="img" aria-label={`今日目标完成 ${percent}%`} className="flex size-20 shrink-0 items-center justify-center rounded-full" style={{ background: `conic-gradient(var(--primary) ${percent}%, #edf1e7 0)` }}>
             <div className="flex size-[67px] flex-col items-center justify-center rounded-full bg-white"><span className="font-reading text-[25px] leading-none text-primary">{read}<span className="text-sm text-zinc-400"> / {target}</span></span><span className="mt-1 text-[9px] text-zinc-500">篇阅读</span></div>
           </div>
-          <div><p className="text-xs font-medium text-zinc-700">{daily?.complete ? "今天又进步了一点" : "一点点，也很了不起"}</p><p className="mt-2 text-[11px] leading-5 text-zinc-500">{daily?.complete ? "让新学的知识慢慢沉淀，明天继续。" : "完成阅读与测验，点亮今天的学习记录。"}</p></div>
+          <div><p className="text-xs font-medium text-zinc-700">{daily?.complete ? "今天又进步了一点" : "一点点，也很了不起"}</p><p className="mt-2 text-[11px] leading-5 text-zinc-500">{daily?.complete ? "让新学的知识慢慢沉淀，明天继续。" : "读完后点击「我读完了」，点亮今天的记录。"}</p></div>
         </div>
         <div className="space-y-3 border-t border-zinc-100 pt-4 text-xs">
           <div className="flex items-center gap-2 text-zinc-600">{daily?.complete ? <Check className="size-4 text-primary" /> : <BookOpen className="size-3.5 text-zinc-400" />}读一篇专属文章<span className="ml-auto text-[10px] text-zinc-400">{read}/{target}</span></div>

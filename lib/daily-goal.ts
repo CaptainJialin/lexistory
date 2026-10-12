@@ -11,7 +11,6 @@
 import { getProfile, recordStudyDay } from "./recommend";
 import { localDateKey } from "./calendar";
 import { countClozeAvailable } from "./cloze";
-import { getDueWordCount } from "./wordbook";
 
 const GOAL_KEY = "lexistory_daily_goal";
 
@@ -37,6 +36,7 @@ export interface DailyGoal {
   articlesRead: number;
   reviewsDone: number;
   articleIds?: string[];
+  reviewTarget?: number;
 }
 
 export interface DailyProgress {
@@ -96,6 +96,13 @@ export function recordReviewForGoal(count: number = 1, now: number = Date.now())
   if (count > 0) recordStudyDay(now);
 }
 
+/** Freeze the attainable target before grading changes what is due. */
+export function beginDailyReview(now: number = Date.now()): void {
+  const goal = currentGoal(now);
+  if (goal.reviewTarget !== undefined) return;
+  writeGoal({ ...goal, reviewTarget: Math.min(REVIEW_TARGET_CAP, goal.reviewsDone + countClozeAvailable(now).due) });
+}
+
 /**
  * 今日进度。
  *
@@ -104,12 +111,8 @@ export function recordReviewForGoal(count: number = 1, now: number = Date.now())
 export function getDailyProgress(now: number = Date.now()): DailyProgress {
   const goal = currentGoal(now);
 
-  const due = getDueWordCount(now);
   const available = countClozeAvailable(now);
-  const reviewTarget = Math.min(
-    REVIEW_TARGET_CAP,
-    Math.max(0, Math.min(due, available.total))
-  );
+  const reviewTarget = goal.reviewTarget ?? Math.min(REVIEW_TARGET_CAP, goal.reviewsDone + available.due);
 
   const articleTarget = 1;
   const articleDone = Math.min(goal.articlesRead, articleTarget);

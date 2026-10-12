@@ -69,14 +69,12 @@ const BOOK_LEVEL_LABELS: Record<string, string> = {
 type Mode = "task" | "select";
 
 /**
- * 生成过程的分步文案。
- * 时间点对应真实流程：撰写正文约 18 秒，随后逐句解析约 16 秒（分片并发）。
+ * 只显示实际完成到的阶段；正文就绪即打开阅读。
  */
 const GENERATION_STEPS = [
   "正在编排词汇与语法...",
   "正在撰写文章...",
-  "正在做逐句解析...",
-  "就快好了...",
+  "正在保存文章...",
 ];
 
 export default function Home() {
@@ -292,8 +290,7 @@ export default function Home() {
   }, [enrichKey, enrichGradeId]);
 
   /**
-   * 生成要 20-30 秒。只转一个圈的话用户不知道是在跑还是卡死了，
-   * 按真实耗时推进文案，让等待有可预期的进度感。
+   * 新一轮生成从准备阶段开始。
    */
   useEffect(() => {
     if (!loading) {
@@ -540,7 +537,7 @@ export default function Home() {
                   )}
                 </Button>
                 {loading && (
-                  <div className="-mt-2 text-center"><p className="text-xs text-zinc-500">正在为你准备文章，较长内容可能需要一分钟。</p><Button variant="ghost" size="sm" onClick={cancelGeneration} className="mt-1 text-xs">取消本次生成</Button></div>
+                  <div className="-mt-2 text-center" role="status"><p className="text-xs text-zinc-500">正文准备好就打开，逐句解析会在阅读时补齐。</p><Button variant="ghost" size="sm" onClick={cancelGeneration} className="mt-1 text-xs">取消本次生成</Button></div>
                 )}
               </>
             )}

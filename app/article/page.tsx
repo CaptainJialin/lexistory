@@ -2,28 +2,28 @@
 
 import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSentencePlayer } from "@/lib/use-sentence-player";
 import { getReadingProgress, saveReadingProgress } from "@/lib/reading-progress";
-import { notifyDataChanged } from "@/lib/client-store";
+import { notifyDataChanged, useStoreVersion } from "@/lib/client-store";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Article, SentenceAnalysis, PROFICIENCY_LABELS, THEME_LABELS, STYLE_LABELS, type WordItem, type QuizResult } from "@/lib/types";
-import { getArticles, recordSentenceClick, saveQuizResult, recordUnitQuizOutcome, updateArticle } from "@/lib/storage";
+import { Article, SentenceAnalysis, PROFICIENCY_LABELS, THEME_LABELS, STYLE_LABELS, type WordItem } from "@/lib/types";
+import { getArticles, recordSentenceClick } from "@/lib/storage";
 import { readableSentences } from "@/lib/reader-sentences";
-import { apiFetch } from "@/lib/api-client";
+import { analyzeArticle } from "@/lib/analyze-article";
+import { withLearningTransaction } from "@/lib/learning-transaction";
 import { getWordBook, updateWordProficiency, addWords } from "@/lib/wordbook";
 import { findHighlights, coverageRate, computeCoverage, longSentencesIn } from "@/lib/coverage";
 import { getArticleStudyLabel, resolveArticleGrade } from "@/lib/grade-resolver";
-import { registerArticleLearning, applyQuizOutcome } from "@/lib/learning";
+import { registerArticleLearning } from "@/lib/learning";
 import { regenerateArticle } from "@/lib/generate-article";
-import { QUIZ_TYPE_LABELS, stripOptionPrefix } from "@/lib/ui-constants";
-import { countClozeAvailable } from "@/lib/cloze";
+import { QuizPanel } from "@/components/article/quiz-panel";
 import { SentenceAnalysisPanel } from "@/components/article/sentence-analysis-panel";
-import { ArrowLeft, RotateCcw, BookOpen, ChevronDown, ChevronUp, Loader2, Sparkles, Target, CheckCircle2, XCircle, Trophy, RotateCcw as RefreshCw, Languages, AlertTriangle } from "lucide-react";
+import { ArrowLeft, RotateCcw, BookOpen, ChevronDown, ChevronUp, Loader2, Sparkles, Target, CheckCircle2, RotateCcw as RefreshCw, Languages, AlertTriangle } from "lucide-react";
 
 function renderHighlightedText(
   text: string,
@@ -272,272 +272,6 @@ function WordProficiencyPopup({
 }
 
 // ====== 测验面板 ======
-function QuizPanel({ article, onComplete }: { article: Article; onComplete: () => boolean }) {
-  const router = useRouter();
-  const [started, setStarted] = useState(false);
-  const [currentIdx, setCurrentIdx] = useState(0);
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [showAnswer, setShowAnswer] = useState(false);
-  const [answers, setAnswers] = useState<number[]>([]);
-  const [finished, setFinished] = useState(false);
-  const [finalResult, setFinalResult] = useState<QuizResult | null>(null);
-  /** 交卷后才查，此时刚读过的词已经入册，数字才准 */
-  const [clozeReady, setClozeReady] = useState(0);
-
-  const quiz = article.quiz;
-  if (!quiz || quiz.length === 0) return null;
-
-  const quizItems = quiz;
-  const currentQ = quizItems[currentIdx];
-  const total = quizItems.length;
-  const correctCount = answers.filter(
-    (a, i) => a === quizItems[i].correctIndex
-  ).length;
-
-  function handleSelect(idx: number) {
-    if (showAnswer) return;
-    setSelectedOption(idx);
-  }
-
-  function handleConfirm() {
-    if (selectedOption === null) return;
-    setShowAnswer(true);
-    setAnswers((prev) => [...prev, selectedOption]);
-  }
-
-  function handleNext() {
-    if (currentIdx < total - 1) {
-      setCurrentIdx(currentIdx + 1);
-      setSelectedOption(null);
-      setShowAnswer(false);
-    } else {
-      if (!onComplete()) return;
-      const finalAnswers = answers.slice(0, total);
-      const finalCorrectCount = finalAnswers.filter(
-        (a, i) => a === quizItems[i].correctIndex
-      ).length;
-      const score = Math.round((finalCorrectCount / total) * 100);
-      const unitId = article.source?.unitId ?? "";
-      const passed = score >= 80;
-      setFinished(true);
-      // 保存测验结果
-      const result: QuizResult = {
-        unitId,
-        articleId: article.id,
-        score,
-        totalQuestions: total,
-        correctCount: finalCorrectCount,
-        wrongQuestions: finalAnswers
-          .map((a, i) =>
-            a !== quizItems[i].correctIndex ? quizItems[i].id : null
-          )
-          .filter(Boolean) as string[],
-        completedAt: Date.now(),
-      };
-      saveQuizResult(result);
-      setFinalResult(result);
-      if (unitId) {
-        recordUnitQuizOutcome(unitId, result, passed);
-      }
-
-      // 按每道题的对错分别推进相关词和语法的 SRS：
-      // 答对的间隔拉长，答错的当天重来并会被排到下一篇文章的队首。
-      applyQuizOutcome(article, finalAnswers, result);
-      // 判分会改 SRS，之后再查可练数量才准
-      setClozeReady(countClozeAvailable().total);
-    }
-  }
-
-  function handleRestart() {
-    setStarted(false);
-    setCurrentIdx(0);
-    setSelectedOption(null);
-    setShowAnswer(false);
-    setAnswers([]);
-    setFinished(false);
-    setFinalResult(null);
-  }
-
-  // Not started
-  if (!started) {
-    return (
-      <div className="mt-6 rounded-xl border border-indigo-200 bg-indigo-50/50 p-6">
-        <div className="flex items-center gap-2 mb-3">
-          <Trophy className="h-5 w-5 text-indigo-600" />
-          <h3 className="text-base font-semibold text-zinc-900">Quiz</h3>
-        </div>
-        <p className="text-sm text-zinc-600 mb-4">
-          {total} questions to check your understanding.
-        </p>
-        <p className="mb-4 text-xs leading-6 text-zinc-500">当天同一篇的测验只调整一次复习计划，重做仍可查看成绩与解析。</p>
-        <Button onClick={() => setStarted(true)} className="gap-1">
-          <Target className="h-4 w-4" />
-          Start Quiz
-        </Button>
-      </div>
-    );
-  }
-
-  // Finished
-  if (finished) {
-    const displayCorrect = finalResult?.correctCount ?? correctCount;
-    const displayScore = finalResult?.score ?? Math.round((correctCount / total) * 100);
-    const passed = displayScore >= 80;
-    return (
-      <div className="mt-6 rounded-xl border border-indigo-200 bg-indigo-50/50 p-6">
-        <div className="text-center">
-          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-indigo-100">
-            <Trophy className="h-7 w-7 text-indigo-600" />
-          </div>
-          <h3 className="text-lg font-bold text-zinc-900">
-            {passed ? "本单元已完成" : "本单元待巩固"}
-          </h3>
-          <p className="mt-1 text-3xl font-bold text-indigo-600">
-            {displayCorrect}/{total}
-          </p>
-          <p className="text-sm text-zinc-500">
-            {passed
-              ? "答错的词会自动排进下一篇文章。"
-              : "建议再练一次，错题会留在复习状态里。"}
-          </p>
-          {/*
-            刚做完测验是成就感最高的一刻，直接给出下一步动作，
-            而不是把人丢回首页自己在一堆卡片里找。
-          */}
-          <div className="mt-4 flex flex-wrap justify-center gap-2">
-            <Button onClick={handleRestart} variant="outline" className="gap-1">
-              <RefreshCw className="h-4 w-4" />
-              再测一次
-            </Button>
-            {clozeReady > 0 ? (
-              <Button onClick={() => router.push("/review")} className="gap-1">
-                <Target className="h-4 w-4" />
-                练一练学过的词（{clozeReady}）
-              </Button>
-            ) : (
-              <Button onClick={() => router.push("/")} className="gap-1">
-                <Target className="h-4 w-4" />
-                回首页
-              </Button>
-            )}
-          </div>
-          {clozeReady > 0 && (
-            <button
-              type="button"
-              onClick={() => router.push("/")}
-              className="mt-3 text-xs text-zinc-400 hover:text-zinc-600"
-            >
-              回首页
-            </button>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  // Answering
-  const isCorrect = selectedOption === currentQ.correctIndex;
-
-  return (
-    <div className="mt-6 rounded-xl border border-indigo-200 bg-white p-6 shadow-sm">
-      {/* Progress */}
-      <div className="mb-4 flex items-center justify-between">
-        <span className="text-xs font-medium text-zinc-500">
-          Question {currentIdx + 1} / {total}
-        </span>
-        <div className="h-1.5 flex-1 mx-3 rounded-full bg-zinc-100 overflow-hidden">
-          <div
-            className="h-full rounded-full bg-indigo-500 transition-all"
-            style={{ width: `${((currentIdx + (showAnswer ? 1 : 0)) / total) * 100}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Question */}
-      <div className="mb-1">
-        <Badge variant="outline" className="mb-2 text-[10px]">
-          {QUIZ_TYPE_LABELS[currentQ.type] ?? "阅读理解"}
-        </Badge>
-        <p className="text-base font-medium text-zinc-900">{currentQ.question}</p>
-      </div>
-
-      {/* Options */}
-      <div className="mt-4 space-y-2">
-        {currentQ.options.map((opt, idx) => {
-          let optionClass =
-            "w-full text-left rounded-lg border px-4 py-3 text-sm transition-colors ";
-          if (showAnswer) {
-            if (idx === currentQ.correctIndex) {
-              optionClass +=
-                "border-green-300 bg-green-50 text-green-800 font-medium";
-            } else if (idx === selectedOption) {
-              optionClass +=
-                "border-red-300 bg-red-50 text-red-800";
-            } else {
-              optionClass +=
-                "border-zinc-200 bg-white text-zinc-500";
-            }
-          } else {
-            optionClass +=
-              selectedOption === idx
-                ? "border-indigo-400 bg-indigo-50 text-indigo-900"
-                : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50";
-          }
-
-          return (
-            <button
-              key={idx}
-              className={optionClass}
-              onClick={() => handleSelect(idx)}
-              disabled={showAnswer}
-            >
-              <div className="flex items-center gap-2">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs font-medium">
-                  {String.fromCharCode(65 + idx)}
-                </span>
-                <span>{stripOptionPrefix(opt)}</span>
-                {showAnswer && idx === currentQ.correctIndex && (
-                  <CheckCircle2 className="ml-auto h-4 w-4 text-green-600" />
-                )}
-                {showAnswer && idx === selectedOption && idx !== currentQ.correctIndex && (
-                  <XCircle className="ml-auto h-4 w-4 text-red-600" />
-                )}
-              </div>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Explanation */}
-      {showAnswer && (
-        <div
-          className={`mt-3 rounded-lg px-4 py-3 text-sm ${
-            isCorrect
-              ? "border border-green-200 bg-green-50 text-green-800"
-              : "border border-red-200 bg-red-50 text-red-800"
-          }`}
-        >
-          <p className="font-medium">{isCorrect ? "Correct!" : "Incorrect"}</p>
-          <p className="mt-0.5 text-zinc-700">{currentQ.explanation}</p>
-        </div>
-      )}
-
-      {/* Action buttons */}
-      <div className="mt-4 flex justify-end">
-        {!showAnswer ? (
-          <Button onClick={handleConfirm} disabled={selectedOption === null}>
-            Confirm
-          </Button>
-        ) : (
-          <Button onClick={handleNext}>
-            {currentIdx < total - 1 ? "Next" : "See Results"}
-          </Button>
-        )}
-      </div>
-    </div>
-  );
-}
-
 function ArticleLearningReport({
   article,
   onRegenerate,
@@ -546,7 +280,9 @@ function ArticleLearningReport({
   onRegenerate?: () => void;
 }) {
   const [collapsed, setCollapsed] = useState(true);
-  const book = useMemo(() => getWordBook(), []);
+  const storeVersion = useStoreVersion();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const book = useMemo(() => getWordBook(), [storeVersion]);
 
   // 出现次数直接读生成时算好的 coverage，和文章里的高亮是同一套判定
   const coverage = useMemo(
@@ -710,6 +446,9 @@ function ArticleViewer() {
   const [article, setArticle] = useState<Article | null>(null);
   const sentences = useMemo(() => article ? readableSentences(article) : [], [article]);
   const [analyzing, setAnalyzing] = useState(false);
+  const [analysisError, setAnalysisError] = useState("");
+  const analysisRef = useRef<AbortController | null>(null);
+  const generationRef = useRef<AbortController | null>(null);
   const [highlightedWord, setHighlightedWord] = useState<string | null>(null);
   const [selectedSentence, setSelectedSentence] = useState<SentenceAnalysis | null>(null);
   const [panelOpen, setPanelOpen] = useState(true);
@@ -735,8 +474,10 @@ function ArticleViewer() {
     if (!article) return false;
     if (completed) return true;
     try {
-      registerArticleLearning(article);
-      saveReadingProgress(article.id, { completedAt: Date.now() });
+      withLearningTransaction(() => {
+        registerArticleLearning(article);
+        saveReadingProgress(article.id, { completedAt: Date.now() });
+      });
       setCompleted(true);
       setActionError("");
       notifyDataChanged();
@@ -748,33 +489,53 @@ function ArticleViewer() {
   }
 
   async function handleRegenerate() {
-    if (!article) return;
+    if (!article || generationRef.current) return;
     const grade = resolveArticleGrade(article);
     if (!grade) return;
     setRegenerating(true);
     setActionError("");
     player.stop();
+    const controller = new AbortController();
+    generationRef.current = controller;
     try {
-      const newArticle = await regenerateArticle(article, grade);
+      const newArticle = await regenerateArticle(article, grade, controller.signal);
+      controller.signal.throwIfAborted();
       router.push(`/article?id=${newArticle.id}`);
     } catch (error) {
+      if (controller.signal.aborted) return;
       setActionError(error instanceof Error ? error.message : "生成失败，请检查网络后重试。");
       setRegenerating(false);
+    } finally {
+      if (generationRef.current === controller) generationRef.current = null;
     }
   }
 
-  async function handleAnalyze() {
-    if (!article) return;
-    setAnalyzing(true); setActionError("");
+  const runAnalysis = useCallback(async (source: Article, controller: AbortController) => {
+    setAnalyzing(true); setAnalysisError("");
     try {
-      const response = await apiFetch("/api/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ content: article.content, grammars: article.grammar, grade: resolveArticleGrade(article) }) });
-      const data = await response.json();
-      if (!response.ok || !Array.isArray(data.sentences) || !data.sentences.length) throw new Error("解析暂未准备好，请稍后重试。正文和朗读仍可使用。");
-      const updated = { ...article, sentences: data.sentences.filter((s: SentenceAnalysis) => s && typeof s.sentence === "string") };
-      updated.coverage = computeCoverage(updated);
-      updateArticle(updated); setArticle(updated); setSelectedSentence(null); player.stop();
-    } catch (error) { setActionError(error instanceof Error ? error.message : "解析失败，请重试。"); }
-    finally { setAnalyzing(false); }
+      const updated = await analyzeArticle(source, controller.signal);
+      if (controller.signal.aborted || analysisRef.current !== controller) return;
+      setArticle(updated);
+      notifyDataChanged();
+    } catch (error) {
+      if (!controller.signal.aborted && analysisRef.current === controller) setAnalysisError(error instanceof Error ? error.message : "解析失败，请重试。");
+    } finally {
+      if (analysisRef.current === controller && !controller.signal.aborted) setAnalyzing(false);
+    }
+  }, []);
+
+  function handleAnalyze() {
+    if (!article || analyzing) return;
+    analysisRef.current?.abort();
+    const controller = new AbortController();
+    analysisRef.current = controller;
+    void runAnalysis(article, controller);
+  }
+
+  function pauseAnalysis() {
+    analysisRef.current?.abort();
+    setAnalyzing(false);
+    setAnalysisError("解析已暂停，正文已经保存。需要时可继续补全。");
   }
 
   useEffect(() => {
@@ -796,9 +557,13 @@ function ArticleViewer() {
     setHighlightedWord(null);
     setLongIndex(-1);
     setCompleted(Boolean(getReadingProgress(found.id)?.completedAt));
+    setActionError(""); setAnalysisError(""); setAnalyzing(false);
     try { saveReadingProgress(found.id, {}); } catch { /* Reading works without storage. */ }
-    return () => player.stop();
-  }, [id, router, player]);
+    const controller = new AbortController();
+    analysisRef.current = controller;
+    if (found.analysisStatus === "pending") void runAnalysis(found, controller);
+    return () => { controller.abort(); analysisRef.current?.abort(); generationRef.current?.abort(); generationRef.current = null; player.stop(); };
+  }, [id, router, player, runAnalysis]);
 
   // 把 content 渲染为带交互句子的段落
   /**
@@ -953,6 +718,7 @@ function ArticleViewer() {
           重新生成
         </Button>
       </div>
+      {regenerating && <div role="status" className="mb-4 rounded-xl bg-teal-50 p-3 text-sm text-primary">正在准备另一篇文章，这篇仍然保留。<Button size="sm" variant="ghost" onClick={() => { generationRef.current?.abort(); generationRef.current = null; setRegenerating(false); }}>取消生成</Button></div>}
 
       {actionError && <p role="alert" className="mb-4 rounded-xl bg-red-50 p-4 text-sm text-red-700">{actionError}</p>}
       {getReadingProgress(article.id)?.sentenceIndex !== undefined && !selectedSentence && (
@@ -1062,7 +828,7 @@ function ArticleViewer() {
           )}
 
           {/* 文章内容 */}
-          {sentences.some((sentence) => !sentence.translation) && <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs leading-6 text-amber-800">部分句子的详细解析还未准备好，可以先阅读或听朗读。<Button variant="ghost" size="sm" disabled={analyzing} onClick={handleAnalyze} className="ml-1 text-xs">{analyzing ? "正在补全…" : "补全句子解析"}</Button></div>}
+          {sentences.some((sentence) => !sentence.translation) && <div role="status" className="mb-4 rounded-xl border border-teal-200/70 bg-teal-50/70 p-3 text-xs leading-6 text-primary"><div className="flex items-start gap-2">{analyzing && <Loader2 className="mt-1 size-4 shrink-0 animate-spin" />}<span>{analyzing ? "正文已保存，可以先读。逐句解析正在补齐，不会自动播放语音。" : analysisError || "部分句子的解析还未准备好，正文和朗读已可使用。"}</span></div><div className="mt-1 flex flex-wrap items-center justify-between gap-2"><span className="text-[11px] text-zinc-500">已就绪 {sentences.filter((sentence) => sentence.translation).length} / {sentences.length} 句</span><Button variant="ghost" size="sm" onClick={analyzing ? pauseAnalysis : handleAnalyze} className="text-xs">{analyzing ? "先暂停解析" : "补全句子解析"}</Button></div></div>}
           <div className="reader-prose">{contentNodes}</div>
 
           <section className="my-7 rounded-2xl border border-teal-200 bg-teal-50/70 p-5" aria-label="完成阅读">
@@ -1095,7 +861,7 @@ function ArticleViewer() {
       {/* 句子解析面板 */}
       {selectedSentence && panelOpen && (
         <SentenceAnalysisPanel
-          analysis={selectedSentence}
+          analysis={sentences[selectedIndex] ?? selectedSentence}
           articleGrammars={article.grammar}
           index={selectedIndex}
           total={sentences.length}

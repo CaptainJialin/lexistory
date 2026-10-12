@@ -154,6 +154,8 @@ export interface ArticleCoverage {
 }
 
 export interface Article {
+  /** Pending analysis resumes when the saved story is opened. Older stories opt in manually. */
+  analysisStatus?: "pending" | "partial" | "ready";
   /** Editorial sample that can be read without waiting for AI generation. */
   isDemo?: boolean;
   id: string;
